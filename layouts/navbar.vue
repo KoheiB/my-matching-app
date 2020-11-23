@@ -58,6 +58,7 @@
         </v-btn>
       </v-container>
       <Login v-if="!currentUser"></Login>
+      <Signup v-if="!currentUser"></Signup>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -69,9 +70,11 @@
 
 <script>
 import Login from '~/components/Login.vue'
+import Signup from '~/components/Signup.vue'
 export default {
   components: {
     Login,
+    Signup
   },
   data() {
     return {
