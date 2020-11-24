@@ -115,8 +115,9 @@ export default {
     },
     logInWithFacebook() {
       const provider = new this.$firebase.auth.FacebookAuthProvider()
-      this.$fireAuth.signInWithRedirect(provider)
+      this.$fireAuth.signInWithPopup(provider)
       .then((result) => {
+        console.log(result)
         this.createUser(result.user)
       })
     },
@@ -125,9 +126,18 @@ export default {
       this.$fireAuth.signInWithPopup(provider)
       .then((result) => {
         alert('Hello, '+result.user.displayName+'!')
+        console.log(result)
         this.createUser(result.user)
       })
     },
+    createUser (user) {
+      this.$firestore.collection('users').doc(user.uid).set({
+        'name': user.displayName,
+        'photoURL': user.photoURL,
+        'email':user.email
+      }, { merge: true })
+    },
+
   }
 }
 </script>
