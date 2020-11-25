@@ -66,6 +66,16 @@ export default {
         'photoURL': user.photoURL,
         'email':user.email
       }, { merge: true })
+
+      this.$firestore.collection('users').doc(user.uid)
+      .collection('profile').doc(user.uid)
+      .set({
+        'displayName': user.displayName,
+        'bodyType': "普通",
+        'bloodType': "A",
+        'residence': "東京",
+        'birthplace': "東京"
+      }, { merge: true })
     },
   }
 }
