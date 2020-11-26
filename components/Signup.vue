@@ -60,23 +60,42 @@ export default {
       alert(errorMessage);
       });
     },
-    createUser (user) {
-      this.$firestore.collection('users').doc(user.uid).set({
-        'name': user.displayName,
-        'photoURL': user.photoURL,
-        'email':user.email
-      }, { merge: true })
+    async createUser (user) {
+      const batch = this.$firestore.batch()
+      
+      // usersコレクションに登録ユーザーを追加
+      batch.set(
+        this.$firestore
+          .collection('users')
+          .doc(user.uid),
+        {
+          'name': user.displayName,
+          'photoURL': user.photoURL,
+          'email':user.email
+        },
+        { merge: true }
+      )
 
-      this.$firestore.collection('users').doc(user.uid)
-      .collection('profile').doc(user.uid)
-      .set({
-        'displayName': user.displayName,
-        'bodyType': "普通",
-        'bloodType': "A",
-        'residence': "東京",
-        'birthplace': "東京"
-      }, { merge: true })
-    },
+      // usersコレクションのサブコレクションprofileに登録ユーザーのプロフィールを追加
+      batch.set(
+        this.$firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('profile')
+          .doc(user.uid),
+        {
+          'displayName': user.displayName,
+          'bodyType': "普通",
+          'bloodType': "A",
+          'residence': "東京",
+          'birthplace': "東京"
+        },
+        { merge: true }
+      ),
+
+      // 一括更新をコミット
+      await batch.commit()
+    }
   }
 }
 </script>
