@@ -29,7 +29,7 @@
         v-for="member in members"
         :key="member.id"
         >
-          <nuxt-link :to="`/users/${member.id}`">
+          <!-- <nuxt-link :to="`/users/${member.id}`"> -->
             <v-card
             class="card mb-5"
             elevation="4"
@@ -45,34 +45,17 @@
                   :src="member.picture"
                   class="picture"
                   >
-
                 </v-container>
                 <p>{{ member.comment }}</p>
-
               </v-card-text>
               <v-card-actions>
                 <v-container>
-                  <v-row
-                  justify="space-between">
-                    <v-btn
-                    width="48%"
-                    color="primary"
-                    >
-                    <v-icon></v-icon>
-                      よくないね
-                    </v-btn>
-                    <v-btn
-                    width="48%"
-                    color="info"
-                    >
-                    <v-icon>mdi-thumb-up-outline</v-icon>
-                      いいね
-                    </v-btn>
-                  </v-row>
+                  <ProfileButton class="mb-2"></ProfileButton>
+                  <LikeButton />
                 </v-container>
               </v-card-actions>
             </v-card>
-          </nuxt-link>
+          <!-- </nuxt-link> -->
         </v-col>
       </v-row>
     </v-container>
@@ -80,8 +63,14 @@
 </template>
 
 <script>
+import LikeButton from '~/components/LikeButton.vue'
+import ProfileButton from '~/components/ProfileButton.vue'
 export default {
   layout: 'navbar',
+  componets: {
+    LikeButton,
+    ProfileButton
+  },
   data() {
     return {
       members: [
