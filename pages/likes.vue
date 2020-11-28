@@ -25,21 +25,8 @@
               <v-col cols="4"
               align-self="center"
               justify="center">
-                <v-btn
-                color="info"
-                class="mb-2"
-                width="80%"
-                >
-                <v-icon>mdi-thumb-up-outline</v-icon>
-                  いいね
-                </v-btn>
-                <v-btn
-                color="primary"
-                width="80%"
-                >
-                <v-icon></v-icon>
-                  よくないね
-                </v-btn>
+                <ProfileButton class="mb-2"></ProfileButton>
+                <LikeButton></LikeButton>
               </v-col>
             </v-row>
           </v-card>
@@ -52,8 +39,14 @@
 </template>
 
 <script>
+import LikeButton from '~/components/LikeButton.vue'
+import ProfileButton from '~/components/ProfileButton.vue'
 export default {
   layout: 'navbar',
+  components: {
+    LikeButton,
+    ProfileButton,
+  },
   data () {
     return {
       likes: [

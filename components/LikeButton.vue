@@ -1,8 +1,9 @@
 <template>
-  <v-btn @click="onclick"
+  <v-btn @click="onclick(currentUser)"
   color="info"
   height="40"
   block
+  :disabled = !currentUser
   >
     <v-icon>mdi-thumb-up-outline</v-icon>いいね
   </v-btn>
@@ -13,45 +14,63 @@ export default {
 
   data() { 
     return {
-
+      currentUser: {}
     }
+  },
+  props: {
+    profile: Object
+  },
+  created () {
+    this.$fireAuth.onAuthStateChanged(user => {
+      this.currentUser = user
+    })
   },
   methods: {
     async onclick(user) {
       // 追加
-      const batch = firestore.batch()
-      const profileRef = this.$firestore.doc('users/user.uid/profile/user.uid')
-
-      // usersコレクションのサブコレクションprofileのサブコレクションlikedUsersにプロフィールを見ていいねした人を追加
+      const batch = this.$firestore.batch()
+  
+      // ログインユーザーがいいねしたProfileのリスト likedProfiles
+      // ログインユーザーのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
+      // profileId: いいねした相手のプロフィールID
+      // profileRef: いいねした相手のプロフィールのDocumentReference
+      const profileRef = await this.$firestore.collectionGroup('profile').where('id', '==', this.profile.id).get();
       batch.set(
+        // エラーが起きて、言われるがままにインデックスの除外を追加した。
+        // 参考：https://note.com/fsxfcu7y/n/nf195177b6e23
         this.$firestore
           .collection('users')
           .doc(user.uid)
-          .collection('profile')
-          .doc(user.uid)
-          .collection('likedUsers')
-          .doc(anotherUserRef.id),
+          .collection('likedProfiles')
+          .doc(),
         {
-          id: anotherUserRef.id,
-          createTime: FieldValue.serverTimestamp()
+          'profileId': this.profile.id,
+          // 'profileRef': profileRef,
+          // createTime: FieldValue.serverTimestamp()
         }
       )
+      
+
+      // 該当ユーザーをいいねしたuserのリスト
+      // いいねされた該当ユーザーのサブコレクションprofileのサブコレクションlikedUsersにログインユーザーのデータを追加
+      // userIdWhoLiked: 該当ユーザーをいいねしたログインユーザーのID
 
       batch.set(
         this.$firestore
           .collection('users')
-          .doc(anotherUserRef.path)
-          .collection('likedPosts')
-          .doc(postRef.id),
+          .doc(this.profile.id)
+          .collection('profile')
+          .doc(this.profile.id)
+          .collection('usersWhoLiked')
+          .doc(),
         {
-          id: postRef.id,
-          postRef: postRef,
-          createTime: FieldValue.serverTimestamp()
+          userIdWhoLiked: user.uid,
         }
       )
 
       await batch.commit()
-    }
+      alert('you liked')
+    },
   }
 }
 </script>

@@ -140,7 +140,7 @@ export default {
       this.$firestore.collection('users').doc(user.uid).set({
         'name': user.displayName,
         'photoURL': user.photoURL,
-        'email':user.email
+        'email':user.email,
       }, { merge: true })
     },
     logInWithGithub() {

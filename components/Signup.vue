@@ -14,6 +14,9 @@
           <v-form>
             <v-row class="text-center">
               <v-col cols="12">
+                <v-text-field class="logInInput" v-model="displayName" outlined placeholder='Name (他のユーザーからの表示名）'></v-text-field>
+              </v-col>
+              <v-col cols="12">
                 <v-text-field class="logInInput" v-model="email" outlined placeholder='Email'></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -42,6 +45,7 @@ export default {
   data (){
     return {
       signUpDialog: false,
+      displayName: '',
       email: '',
       password: '',
     }
@@ -84,7 +88,8 @@ export default {
           .collection('profile')
           .doc(user.uid),
         {
-          'displayName': user.displayName,
+          'id': user.uid,
+          'displayName': this.displayName,
           'bodyType': "普通",
           'bloodType': "A",
           'residence': "東京",

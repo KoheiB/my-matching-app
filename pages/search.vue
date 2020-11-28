@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-container>
-      <v-carousel v-model="model">
+
+      <!-- カルーセル部分（削除するかも？） -->
+      <!-- <v-carousel v-model="model">
         <v-carousel-item
           v-for="(color, i) in colors"
           :key="color"
@@ -22,12 +24,15 @@
             </v-row>
           </v-sheet>
         </v-carousel-item>
-      </v-carousel>
+      </v-carousel> -->
+      <!-- カルーセル部分END -->
+
+      <!-- プロフィール一覧 -->
       <v-row>
         <v-col
         cols="6" sm="4" md="4" lg="3" xl="3"
-        v-for="member in members"
-        :key="member.id"
+        v-for="profile in profiles"
+        :key="profile.id"
         >
           <!-- <nuxt-link :to="`/users/${member.id}`"> -->
             <v-card
@@ -35,23 +40,24 @@
             elevation="4"
             >
               <v-card-title>
-                {{ member.id }}
-                {{ member.name}}
+                {{ profile.id }}
+                <hr>
+                {{ profile.displayName}}
               </v-card-title>
               <v-card-text>
                 <v-container
                 >
-                  <img
+                  <!-- <img
                   :src="member.picture"
                   class="picture"
-                  >
+                  > -->
                 </v-container>
-                <p>{{ member.comment }}</p>
+                <p>{{ profile.residence }}</p>
               </v-card-text>
               <v-card-actions>
                 <v-container>
                   <ProfileButton class="mb-2"></ProfileButton>
-                  <LikeButton />
+                  <LikeButton :profile = "profile"></LikeButton>
                 </v-container>
               </v-card-actions>
             </v-card>
@@ -59,6 +65,8 @@
         </v-col>
       </v-row>
     </v-container>
+    <!-- プロフィール一覧END -->
+    {{ this.profiles }}
   </v-app>
 </template>
 
@@ -73,13 +81,7 @@ export default {
   },
   data() {
     return {
-      members: [
-        {id: 1, name: "John", picture: require("~/assets/image/html.png"), comment: "hi"},
-        {id: 2, name: "Jane", picture: require("~/assets/image/html.png"), comment: "hi"},
-        {id: 3, name: "Bob", picture: require("~/assets/image/html.png"), comment: "hi"},
-        {id: 4, name: "Kate", picture: require("~/assets/image/html.png"), comment: "hi"},
-        {id: 5, name: "Nancy", picture: require("~/assets/image/html.png"), comment: "hi"},
-      ],
+      profiles: [],
       model: 0,
       colors: [
         'primary',
@@ -89,6 +91,12 @@ export default {
         'orange',
       ],
     }
+  },
+  // 表示するプロフィールの配列をコレクショングループで取得しておく。
+  created() {
+    this.$firestore.collectionGroup('profile').get().then((querySnapshot) => {
+      this.profiles = querySnapshot.docs.map(doc => doc.data())
+    })
   }
 }
 </script>

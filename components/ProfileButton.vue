@@ -1,11 +1,11 @@
 <template>
   <v-btn @click="onclick"
-  color="info"
+  color="primary"
   height="40"
   outlined
   block
   >
-    プロフィール詳細
+    プロフィール
   </v-btn>
 </template>
 
