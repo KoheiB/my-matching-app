@@ -22,12 +22,12 @@
                   {{ like.date }}
                 </v-card-subtitle>
               </v-col>
-              <v-col cols="4"
+              <v-col cols="3"
               align-self="center"
               justify="center">
-                <ProfileButton class="mb-2"></ProfileButton>
-                <LikeButton></LikeButton>
+                <ThankyouButton></ThankyouButton>
               </v-col>
+              <v-col cols="1"></v-col>
             </v-row>
           </v-card>
 
@@ -49,23 +49,35 @@ export default {
   },
   data () {
     return {
+      currentUser: {},
       likes: [
-        {
-          id: 1,
-          name: "aaa",
-          picture: require('@/assets/image/html.png'),
-          date: "2020/11/11"
-        },
-        {
-          id: 2,
-          name: "bbb",
-          picture: require('@/assets/image/html.png'),
-          date: "2020/11/11"
-        },
+        // {
+        //   id: 1,
+        //   name: "aaa",
+        //   picture: require('@/assets/image/html.png'),
+        //   date: "2020/11/11"
+        // },
+        // {
+        //   id: 2,
+        //   name: "bbb",
+        //   picture: require('@/assets/image/html.png'),
+        //   date: "2020/11/11"
+        // },
       ],
     }
+  },
+  created() {
+    this.$fireAuth.onAuthStateChanged(user => {
+      this.currentUser = user
+      console.log(this.currentUser)
+      this.$firestore.collection('users').doc(this.currentUser.uid)
+      .collection('profile').doc(this.currentUser.uid)
+      .collection('likedUsers')
+      .get().then((querySnapshot) => {
+        this.likes = querySnapshot.docs.map(doc => doc.data())
+      })
+    })
   }
-
 }
 </script>
 

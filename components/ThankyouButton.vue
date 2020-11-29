@@ -2,9 +2,8 @@
   <v-btn @click="onclick(currentUser)"
   color="info"
   height="40"
-  :disabled = !currentUser
   >
-    <v-icon>mdi-thumb-up-outline</v-icon>いいね
+    <v-icon>mdi-heart</v-icon>ありがとう！
   </v-btn>
 </template>
 
@@ -17,11 +16,15 @@ export default {
     }
   },
   props: {
-    profile: Object
+    like: Object
   },
-  created () {
-    this.$fireAuth.onAuthStateChanged(user => {
+  async created () {
+    await this.$fireAuth.onAuthStateChanged(user => {
       this.currentUser = user
+    }),
+
+    await this.$firestore.collection('users').doc(this.currentUser.uid).collection('likedProfiles').get().then((querySnapshot) => {
+      this.likes = querySnapshot.docs.map(doc => doc.data())
     })
   },
   methods: {

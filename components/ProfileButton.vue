@@ -3,7 +3,6 @@
   color="primary"
   height="40"
   outlined
-  block
   >
     プロフィール
   </v-btn>

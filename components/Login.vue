@@ -117,7 +117,6 @@ export default {
       const provider = new this.$firebase.auth.FacebookAuthProvider()
       this.$fireAuth.signInWithPopup(provider)
       .then((result) => {
-        console.log(result)
         this.createUser(result.user)
       })
     },
@@ -126,7 +125,6 @@ export default {
       this.$fireAuth.signInWithPopup(provider)
       .then((result) => {
         alert('Hello, '+result.user.displayName+'!')
-        console.log(result)
         this.createUser(result.user)
       })
     },
