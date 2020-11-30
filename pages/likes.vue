@@ -70,6 +70,7 @@ export default {
     this.$fireAuth.onAuthStateChanged(user => {
       this.currentUser = user
       console.log(this.currentUser)
+      
       this.$firestore.collection('users').doc(this.currentUser.uid)
       .collection('profile').doc(this.currentUser.uid)
       .collection('likedUsers')

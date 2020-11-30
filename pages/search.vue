@@ -57,7 +57,7 @@
               <v-card-actions>
                 <v-container>
                   <ProfileButton class="mb-2"></ProfileButton>
-                  <LikeButton :profile = "profile"></LikeButton>
+                  <LikeButton :profileId = "profile.id"></LikeButton>
                 </v-container>
               </v-card-actions>
             </v-card>

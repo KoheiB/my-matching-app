@@ -17,7 +17,7 @@ export default {
     }
   },
   props: {
-    profile: Object
+    profileId: String
   },
   created () {
     this.$fireAuth.onAuthStateChanged(user => {
@@ -33,7 +33,7 @@ export default {
       // ログインユーザーのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
       // profileId: いいねした相手のプロフィールID
       // profileRef: いいねした相手のプロフィールのDocumentReference
-      const profileRef = await this.$firestore.collectionGroup('profile').where('id', '==', this.profile.id).get();
+      const profileRef = await this.$firestore.collectionGroup('profile').where('id', '==', this.profileId).get();
       batch.set(
         // エラーが起きて、言われるがままにインデックスの除外を追加した。
         // 参考：https://note.com/fsxfcu7y/n/nf195177b6e23
@@ -43,7 +43,7 @@ export default {
           .collection('likedProfiles')
           .doc(),
         {
-          'profileId': this.profile.id,
+          'profileId': this.profileId,
           // 'profileRef': profileRef,
           // createTime: FieldValue.serverTimestamp()
         }
@@ -57,9 +57,9 @@ export default {
       batch.set(
         this.$firestore
           .collection('users')
-          .doc(this.profile.id)
+          .doc(this.profileId)
           .collection('profile')
-          .doc(this.profile.id)
+          .doc(this.profileId)
           .collection('usersWhoLiked')
           .doc(),
         {
