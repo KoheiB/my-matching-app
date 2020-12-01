@@ -75,7 +75,7 @@ import LikeButton from '~/components/LikeButton.vue'
 import ProfileButton from '~/components/ProfileButton.vue'
 export default {
   layout: 'navbar',
-  componets: {
+  components: {
     LikeButton,
     ProfileButton
   },

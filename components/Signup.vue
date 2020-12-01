@@ -83,9 +83,7 @@ export default {
       // usersコレクションのサブコレクションprofileに登録ユーザーのプロフィールを追加
       batch.set(
         this.$firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('profile')
+          .collection('profiles')
           .doc(user.uid),
         {
           'id': user.uid,

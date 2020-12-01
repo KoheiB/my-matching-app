@@ -56,11 +56,9 @@ export default {
 
       batch.set(
         this.$firestore
-          .collection('users')
+          .collection('profiles')
           .doc(this.profileId)
-          .collection('profile')
-          .doc(this.profileId)
-          .collection('usersWhoLiked')
+          .collection('likedProfileUsers')
           .doc(),
         {
           userIdWhoLiked: user.uid,
