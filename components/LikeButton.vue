@@ -29,11 +29,11 @@ export default {
       // 追加
       const batch = this.$firestore.batch()
   
-      // ログインユーザーがいいねしたProfileのリスト likedProfiles
+      // likedProfiles: ログインユーザーがいいねしたProfileのリスト
       // ログインユーザーのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
       // profileId: いいねした相手のプロフィールID
       // profileRef: いいねした相手のプロフィールのDocumentReference
-      const profileRef = await this.$firestore.collectionGroup('profile').where('id', '==', this.profileId).get();
+      // const profileRef = await this.$firestore.collectionGroup('profile').where('id', '==', this.profileId).get();
       batch.set(
         // エラーが起きて、言われるがままにインデックスの除外を追加した。
         // 参考：https://note.com/fsxfcu7y/n/nf195177b6e23
@@ -45,7 +45,7 @@ export default {
         {
           'profileId': this.profileId,
           // 'profileRef': profileRef,
-          // createTime: FieldValue.serverTimestamp()
+          // createTime: this.$firestore.FieldValue.serverTimestamp()
         }
       )
       

@@ -75,12 +75,14 @@ export default {
         {
           'name': user.displayName,
           'photoURL': user.photoURL,
-          'email':user.email
+          'email':user.email,
+          'createdAt': this.$firestore.FieldValue.serverTimeStamp(),
+          'updatedAt': this.$firestore.FieldValue.serverTimeStamp(),
         },
         { merge: true }
       )
 
-      // usersコレクションのサブコレクションprofileに登録ユーザーのプロフィールを追加
+      // profilesコレクションに登録ユーザーのプロフィールを追加
       batch.set(
         this.$firestore
           .collection('profiles')
@@ -91,7 +93,9 @@ export default {
           'bodyType': "普通",
           'bloodType': "A",
           'residence': "東京",
-          'birthplace': "東京"
+          'birthplace': "東京",
+          'createdAt': this.$firestore.FieldValue.serverTimeStamp(),
+          'updatedAt': this.$firestore.FieldValue.serverTimeStamp(),
         },
         { merge: true }
       ),

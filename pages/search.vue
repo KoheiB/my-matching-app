@@ -93,11 +93,14 @@ export default {
     }
   },
   // 表示するプロフィールの配列をコレクショングループで取得しておく。
-  created() {
-    this.$firestore.collectionGroup('profile').get().then((querySnapshot) => {
+  created () {
+    this.$fireAuth.onAuthStateChanged(user => {
+      this.currentUser = user
+      this.$firestore.collection('profiles').where('id', '!=', this.currentUser.uid).get().then((querySnapshot) => {
       this.profiles = querySnapshot.docs.map(doc => doc.data())
+      })
     })
-  }
+  },
 }
 </script>
 

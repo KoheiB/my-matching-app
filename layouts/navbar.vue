@@ -115,7 +115,6 @@ export default {
   created () {
     this.$fireAuth.onAuthStateChanged(user => {
       this.currentUser = user
-      console.log(this.currentUser)
     })
   },
   methods: {
