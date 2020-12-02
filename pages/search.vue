@@ -81,6 +81,7 @@ export default {
   },
   data() {
     return {
+      currentUser: {},
       profiles: [],
       model: 0,
       colors: [

@@ -73,11 +73,11 @@ export default {
           .collection('users')
           .doc(user.uid),
         {
-          'name': user.displayName,
-          'photoURL': user.photoURL,
+          'name': this.displayName,
           'email':user.email,
-          'createdAt': this.$firestore.FieldValue.serverTimeStamp(),
-          'updatedAt': this.$firestore.FieldValue.serverTimeStamp(),
+          'password':user.password,
+          'createdAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
+          'updatedAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
         },
         { merge: true }
       )
@@ -94,8 +94,8 @@ export default {
           'bloodType': "A",
           'residence': "東京",
           'birthplace': "東京",
-          'createdAt': this.$firestore.FieldValue.serverTimeStamp(),
-          'updatedAt': this.$firestore.FieldValue.serverTimeStamp(),
+          'createdAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
+          'updatedAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
         },
         { merge: true }
       ),
