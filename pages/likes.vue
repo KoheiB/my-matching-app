@@ -50,20 +50,7 @@ export default {
   data () {
     return {
       currentUser: {},
-      likes: [
-        // {
-        //   id: 1,
-        //   name: "aaa",
-        //   picture: require('@/assets/image/html.png'),
-        //   date: "2020/11/11"
-        // },
-        // {
-        //   id: 2,
-        //   name: "bbb",
-        //   picture: require('@/assets/image/html.png'),
-        //   date: "2020/11/11"
-        // },
-      ],
+      likes: [],
     }
   },
   created() {
@@ -71,9 +58,8 @@ export default {
       this.currentUser = user
       console.log(this.currentUser)
       
-      this.$firestore.collection('users').doc(this.currentUser.uid)
-      .collection('profile').doc(this.currentUser.uid)
-      .collection('likedUsers')
+      this.$firestore.collection('profile').doc(this.currentUser.uid)
+      .collection('likedProfileUsers')
       .get().then((querySnapshot) => {
         this.likes = querySnapshot.docs.map(doc => doc.data())
       })

@@ -30,10 +30,8 @@ export default {
       const batch = this.$firestore.batch()
   
       // likedProfiles: ログインユーザーがいいねしたProfileのリスト
-      // ログインユーザーのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
-      // profileId: いいねした相手のプロフィールID
-      // profileRef: いいねした相手のプロフィールのDocumentReference
-      // const profileRef = await this.$firestore.collectionGroup('profile').where('id', '==', this.profileId).get();
+      // usersのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
+      const likedProfileRef = await this.$firestore.collection('profiles').doc(`${this.profileId}`)
       batch.set(
         // エラーが起きて、言われるがままにインデックスの除外を追加した。
         // 参考：https://note.com/fsxfcu7y/n/nf195177b6e23
@@ -43,17 +41,16 @@ export default {
           .collection('likedProfiles')
           .doc(),
         {
-          'profileId': this.profileId,
-          // 'profileRef': profileRef,
-          // createTime: this.$firestore.FieldValue.serverTimestamp()
+          likedProfileRef: likedProfileRef,
+          isApproved: false,
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp()
         }
       )
       
-
       // 該当ユーザーをいいねしたuserのリスト
-      // いいねされた該当ユーザーのサブコレクションprofileのサブコレクションlikedUsersにログインユーザーのデータを追加
-      // userIdWhoLiked: 該当ユーザーをいいねしたログインユーザーのID
-
+      // いいねされた該当ユーザーのサブコレクションprofileのサブコレクションlikedProfileUsersにログインユーザーのデータを追加
+      // likedProfileUsers: 該当ユーザーをいいねしたユーザーリスト（ログインユーザー含む）
+      const likedUserRef = await this.$firestore.collection('users').doc(user.uid)
       batch.set(
         this.$firestore
           .collection('profiles')
@@ -61,7 +58,9 @@ export default {
           .collection('likedProfileUsers')
           .doc(),
         {
-          userIdWhoLiked: user.uid,
+          likedUserRef: likedUserRef,
+          isApproved: false,
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp()
         }
       )
 
