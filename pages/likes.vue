@@ -16,16 +16,15 @@
               </v-col>
               <v-col cols="6">
                 <v-card-title>
-                  {{ like.name }}
+                  {{ like.likedUserRef }}
                 </v-card-title>
                 <v-card-subtitle>
-                  {{ like.date }}
+                  {{ like.createdAt }}
                 </v-card-subtitle>
               </v-col>
               <v-col cols="3"
               align-self="center"
               justify="center">
-                <ThankyouButton></ThankyouButton>
               </v-col>
               <v-col cols="1"></v-col>
             </v-row>
@@ -55,10 +54,7 @@ export default {
   },
   created() {
     this.$fireAuth.onAuthStateChanged(user => {
-      this.currentUser = user
-      console.log(this.currentUser)
-      
-      this.$firestore.collection('profile').doc(this.currentUser.uid)
+      this.$firestore.collection('profiles').doc(user.uid)
       .collection('likedProfileUsers')
       .get().then((querySnapshot) => {
         this.likes = querySnapshot.docs.map(doc => doc.data())

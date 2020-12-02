@@ -48,8 +48,7 @@ export default {
       )
       
       // 該当ユーザーをいいねしたuserのリスト
-      // いいねされた該当ユーザーのサブコレクションprofileのサブコレクションlikedProfileUsersにログインユーザーのデータを追加
-      // likedProfileUsers: 該当ユーザーをいいねしたユーザーリスト（ログインユーザー含む）
+      // いいねされた該当ユーザーのコレクションprofileのサブコレクションlikedProfileUsersにログインユーザーのデータを追加
       const likedUserRef = await this.$firestore.collection('users').doc(user.uid)
       batch.set(
         this.$firestore
