@@ -2,7 +2,7 @@
   <v-app>
     <v-container class="primary">
       <v-row>
-        <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
+        <v-col cols="12" md="6" v-for="like in likesAfter" :key="like.id">
           <v-card>
             <v-row>
               <v-col cols="2" align-self="center">
@@ -14,7 +14,7 @@
               </v-col>
               <v-col cols="6">
                 <v-card-title>
-                  <!-- {{ like.likedUserRef }} -->
+                  {{ like.name }}
                 </v-card-title>
                 <v-card-subtitle>
                   {{ like.createdAt }}
@@ -43,6 +43,7 @@ export default {
     return {
       currentUser: {},
       likes: [],
+      likesAfter: []
     };
   },
   created() {
@@ -68,11 +69,16 @@ export default {
           .collection("likedProfileUsers")
           .get()
         this.likes = querySnapshot.docs.map((doc) => doc.data());
-        this.likes.forEach((like) => {
+        this.likes.forEach(async (like) => {
           const likedUserRef = like.likedUserRef
-          const likedUser = likedUserRef.get()
-          console.log(likedUser.data())
+          const likedUser = await likedUserRef.get()
+          const likedUserName = likedUser.data().name
+          like.name = likedUserName
+          this.likesAfter.push(like)
         })
+        // const likedUserRef = this.likes[0].likedUserRef
+        // const likedUser = await likedUserRef.get()
+        // console.log(likedUser.data())
       } catch (error) {
         console.log(error)
       }

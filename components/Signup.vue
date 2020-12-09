@@ -75,7 +75,6 @@ export default {
         {
           'name': this.displayName,
           'email':user.email,
-          'password':user.password,
           'createdAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
           'updatedAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
         },
