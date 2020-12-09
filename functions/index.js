@@ -14,10 +14,13 @@ const db = admin.firestore();
 
 exports.createChatroom = functions.firestore.document('profiles/{profileId}/likedProfileUsers/{likedProfileUsersId}')
 .onUpdate((change, context) => {
-  const newValue = change.after.data();
-  const previousValue = change.before.data();
-  const isApproved = newValue.isApproved
-  const likedUserRef = newValue.likedUserRef
+  // const previousSnapshot = change.before
+  const newSnapshot = change.after
+  const newData = newSnapshot.data();
+  const isApproved = newData.isApproved
+  const likedUserRef = newData.likedUserRef
+  console.log(isApproved)
+  console.log(likedUserRef)
 
   if (!isApproved) {
     return null;
@@ -26,7 +29,8 @@ exports.createChatroom = functions.firestore.document('profiles/{profileId}/like
   db.collection('rooms').doc()
   .set({
     chatPartnerRef: likedUserRef,
-    createdAt: db.FieldValue.serverTimestamp(),
+    createdAt: admin.firestore.FieldValue.serverTimestamp()
   }, {merge: true});
-  
+  console.log('chatroom is created.')
+  return null;
 })
