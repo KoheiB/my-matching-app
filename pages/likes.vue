@@ -2,7 +2,7 @@
   <v-app>
     <v-container class="primary">
       <v-row>
-        <v-col cols="12" md="6" v-for="like in likesAfter" :key="like.id">
+        <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
           <v-card>
             <v-row>
               <v-col cols="2" align-self="center">
@@ -20,7 +20,15 @@
                   {{ like.createdAt }}
                 </v-card-subtitle>
               </v-col>
-              <v-col cols="3" align-self="center" justify="center"> </v-col>
+              <v-col cols="3" align-self="center" justify="center">
+                <v-btn @click="approveLike(like)"
+                color="info"
+                height="40"
+                :disabled = like.isApproved
+                >
+                  <v-icon>mdi-heart</v-icon>ありがとう！
+                </v-btn>
+              </v-col>
               <v-col cols="1"></v-col>
             </v-row>
           </v-card>
@@ -43,7 +51,6 @@ export default {
     return {
       currentUser: {},
       likes: [],
-      likesAfter: []
     };
   },
   created() {
@@ -62,28 +69,47 @@ export default {
       //       console.log(likedUser.data())
       //     )
       //   });
+      this.currentUser = user
       try {
         const querySnapshot = await this.$firestore
           .collection("profiles")
           .doc(user.uid)
           .collection("likedProfileUsers")
           .get()
-        this.likes = querySnapshot.docs.map((doc) => doc.data());
-        this.likes.forEach(async (like) => {
+        const likes = querySnapshot.docs.map((doc) => {
+          const result = doc.data()
+          result.id = doc.id
+          return result
+        });
+        likes.forEach(async (like) => {
           const likedUserRef = like.likedUserRef
           const likedUser = await likedUserRef.get()
           const likedUserName = likedUser.data().name
           like.name = likedUserName
-          this.likesAfter.push(like)
+          this.likes.push(like)
         })
-        // const likedUserRef = this.likes[0].likedUserRef
-        // const likedUser = await likedUserRef.get()
-        // console.log(likedUser.data())
+        console.log(this.likes)
       } catch (error) {
         console.log(error)
       }
     });
   },
+  methods: {
+    approveLike(like) {
+      this.$firestore.collection('profiles')
+      .doc(this.currentUser.uid)
+      .collection('likedProfileUsers')
+      .doc(like.id)
+      .update({
+        isApproved: true,
+      })
+    },
+    // onClickThankyou(like) {
+    //   this.$fireAuth.onAuthStateChanged((user) => {
+    //     this.approveLike(like)
+    //   })
+    // }
+  }
 };
 </script>
 
