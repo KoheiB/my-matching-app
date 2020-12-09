@@ -17,7 +17,10 @@ export default {
     }
   },
   props: {
-    profileId: String
+    profileId: {
+      type: String,
+      required: true
+    }
   },
   created () {
     this.$fireAuth.onAuthStateChanged(user => {

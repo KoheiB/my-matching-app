@@ -88,7 +88,6 @@ export default {
           like.name = likedUserName
           this.likes.push(like)
         })
-        console.log(this.likes)
       } catch (error) {
         console.log(error)
       }
@@ -103,12 +102,8 @@ export default {
       .update({
         isApproved: true,
       })
+      like.isApproved = true
     },
-    // onClickThankyou(like) {
-    //   this.$fireAuth.onAuthStateChanged((user) => {
-    //     this.approveLike(like)
-    //   })
-    // }
   }
 };
 </script>

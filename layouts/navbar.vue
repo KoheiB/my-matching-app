@@ -45,7 +45,9 @@
           icon
           :style="'background-image: url('+currentUser.photoURL+')'" 
           ></v-btn>
-          {{ userName }}
+        <v-btn>
+          {{ currentUserName }}
+        </v-btn>
         <v-btn @click="logOut">
           ログアウト
         </v-btn>
@@ -84,7 +86,7 @@ export default {
       fixed: false,
       selectedItem: 1,
       currentUser: {},
-      userName: '',
+      currentUserName: '',
       items:[
         {
           icon: 'mdi-magnify',
@@ -115,9 +117,17 @@ export default {
     }
   },
   created () {
-    this.$fireAuth.onAuthStateChanged(user => {
+    this.$fireAuth.onAuthStateChanged(async(user) => {
       this.currentUser = user
-      this.userName = this.$firestore.collection('profiles').doc(this.currentUser.uid).get()
+      try {
+        const documentSnapshot = await this.$firestore
+          .collection('profiles').doc(user.uid)
+          .get()
+        const documentData = documentSnapshot.data()
+        this.currentUserName = documentData.displayName
+      } catch (error) {
+        console.log(error)
+      }
     })
   },
   methods: {
