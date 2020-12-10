@@ -7,8 +7,8 @@
         </v-col>
       </v-row>
       <v-card
-        v-for="room in rooms"
-        :key="room.id">
+        v-for="chatroom in chatrooms"
+        :key="chatroom.id">
         <v-card-title>
           {{ room.name }}
         </v-card-title>
@@ -21,25 +21,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   layout: 'navbar',
-  computed: {
-    ...mapGetters('rooms', ['rooms'])
-  },
-
-  async asyncData({ store }) {
-    const unsubscribe = await store.dispatch('rooms/subscribe')
+  data () {
     return {
-      unsubscribe
+      chatrooms: []
     }
-  },
-
-  destroyed() {
-    this.$store.dispatch('rooms/clear')
-    if (this.unsubscribe) this.unsubscribe()
-  },
-
+  }
 }
 </script>
 

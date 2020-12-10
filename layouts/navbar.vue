@@ -101,7 +101,7 @@ export default {
         {
           icon: 'mdi-email',
           title: 'Message',
-          to: '/messages'
+          to: '/messages/'
         },
         {
           icon: 'mdi-account',
