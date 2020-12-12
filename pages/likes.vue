@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container class="primary">
+    <v-container>
       <v-row>
         <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
           <v-card>

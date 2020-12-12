@@ -1,20 +1,22 @@
 <template>
   <v-app>
-    <v-container class="primary">
+    <v-container>
       <v-row>
         <v-col>
-          <!-- {{ chatrooms }} -->
         </v-col>
       </v-row>
       <v-card
+        class="mb-2"
         v-for="chatroom in chatrooms"
         :key="chatroom.id"
         >
         <v-card-title>
-          {{ chatroom.updatedAt }}
+          {{ chatroom.attendUserName }}
         </v-card-title>
+        <v-card-subtitle>
+          {{ chatroom.updatedAt }}
+        </v-card-subtitle>
         <v-card-text>
-          content
         </v-card-text>
       </v-card>
     </v-container>
@@ -44,8 +46,13 @@ export default {
           result.id = doc.id
           return result
         });
-        // console.log(chatrooms);
-        chatrooms.forEach((chatroom) => {
+        chatrooms.forEach(async (chatroom) => {
+          const attendUserRef = chatroom.attendUserRef
+          const attendUserSnapshot = await attendUserRef.get()
+          const attendUserId = attendUserSnapshot.id
+          const attendProfileSnapshot = await this.$firestore.collection('profiles').doc(attendUserId).get()
+          const attendProfileData = attendProfileSnapshot.data()
+          chatroom.attendUserName = attendProfileData.displayName
           this.chatrooms.push(chatroom)
         })
       } catch (error) {
