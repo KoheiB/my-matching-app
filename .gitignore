@@ -91,3 +91,6 @@ sw.*
 
 #Firebase
 firebaseConfig.json
+
+#data
+data/
