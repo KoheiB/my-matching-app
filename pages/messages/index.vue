@@ -5,20 +5,23 @@
         <v-col>
         </v-col>
       </v-row>
-      <v-card
-        class="mb-2"
+      <nuxt-link :to="`${chatroom.id}`"
         v-for="chatroom in chatrooms"
         :key="chatroom.id"
+      >
+        <v-card 
+        class="mb-2"
         >
-        <v-card-title>
-          {{ chatroom.attendUserName }}
-        </v-card-title>
-        <v-card-subtitle>
-          {{ chatroom.updatedAt }}
-        </v-card-subtitle>
-        <v-card-text>
-        </v-card-text>
-      </v-card>
+          <v-card-title>
+            {{ chatroom.attendUserName }}
+          </v-card-title>
+          <v-card-subtitle>
+            {{ chatroom.updatedAt }}
+          </v-card-subtitle>
+          <v-card-text>
+          </v-card-text>
+        </v-card>
+      </nuxt-link>
     </v-container>
   </v-app>
 </template>
@@ -53,6 +56,7 @@ export default {
           const attendProfileSnapshot = await this.$firestore.collection('profiles').doc(attendUserId).get()
           const attendProfileData = attendProfileSnapshot.data()
           chatroom.attendUserName = attendProfileData.displayName
+          chatroom.updatedAt = chatroom.updatedAt.toDate().toLocaleString('ja-JP-u-ca-japanese')
           this.chatrooms.push(chatroom)
         })
       } catch (error) {

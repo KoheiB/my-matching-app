@@ -86,6 +86,7 @@ export default {
           const likedUser = await likedUserRef.get()
           const likedUserName = likedUser.data().name
           like.name = likedUserName
+          like.createdAt = like.createdAt.toDate().toLocaleString('ja-JP-u-ca-japanese')
           this.likes.push(like)
         })
       } catch (error) {

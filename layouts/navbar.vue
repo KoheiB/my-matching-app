@@ -15,7 +15,7 @@
           :key="i"
           :to="item.to"
           router
-          exact>
+          >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -106,7 +106,7 @@ export default {
         {
           icon: 'mdi-account',
           title: 'Profile',
-          to: '/profile'
+          to: '/myprofile'
         },
         {
           icon: 'mdi-cog',
