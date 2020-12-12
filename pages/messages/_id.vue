@@ -32,19 +32,36 @@
     </v-col>
 
     <!-- ディバイダー -->
-    <v-col cols="1">
-      <v-divider vertical></v-divider>
-    </v-col>
+    <v-divider vertical></v-divider>
 
     <!-- 右半分 メッセージ画面 -->
     <v-col cols="5">
-      マナーを守って楽しくチャットしよう！
-      <v-container v-if="!this.chats.docs">
-        チャットを送ってみよう！
+      <v-container class="box">
+        <v-card
+        outlined
+          class="info mb-2 overflow-auto"
+          max-height="50%"
+        >
+          <v-container
+            v-show="chats"
+            v-for="chat in chats"
+            :key="chat.id"
+          >
+            <v-sheet rounded>
+              {{ chat.content }}
+            </v-sheet>
+          </v-container>
+          <v-container
+            v-show="!chats"
+          >
+            <p>まだチャットがありません</p>
+          </v-container>
+        </v-card>
+        <v-text-field
+          v-model="content"
+          placeholder="チャット"
+          ></v-text-field>
       </v-container>
-      <v-sheet v-for="chat in chats" :key="chat.id">
-        {{ chats }}
-      </v-sheet>
     </v-col>
   </v-row>
 </template>
@@ -56,6 +73,7 @@ export default {
     return {
       attendUserId: this.$route.params.id,
       chats: [],
+      content: '',
       picture: require('@/assets/image/html.png'),
       name: 'aaa',
       items: [
@@ -77,10 +95,8 @@ export default {
       .doc(this.attendUserId)
       .collection('chats')
       .get();
-      console.log(querySnapshot)
       const chats = querySnapshot.docs.map((doc) => {
         const result = doc.data()
-        console.log(result)
         return result
       });
       this.chats = chats
@@ -90,5 +106,8 @@ export default {
 </script>
 
 <style>
+.box {
+  height: 80%;
+}
 
 </style>
