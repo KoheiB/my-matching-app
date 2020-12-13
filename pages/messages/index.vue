@@ -5,23 +5,23 @@
         <v-col>
         </v-col>
       </v-row>
-      <nuxt-link :to="`${chatroom.id}`"
+      <v-card
         v-for="chatroom in chatrooms"
         :key="chatroom.id"
-      >
-        <v-card 
         class="mb-2"
-        >
-          <v-card-title>
-            {{ chatroom.attendUserName }}
-          </v-card-title>
-          <v-card-subtitle>
-            {{ chatroom.updatedAt }}
-          </v-card-subtitle>
-          <v-card-text>
-          </v-card-text>
-        </v-card>
-      </nuxt-link>
+        hover
+        nuxt
+        :to="`${chatroom.id}`"
+      >
+        <v-card-title>
+          {{ chatroom.attendUserName }}
+        </v-card-title>
+        <v-card-subtitle>
+          {{ chatroom.updatedAt }}
+        </v-card-subtitle>
+        <v-card-text>
+        </v-card-text>
+      </v-card>
     </v-container>
   </v-app>
 </template>

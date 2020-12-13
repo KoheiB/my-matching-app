@@ -3,7 +3,9 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
-          <v-card>
+          <v-card
+            hover
+          >
             <v-row>
               <v-col cols="2" align-self="center">
                 <v-img
