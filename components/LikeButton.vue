@@ -3,6 +3,7 @@
   color="info"
   height="40"
   :disabled = !currentUser
+  to=""
   >
     <v-icon>mdi-thumb-up-outline</v-icon>いいね
   </v-btn>

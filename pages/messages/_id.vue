@@ -52,15 +52,18 @@
             </v-sheet>
           </v-container>
           <v-container
-            v-show="!chats"
+            v-show="!chats.length"
           >
             <p>まだチャットがありません</p>
           </v-container>
         </v-card>
-        <v-text-field
-          v-model="content"
-          placeholder="チャット"
-          ></v-text-field>
+        <v-form @submit.prevent="onSubmit">
+          <v-text-field
+            v-model="content"
+            placeholder="チャット"
+          />
+          <v-btn type="submit">submit</v-btn>
+        </v-form>
       </v-container>
     </v-col>
   </v-row>
@@ -72,6 +75,7 @@ export default {
   data() {
     return {
       attendUserId: this.$route.params.id,
+      currentUser: {},
       chats: [],
       content: '',
       picture: require('@/assets/image/html.png'),
@@ -88,6 +92,7 @@ export default {
   },
   created() {
     this.$fireAuth.onAuthStateChanged(async(user) => {
+      this.currentUser = user
       const querySnapshot = await this.$firestore
       .collection('users')
       .doc(user.uid)
@@ -101,8 +106,21 @@ export default {
       });
       this.chats = chats
     })
+  },
+  methods: {
+    onSubmit() {
+      this.$firestore.collection('users').doc(this.currentUser.uid)
+      .collection('chatrooms').doc(this.attendUserId)
+      .collection('chats').add(),
+      {
+        'content': this.content,
+        'createdAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
+      }
+      console.log('submit');
+    }
   }
 }
+
 </script>
 
 <style>

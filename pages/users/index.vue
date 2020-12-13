@@ -34,34 +34,34 @@
         v-for="profile in profiles"
         :key="profile.id"
         >
-          <!-- <nuxt-link :to="`/users/${member.id}`"> -->
-            <v-card
+          <v-card
             class="card mb-5"
-            elevation="4"
-            >
-              <v-card-title>
-                {{ profile.id }}
-                <hr>
-                {{ profile.displayName}}
-              </v-card-title>
-              <v-card-text>
-                <v-container
-                >
-                  <!-- <img
-                  :src="member.picture"
-                  class="picture"
-                  > -->
-                </v-container>
-                <p>{{ profile.residence }}</p>
-              </v-card-text>
-              <v-card-actions>
-                <v-container>
-                  <ProfileButton class="mb-2"></ProfileButton>
-                  <LikeButton :profileId = "profile.id"></LikeButton>
-                </v-container>
-              </v-card-actions>
-            </v-card>
-          <!-- </nuxt-link> -->
+            nuxt
+            :to="`/users/${profile.id}`"
+            hover
+          >
+            <v-card-title>
+              {{ profile.id }}
+              <hr>
+              {{ profile.displayName}}
+            </v-card-title>
+            <v-card-text>
+              <v-container
+              >
+                <!-- <img
+                :src="member.picture"
+                class="picture"
+                > -->
+              </v-container>
+              <p>{{ profile.residence }}</p>
+            </v-card-text>
+            <v-card-actions>
+              <v-container>
+                <ProfileButton class="mb-2"></ProfileButton>
+                <LikeButton :profileId = "profile.id"></LikeButton>
+              </v-container>
+            </v-card-actions>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>

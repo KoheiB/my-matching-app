@@ -91,7 +91,7 @@ export default {
         {
           icon: 'mdi-magnify',
           title: 'Search',
-          to: '/search'
+          to: '/users/'
         },
         {
           icon: 'mdi-thumb-up',
