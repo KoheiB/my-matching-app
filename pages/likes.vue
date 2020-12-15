@@ -6,6 +6,8 @@
         <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
           <v-card
             hover
+            nuxt
+            :to="`/users/${like.id}`"
           >
             <v-row>
               <v-col cols="2" align-self="center">
@@ -24,7 +26,7 @@
                 </v-card-subtitle>
               </v-col>
               <v-col cols="3" align-self="center" justify="center">
-                <v-btn @click="approveLike(like)"
+                <v-btn @click.prevent="approveLike(like)"
                 color="info"
                 height="40"
                 :disabled = like.isApproved
@@ -59,20 +61,6 @@ export default {
   },
   created() {
     this.$fireAuth.onAuthStateChanged(async(user) => {
-      // this.$firestore
-      //   .collection("profiles")
-      //   .doc(user.uid)
-      //   .collection("likedProfileUsers")
-      //   .get()
-      //   .then((querySnapshot) => {
-      //     this.likes = querySnapshot.docs.map((doc) => doc.data());
-      //     console.log(this.likes);
-      //     console.log(this.likes[0].likedUserRef)
-      //     const likedUserRef = this.likes[0].likedUserRef
-      //     likedUserRef.get().then((likedUser) =>
-      //       console.log(likedUser.data())
-      //     )
-      //   });
       this.currentUser = user
       try {
         const querySnapshot = await this.$firestore
@@ -86,9 +74,9 @@ export default {
           return result
         });
         likes.forEach(async (like) => {
-          const likedUserRef = like.likedUserRef
-          const likedUser = await likedUserRef.get()
+          const likedUser = await like.likedUserRef.get()
           const likedUserName = likedUser.data().name
+          like.userId = like.likedUserRef.id
           like.name = likedUserName
           like.createdAt = like.createdAt.toDate().toLocaleString('ja-JP-u-ca-japanese')
           this.likes.push(like)
@@ -100,15 +88,35 @@ export default {
     });
   },
   methods: {
-    approveLike(like) {
-      this.$firestore.collection('profiles')
-      .doc(this.currentUser.uid)
-      .collection('likedProfileUsers')
-      .doc(like.id)
-      .update({
-        isApproved: true,
-      })
+    async approveLike(like) {
+      const batch = this.$firestore.batch()
       like.isApproved = true
+
+      // Firestore上のデータを更新
+      batch.update(
+        this.$firestore
+        .collection('profiles')
+        .doc(this.currentUser.uid)
+        .collection('likedProfileUsers')
+        .doc(like.id),
+        {
+          isApproved: true,
+        }
+      )
+
+      // ルーム作成
+      batch.set(
+        this.$firestore
+        .collection('rooms')
+        .doc(),
+        {
+          attendUsersId: [this.currentUser.uid, like.userId],
+          updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp()
+        }
+      )
+
+      // 一括処理
+      await batch.commit()
     },
   }
 };

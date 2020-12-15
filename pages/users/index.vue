@@ -14,6 +14,7 @@
             nuxt
             :to="`/users/${profile.id}`"
             hover
+            :ripple="false"
           >
             <v-card-title>
               {{ profile.displayName}}
