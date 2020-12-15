@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-container>
+      <v-skeleton-loader v-if="loading" type="card"/>
       <v-row>
         <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
           <v-card
@@ -51,6 +52,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       currentUser: {},
       likes: [],
     };
@@ -90,6 +92,7 @@ export default {
           like.name = likedUserName
           like.createdAt = like.createdAt.toDate().toLocaleString('ja-JP-u-ca-japanese')
           this.likes.push(like)
+          this.loading = false
         })
       } catch (error) {
         console.log(error)

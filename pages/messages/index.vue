@@ -1,10 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <v-row>
-        <v-col>
-        </v-col>
-      </v-row>
+      <v-skeleton-loader v-if="loading" type="card"/>
       <v-card
         v-for="chatroom in chatrooms"
         :key="chatroom.id"
@@ -31,6 +28,7 @@ export default {
   layout: 'navbar',
   data () {
     return {
+      loading: true,
       chatrooms: [],
       currentUser: {},
     }
@@ -58,6 +56,7 @@ export default {
           chatroom.attendUserName = attendProfileData.displayName
           chatroom.updatedAt = chatroom.updatedAt.toDate().toLocaleString('ja-JP-u-ca-japanese')
           this.chatrooms.push(chatroom)
+          this.loading = false
         })
       } catch (error) {
         console.log(error);

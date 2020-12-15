@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-container>
+      <v-skeleton-loader v-if="loading" type="card"/>
       <!-- プロフィール一覧 -->
       <v-row>
         <v-col
@@ -56,6 +57,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       currentUser: {},
       profiles: [],
       model: 0,
@@ -70,10 +72,11 @@ export default {
   },
   // 表示するプロフィールの配列をコレクショングループで取得しておく。
   created () {
-    this.$fireAuth.onAuthStateChanged(user => {
+    this.$fireAuth.onAuthStateChanged(async(user) => {
       this.currentUser = user
       this.$firestore.collection('profiles').where('id', '!=', this.currentUser.uid).get().then((querySnapshot) => {
         this.profiles = querySnapshot.docs.map(doc => doc.data())
+        this.loading = false
       })
     })
   },
