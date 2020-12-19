@@ -8,7 +8,7 @@
         class="mb-2"
         hover
         nuxt
-        :to="`${room.partnerId}`"
+        :to="`${room.id}`"
       >
         <v-card-title>
           {{ room.partnerName }}
@@ -50,7 +50,6 @@ export default {
           const partnerId = room.attendUsersId.filter((attendUserId) => attendUserId !== this.currentUser.uid)[0]
           const documentSnapshot = await this.$firestore.collection('profiles').doc(partnerId).get()
           const documentData = documentSnapshot.data()
-
           room.partnerId = partnerId
           room.partnerName = documentData.displayName
           room.updatedAt = room.updatedAt.toDate().toLocaleString('ja-JP-u-ca-japanese')

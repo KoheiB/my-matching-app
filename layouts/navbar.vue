@@ -51,6 +51,7 @@
         <v-btn @click="logOut">
           ログアウト
         </v-btn>
+        <v-btn @click="passwordReset(currentUser)">passwordchange</v-btn>
       </v-container>
       <v-container v-else>
         <v-btn @click="logIn">
@@ -148,6 +149,14 @@ export default {
           location.reload()
         })
       }
+    },
+    passwordReset(user) {
+      this.$fireAuth.sendPasswordResetEmail(user.email).then(function() {
+        // Email sent.
+        console.log('Email sent.')
+      }).catch(function(error) {
+        // An error happened.
+      })
     },
     createUser (user) {
       this.$firestore.collection('users').doc(user.uid).set({

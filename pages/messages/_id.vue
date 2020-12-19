@@ -40,29 +40,31 @@
         <v-card
         outlined
           class="info mb-2 overflow-auto"
-          max-height="50%"
+          max-height="100%"
         >
           <v-container
-            v-show="chats"
-            v-for="chat in chats"
-            :key="chat.id"
+            v-show="messages"
+            v-for="message in messages"
+            :key="message.id"
           >
             <v-sheet rounded>
-              {{ chat.content }}
+              {{ message.body }}
             </v-sheet>
           </v-container>
           <v-container
-            v-show="!chats.length"
+            v-show="!messages"
           >
             <p>まだチャットがありません</p>
           </v-container>
         </v-card>
         <v-form @submit.prevent="onSubmit">
           <v-text-field
-            v-model="content"
-            placeholder="チャット"
+            v-model="sendMessage"
+            placeholder="メッセージを送信する"
           />
-          <v-btn type="submit">submit</v-btn>
+          <div class="d-flex justify-end">
+            <v-btn type="submit">submit</v-btn>
+          </div>
         </v-form>
       </v-container>
     </v-col>
@@ -74,10 +76,10 @@ export default {
   layout: 'navbar',
   data() {
     return {
-      attendUserId: this.$route.params.id,
+      roomId: this.$route.params.id,
       currentUser: {},
-      chats: [],
-      content: '',
+      messages: [],
+      sendMessage: '',
       picture: require('@/assets/image/html.png'),
       name: 'aaa',
       items: [
@@ -91,32 +93,39 @@ export default {
     }
   },
   created() {
-    this.$fireAuth.onAuthStateChanged(async(user) => {
-      this.currentUser = user
-      const querySnapshot = await this.$firestore
-      .collection('users')
-      .doc(user.uid)
-      .collection('chatrooms')
-      .doc(this.attendUserId)
-      .collection('chats')
-      .get();
-      const chats = querySnapshot.docs.map((doc) => {
-        const result = doc.data()
-        return result
-      });
-      this.chats = chats
-    })
+    this.getMessages()
   },
   methods: {
+    getMessages() {
+      this.$fireAuth.onAuthStateChanged(async(user) => {
+        this.currentUser = user
+        const querySnapshot = await this.$firestore
+        .collection('rooms')
+        .doc(this.roomId)
+        .collection('messages')
+        .orderBy('createdAt', 'asc')
+        .get();
+        const messages = querySnapshot.docs.map((doc) => {
+          const result = doc.data()
+          return result
+        });
+        this.messages = messages
+      })
+    },
     onSubmit() {
-      this.$firestore.collection('users').doc(this.currentUser.uid)
-      .collection('chatrooms').doc(this.attendUserId)
-      .collection('chats').add(),
-      {
-        'content': this.content,
-        'createdAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
+      if (this.sendMessage.trim()) {
+        this.$firestore.collection('rooms').doc(this.roomId)
+        .collection('messages').add(
+          {
+            'userId': this.currentUser.uid,
+            'body': this.sendMessage,
+            'createdAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
+          }
+        )
+        console.log('submit');
+        this.getMessages()
+        this.sendMessage = ''
       }
-      console.log('submit');
     }
   }
 }
