@@ -37,20 +37,51 @@
     <!-- 右半分 メッセージ画面 -->
     <v-col cols="5">
       <v-container class="box">
-        <v-card
-        outlined
-          class="info mb-2 overflow-auto"
-          max-height="100%"
+        <v-card class="teal lighten-4 mb-2 overflow-auto"
+          outlined
+          height="500"
         >
-          <v-container
-            v-show="messages"
+          <div
             v-for="message in messages"
             :key="message.id"
+            v-show="messages"
           >
-            <v-sheet rounded>
-              {{ message.body }}
-            </v-sheet>
-          </v-container>
+            <div v-if="isMyMessage(message.userId)">
+              <v-row>
+                <v-col cols="2">
+                </v-col>
+                <v-col cols="8" class="d-flex justify-end">
+                  <div class="teal lighten-5 pa-2 rounded-lg">
+                    {{ message.body }}
+                  </div>
+                </v-col>
+                <v-col cols="2" class="d-flex">
+                  <v-avatar size="30">
+                    <v-img
+                      :src="require('@/assets/image/default-user.jpg')"
+                    />
+                  </v-avatar>
+                </v-col>
+              </v-row>
+            </div>
+            <div v-else>
+              <v-row>
+                <v-col cols="2" class="d-flex justify-end">
+                  <v-avatar size="30">
+                    <v-img
+                      :src="require('@/assets/image/default-user.jpg')"
+                    />
+                  </v-avatar>
+                </v-col>
+                <v-col cols="8" class="d-flex">
+                  <div class="teal lighten-5 pa-2 rounded-lg">
+                    {{ message.body }}
+                  </div>
+                </v-col>
+                <v-col cols="2"></v-col>
+              </v-row>
+            </div>
+          </div>
           <v-container
             v-show="!messages"
           >
@@ -60,10 +91,10 @@
         <v-form @submit.prevent="onSubmit">
           <v-text-field
             v-model="sendMessage"
-            placeholder="メッセージを送信する"
+            placeholder="メッセージを入力"
           />
           <div class="d-flex justify-end">
-            <v-btn type="submit">submit</v-btn>
+            <v-btn type="submit">送信</v-btn>
           </div>
         </v-form>
       </v-container>
@@ -112,6 +143,10 @@ export default {
         this.messages = messages
       })
     },
+    isMyMessage(userId) {
+      const { uid } = this.$fireAuth.currentUser
+      return userId === uid
+    },
     onSubmit() {
       if (this.sendMessage.trim()) {
         this.$firestore.collection('rooms').doc(this.roomId)
@@ -133,8 +168,5 @@ export default {
 </script>
 
 <style>
-.box {
-  height: 80%;
-}
 
 </style>
