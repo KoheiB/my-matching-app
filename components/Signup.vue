@@ -89,7 +89,7 @@ export default {
         {
           'id': user.uid,
           'displayName': this.displayName,
-          'avatarUrl': require('@/assets/image/default-user.jpg'),
+          'avatarUrl': '',
           'bodyType': "普通",
           'bloodType': "A",
           'residence': "東京",

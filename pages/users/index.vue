@@ -22,15 +22,18 @@
             <v-card-subtitle>
               {{ profile.id }}
             </v-card-subtitle>
+            <v-layout justify-center>
+              <v-avatar size="200" color="black">
+                <v-img v-show="!profile.avatarUrl"
+                  :src="require('@/assets/image/default-user.jpg')"
+                />
+                <v-img v-show="profile.avatarUrl"
+                  :src="profile.avatarUrl"
+                />
+              </v-avatar>
+            </v-layout>
             <v-card-text>
-              <v-container
-              >
-                <!-- <img
-                :src="member.picture"
-                class="picture"
-                > -->
-              </v-container>
-              <p>{{ profile.residence }}</p>
+              <span>{{ profile.residence }}</span>
             </v-card-text>
             <v-card-actions>
               <v-container>
@@ -78,6 +81,7 @@ export default {
       this.$firestore.collection('profiles').where('id', '!=', this.currentUser.uid).get().then((querySnapshot) => {
         this.profiles = querySnapshot.docs.map(doc => doc.data())
         this.loading = false
+        console.log(this.profiles)
       })
     })
   },

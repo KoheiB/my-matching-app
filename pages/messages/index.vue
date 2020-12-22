@@ -8,7 +8,7 @@
         class="mb-2"
         hover
         nuxt
-        :to="`${room.id}`"
+        :to="`/messages/${room.id}`"
       >
         <v-card-title>
           {{ room.partnerName }}
@@ -60,6 +60,9 @@ export default {
         console.log(error);
       }
     })
+  },
+  destroyed() {
+    
   },
 }
 </script>
