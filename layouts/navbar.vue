@@ -38,7 +38,9 @@
     elevation="2"
     app
     clipped-left>
-      MyMatchingApp
+      <v-toolbar-title>
+        MyMatchingApp
+      </v-toolbar-title>
       <v-container v-if="currentUser">
         <v-btn
           class="btn"
@@ -180,5 +182,9 @@ export default {
 <style>
 .btn {
   background-size: cover;
+}
+
+.v-main__wrap {
+  background-color: #ECEFF1;
 }
 </style>

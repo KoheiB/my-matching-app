@@ -108,6 +108,7 @@ export default {
   data() {
     return {
       roomId: this.$route.params.id,
+      unsubscribe: null,
       currentUser: {},
       messages: [],
       sendMessage: '',
@@ -126,21 +127,29 @@ export default {
   created() {
     this.getMessages()
   },
+  destroyed() {
+    this.messages = []
+    if(this.unsubscribe) {
+      console.log('unsubscribe')
+      this.unsubscribe();
+    }
+  },
   methods: {
     getMessages() {
       this.$fireAuth.onAuthStateChanged(async(user) => {
         this.currentUser = user
-        const querySnapshot = await this.$firestore
+        this.unsubscribe = this.$firestore
         .collection('rooms')
         .doc(this.roomId)
         .collection('messages')
         .orderBy('createdAt', 'asc')
-        .get();
-        const messages = querySnapshot.docs.map((doc) => {
-          const result = doc.data()
-          return result
+        .onSnapshot((snapshot) => {
+          snapshot.docs.map((doc) => {
+            this.messages.push(doc.data())
+          })
+        }, function(error) {
+          console.log(error);
         });
-        this.messages = messages
       })
     },
     isMyMessage(userId) {
@@ -158,7 +167,6 @@ export default {
           }
         )
         console.log('submit');
-        this.getMessages()
         this.sendMessage = ''
       }
     }

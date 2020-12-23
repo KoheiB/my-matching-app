@@ -1,53 +1,48 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-skeleton-loader v-if="loading" type="card"/>
-      <!-- プロフィール一覧 -->
-      <v-row>
-        <v-col
-        cols="6" sm="4" md="4" lg="3" xl="3"
-        v-for="profile in profiles"
-        :key="profile.id"
+  <v-container>
+    <v-skeleton-loader v-if="loading" type="card"/>
+    <!-- プロフィール一覧 -->
+    <v-row>
+      <v-col
+      cols="6" sm="4" md="4" lg="3" xl="3"
+      v-for="profile in profiles"
+      :key="profile.id"
+      >
+        <v-card
+          class="card mb-5 teal lighten-5"
+          nuxt
+          :to="`/users/${profile.id}`"
+          hover
+          :ripple="false"
         >
-          <v-card
-            class="card mb-5"
-            nuxt
-            :to="`/users/${profile.id}`"
-            hover
-            :ripple="false"
-          >
-            <v-card-title>
-              {{ profile.displayName}}
-            </v-card-title>
-            <v-card-subtitle>
-              {{ profile.id }}
-            </v-card-subtitle>
-            <v-layout justify-center>
-              <v-avatar size="200" color="black">
-                <v-img v-show="!profile.avatarUrl"
-                  :src="require('@/assets/image/default-user.jpg')"
-                />
-                <v-img v-show="profile.avatarUrl"
-                  :src="profile.avatarUrl"
-                />
-              </v-avatar>
-            </v-layout>
-            <v-card-text>
-              <span>{{ profile.residence }}</span>
-            </v-card-text>
-            <v-card-actions>
-              <v-container>
-                <ProfileButton class="mb-2"></ProfileButton>
-                <LikeButton :profileId = "profile.id"></LikeButton>
-              </v-container>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-    <!-- プロフィール一覧END -->
-    {{ this.profiles }}
-  </v-app>
+          <v-card-title>
+            {{ profile.displayName}}
+          </v-card-title>
+          <v-card-subtitle>
+            {{ profile.id }}
+          </v-card-subtitle>
+          <v-layout justify-center>
+            <v-avatar size="200">
+              <v-img v-show="!profile.avatarUrl"
+                :src="require('@/assets/image/default-user.jpg')"
+              />
+              <v-img v-show="profile.avatarUrl"
+                :src="profile.avatarUrl"
+              />
+            </v-avatar>
+          </v-layout>
+          <v-card-text>
+            <span>{{ profile.residence }}</span>
+          </v-card-text>
+          <v-card-actions>
+            <LikeButton :profileId = "profile.id"></LikeButton>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  {{ this.profiles }}
+  </v-container>
+  <!-- プロフィール一覧END -->
 </template>
 
 <script>

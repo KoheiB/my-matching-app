@@ -1,26 +1,24 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-skeleton-loader v-if="loading" type="card"/>
-      <v-card
-        v-for="room in rooms"
-        :key="room.id"
-        class="mb-2"
-        hover
-        nuxt
-        :to="`/messages/${room.id}`"
-      >
-        <v-card-title>
-          {{ room.partnerName }}
-        </v-card-title>
-        <v-card-subtitle>
-          {{ room.updatedAt }}
-        </v-card-subtitle>
-        <v-card-text>
-        </v-card-text>
-      </v-card>
-    </v-container>
-  </v-app>
+  <v-container>
+    <v-skeleton-loader v-if="loading" type="card"/>
+    <v-card
+      v-for="room in rooms"
+      :key="room.id"
+      class="mb-2"
+      hover
+      nuxt
+      :to="`/messages/${room.id}`"
+    >
+      <v-card-title>
+        {{ room.partnerName }}
+      </v-card-title>
+      <v-card-subtitle>
+        {{ room.updatedAt }}
+      </v-card-subtitle>
+      <v-card-text>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>

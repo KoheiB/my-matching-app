@@ -1,10 +1,12 @@
 <template>
   <v-btn @click.prevent="onclick(currentUser)"
-  color="info"
-  height="40"
+  color="red darken-1 white--text"
+  height="50"
+  block
+  rounded
   :disabled = !currentUser
   >
-    <v-icon>mdi-thumb-up-outline</v-icon>いいね
+    <v-icon>mdi-thumb-up-outline</v-icon>いいね！
   </v-btn>
 </template>
 
