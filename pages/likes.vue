@@ -43,12 +43,10 @@
 
 <script>
 import LikeButton from "~/components/LikeButton.vue";
-import ProfileButton from "~/components/ProfileButton.vue";
 export default {
   layout: "navbar",
   components: {
     LikeButton,
-    ProfileButton,
   },
   data() {
     return {

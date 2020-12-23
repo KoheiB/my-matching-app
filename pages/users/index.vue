@@ -8,6 +8,7 @@
       v-for="profile in profiles"
       :key="profile.id"
       >
+      <!-- カード部分 -->
         <v-card
           class="card mb-5 teal lighten-5"
           nuxt
@@ -16,11 +17,8 @@
           :ripple="false"
         >
           <v-card-title>
-            {{ profile.displayName}}
+            <span class="white px-4 rounded-lg">{{ profile.displayName}}</span>
           </v-card-title>
-          <v-card-subtitle>
-            {{ profile.id }}
-          </v-card-subtitle>
           <v-layout justify-center>
             <v-avatar size="200">
               <v-img v-show="!profile.avatarUrl"
@@ -31,9 +29,10 @@
               />
             </v-avatar>
           </v-layout>
-          <v-card-text>
-            <span>{{ profile.residence }}</span>
-          </v-card-text>
+          <v-card-subtitle class="d-flex justify-space-between">
+            <span class="white px-4 py-2 rounded-xl">{{ profile.residence }}</span>
+            <span class="white px-4 py-2 rounded-xl">{{ profile.bloodType}}</span>
+          </v-card-subtitle>
           <v-card-actions>
             <LikeButton :profileId = "profile.id"></LikeButton>
           </v-card-actions>
@@ -47,12 +46,10 @@
 
 <script>
 import LikeButton from '~/components/LikeButton.vue'
-import ProfileButton from '~/components/ProfileButton.vue'
 export default {
   layout: 'navbar',
   components: {
     LikeButton,
-    ProfileButton
   },
   data() {
     return {
