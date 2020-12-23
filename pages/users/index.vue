@@ -1,6 +1,15 @@
 <template>
   <v-container>
-    <v-skeleton-loader v-if="loading" type="card"/>
+    <div v-if="loading">
+      <v-row>
+        <v-col cols="6" sm="4" md="4" lg="3" xl="3"
+          v-for="n of 12" :key="n"
+        >
+          <v-skeleton-loader type="card-heading, card"
+          />
+        </v-col>
+      </v-row>
+    </div>
     <!-- プロフィール一覧 -->
     <v-row>
       <v-col
@@ -9,7 +18,7 @@
       :key="profile.id"
       >
       <!-- カード部分 -->
-        <v-card
+        <v-card 
           class="card mb-5 teal lighten-5"
           nuxt
           :to="`/users/${profile.id}`"
@@ -29,10 +38,6 @@
               />
             </v-avatar>
           </v-layout>
-          <v-card-subtitle class="d-flex justify-space-between">
-            <span class="white px-4 py-2 rounded-xl">{{ profile.residence }}</span>
-            <span class="white px-4 py-2 rounded-xl">{{ profile.bloodType}}</span>
-          </v-card-subtitle>
           <v-card-actions>
             <LikeButton :profileId = "profile.id"></LikeButton>
           </v-card-actions>
