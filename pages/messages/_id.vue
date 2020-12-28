@@ -90,7 +90,7 @@
         </v-card>
         <v-form @submit.prevent="onSubmit">
           <v-text-field
-            v-model="sendMessage"
+            v-model="sendingMessage"
             placeholder="メッセージを入力"
           />
           <div class="d-flex justify-end">
@@ -111,7 +111,7 @@ export default {
       unsubscribe: null,
       currentUser: {},
       messages: [],
-      sendMessage: '',
+      sendingMessage: '',
       picture: require('@/assets/image/html.png'),
       name: 'aaa',
       items: [
@@ -121,17 +121,6 @@ export default {
         { name: '居住地'},
         { name: '出身地'},
       ],
-
-    }
-  },
-  created() {
-    this.getMessages()
-  },
-  destroyed() {
-    this.messages = []
-    if(this.unsubscribe) {
-      console.log('unsubscribe')
-      this.unsubscribe();
     }
   },
   methods: {
@@ -145,7 +134,15 @@ export default {
         .orderBy('createdAt', 'asc')
         .onSnapshot((snapshot) => {
           snapshot.docs.map((doc) => {
-            this.messages.push(doc.data())
+            const docData = doc.data()
+            docData.id = doc.id
+            const ids = []
+            this.messages.map((msg) => {
+              ids.push(msg.id)
+            })
+            if (!ids.includes(docData.id)) {
+              this.messages.push(docData)
+            }
           })
         }, function(error) {
           console.log(error);
@@ -157,20 +154,30 @@ export default {
       return userId === uid
     },
     onSubmit() {
-      if (this.sendMessage.trim()) {
+      if (this.sendingMessage.trim()) {
         this.$firestore.collection('rooms').doc(this.roomId)
         .collection('messages').add(
           {
             'userId': this.currentUser.uid,
-            'body': this.sendMessage,
+            'body': this.sendingMessage,
             'createdAt': this.$firebase.firestore.FieldValue.serverTimestamp(),
           }
         )
         console.log('submit');
-        this.sendMessage = ''
+        this.sendingMessage = ''
       }
     }
-  }
+  },
+  created() {
+    this.getMessages()
+  },
+  destroyed() {
+    this.messages = []
+    if(this.unsubscribe) {
+      console.log('unsubscribe')
+      this.unsubscribe();
+    }
+  },
 }
 
 </script>

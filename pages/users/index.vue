@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <!-- ローダー部分 -->
     <div v-if="loading">
       <v-row>
         <v-col cols="6" sm="4" md="4" lg="3" xl="3"
@@ -42,6 +43,7 @@
             <LikeButton :profileId = "profile.id"></LikeButton>
           </v-card-actions>
         </v-card>
+        <!-- カード部分END -->
       </v-col>
     </v-row>
   {{ this.profiles }}
