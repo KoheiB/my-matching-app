@@ -1,39 +1,73 @@
 <template>
-  <v-btn @click.prevent="likeUser(currentUser)"
-  color="red darken-1 white--text"
-  height="50"
-  block
-  rounded
-  :disabled = !currentUser
+  <v-card 
+    class="card mb-5 teal lighten-5"
+    nuxt
+    :to="`/users/${profileId}`"
+    hover
+    :ripple="false"
   >
-    <v-icon>mdi-thumb-up-outline</v-icon>いいね！
-  </v-btn>
+    <v-card-title>
+      <span class="white px-4 rounded-lg">{{ name }}</span>
+    </v-card-title>
+    <v-layout justify-center>
+      <v-avatar size="200">
+        <v-img v-show="!avatarUrl"
+          :src="require('@/assets/image/default-user.jpg')"
+        />
+        <v-img v-show="avatarUrl"
+          :src="avatarUrl"
+        />
+      </v-avatar>
+    </v-layout>
+    <v-card-actions>
+      <v-btn @click.prevent="onclick(currentUser)"
+        color="red darken-1 white--text"
+        height="50"
+        block
+        rounded
+        :disabled = !currentUser
+      >
+        <v-icon>mdi-thumb-up-outline</v-icon>いいね！
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
 export default {
-
-  data() { 
+  data () {
     return {
       currentUser: {}
     }
   },
   props: {
-    profileId: {
+    prodileId: {
       type: String,
+      required: true
+    },
+    avatarUrl: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    age: {
+      type: Number,
+      required: true
+    },
+    likedCount: {
+      type: Number,
       required: true
     }
   },
-  created () {
-    this.$fireAuth.onAuthStateChanged(user => {
-      this.currentUser = user
-    })
-  },
+  
   methods: {
-    async likeUser(user) {
+    async onclick(user) {
       // 追加
       const batch = this.$firestore.batch()
-  
+      
       // likedProfiles: ログインユーザーがいいねしたProfileのリスト
       // usersのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
       const likedProfileRef = await this.$firestore.collection('profiles').doc(`${this.profileId}`)
@@ -71,6 +105,9 @@ export default {
       await batch.commit()
       alert('you liked')
     },
+  },
+  created() {
+    this.currentUser = this.$fireAuth.currentUser
   }
 }
 </script>

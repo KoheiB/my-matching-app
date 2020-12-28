@@ -1,44 +1,71 @@
 <template>
-  <v-container>
+  <div>
+    <!-- 画面タブ -->
+    <v-tabs
+      v-model="tab"
+      background-color="#ECEFF1"
+      grow
+      color="grey"
+    >
+      <v-tab>
+        相手から
+      </v-tab>
+      <v-tab>
+        自分から
+      </v-tab>
+    </v-tabs>
+    <!-- 画面タブここまで -->
+
+    <!-- タブ内容 -->
+    <v-tabs-items v-model="tab" class="primary">
+      <!-- 相手から -->
+      <v-tab-item>
+        <v-row>
+          <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
+            <v-card
+              hover
+              nuxt
+              :to="`/users/${like.id}`"
+            >
+              <v-row>
+                <v-col cols="2" align-self="center">
+                  <v-img
+                    :src="like.picture"
+                    class="member-picture"
+                    width="100%"
+                  />
+                </v-col>
+                <v-col cols="6">
+                  <v-card-title>
+                    {{ like.name }}
+                  </v-card-title>
+                  <v-card-subtitle>
+                    {{ like.createdAt }}
+                  </v-card-subtitle>
+                </v-col>
+                <v-col cols="3" align-self="center" justify="center">
+                  <v-btn @click.prevent="approveLike(like)"
+                  color="info"
+                  height="40"
+                  :disabled = like.isApproved
+                  >
+                    <v-icon>mdi-heart</v-icon>ありがとう！
+                  </v-btn>
+                </v-col>
+                <v-col cols="1"></v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-tab-item>
+      <!-- 自分から -->
+      <v-tab-item>
+        bbb
+      </v-tab-item>
+    </v-tabs-items>
+
     <v-skeleton-loader v-if="loading" type="card"/>
-    <v-row>
-      <v-col cols="12" md="6" v-for="like in likes" :key="like.id">
-        <v-card
-          hover
-          nuxt
-          :to="`/users/${like.id}`"
-        >
-          <v-row>
-            <v-col cols="2" align-self="center">
-              <v-img
-                :src="like.picture"
-                class="member-picture"
-                width="100%"
-              />
-            </v-col>
-            <v-col cols="6">
-              <v-card-title>
-                {{ like.name }}
-              </v-card-title>
-              <v-card-subtitle>
-                {{ like.createdAt }}
-              </v-card-subtitle>
-            </v-col>
-            <v-col cols="3" align-self="center" justify="center">
-              <v-btn @click.prevent="approveLike(like)"
-              color="info"
-              height="40"
-              :disabled = like.isApproved
-              >
-                <v-icon>mdi-heart</v-icon>ありがとう！
-              </v-btn>
-            </v-col>
-            <v-col cols="1"></v-col>
-          </v-row>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -53,6 +80,7 @@ export default {
       loading: true,
       currentUser: {},
       likes: [],
+      tab: null,
     };
   },
   created() {
