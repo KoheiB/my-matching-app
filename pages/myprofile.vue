@@ -1,30 +1,58 @@
 <template>
-  <v-container>
-    <div class="text-h4">Name</div>
-    <v-img :src="picture"
-    width="100px"
-    />
-    <v-divider />
-    <div class="text-h4">Profile</div>
-    <v-form>
-      <v-container>
-        <v-row v-for="item in items"
-          :key="item.name">
-          <v-col cols="2"></v-col>
-          <v-col cols="2"
-          align-self="center"
-          >
-            {{ item.name }}
-          </v-col>
-          <v-col cols="6"
-          align-self="center"
-          >
-            <v-text-field v-model="name"></v-text-field>
-          </v-col>
-          <v-col cols="2"></v-col>
-        </v-row>
-      </v-container>
-    </v-form>
+  <v-container class="info">
+    <v-row>
+      <v-col cols="12" md="6" lg="4" class="green">
+        <v-layout justify-center>
+          <v-avatar size="200">
+            <v-img v-show="!profile.avatarUrl"
+              :src="require('@/assets/image/default-user.jpg')"
+            />
+            <v-img v-show="profile.avatarUrl"
+              :src="profile.avatarUrl"
+            />
+          </v-avatar>
+        </v-layout>
+        <v-btn class="d-flex mt-4 mx-auto">プロフィール写真をアップロードする</v-btn>
+      </v-col>
+      <v-col cols="12" md="6" lg="8">
+        <v-form class="red">
+          <v-row>
+            <v-col cols="6">
+              <v-row v-for="item in items"
+                :key="item.name">
+                <v-col cols="3"
+                  align-self="center"
+                >
+                  {{ item.name }}
+                </v-col>
+                <v-col cols="9"
+                align-self="center"
+                >
+                  <v-text-field v-model="name"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="6">
+              <v-row v-for="item in items"
+                :key="item.name">
+                <v-col cols="3"
+                  align-self="center"
+                >
+                  {{ item.name }}
+                </v-col>
+                <v-col cols="9"
+                align-self="center"
+                >
+                  <v-text-field v-model="name"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          
+        </v-form>
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
@@ -35,6 +63,9 @@ export default {
     return {
       picture: require('@/assets/image/html.png'),
       name: 'aaa',
+      profile: {
+        picture: require('@/assets/image/html.png'),
+      },
       items: [
         { name: '身長'},
         { name: '体型'},
