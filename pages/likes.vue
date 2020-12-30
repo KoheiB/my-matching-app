@@ -5,7 +5,7 @@
       v-model="tab"
       background-color="#ECEFF1"
       grow
-      color="grey"
+      color="green"
     >
       <v-tab>
         相手から
