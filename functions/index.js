@@ -3,7 +3,23 @@
 // const admin = require("firebase-admin");
 // admin.initializeApp();
 // const db = admin.firestore();
+// const auth = admin.auth()
 
+// exports.addImageUrl = functions.storage.object().onFinalize((object) => {
+//   console.log('OBJECT', object)
+//   const userId = object.name.split('/')[1]
+//   console.log(userId)
+//   try {
+//     db.collection('profiles')
+//       .doc(userId)
+//       .set({
+//         'avatarUrl': object.metadata.downloadUrl
+//       }, { merge: true })
+//     console.log('added URL')
+//   } catch (error) {
+//     console.log('ERROR!',error)
+//   }
+// })
 // exports.createChatroom = functions.firestore.document('profiles/{profileId}/likedProfileUsers/{likedProfileUsersId}')
 // .onUpdate(async (change, context) => {
 //   const batch = db.batch()
