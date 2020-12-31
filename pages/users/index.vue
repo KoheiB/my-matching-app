@@ -3,7 +3,7 @@
     <!-- ローダー部分 -->
     <div v-if="loading">
       <v-row>
-        <v-col cols="6" sm="4" md="4" lg="3" xl="3"
+        <v-col cols="6" sm="4" lg="3"
           v-for="n of 12" :key="n"
         >
           <v-skeleton-loader type="card-heading, card"
