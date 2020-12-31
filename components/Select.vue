@@ -1,5 +1,5 @@
 <template>
-  <v-select class="mt-4" dense color="" :label="label" v-model="profile" :items= items></v-select>
+  <v-select class="mt-4" dense color="info" item-color="blue" :label="label" v-model="profileData" :items= items></v-select>
 </template>
 
 <script>
@@ -9,10 +9,20 @@ export default {
       type: String,
     },
     profile: {
-      type: Object
+      type: String || Number,
     },
     items: {
       type: Array
+    }
+  },
+  data() {
+    return {
+      profileData: this.profile
+    }
+  },
+  watch: {
+    profile() {
+      this.profileData = this.profile
     }
   }
 
@@ -20,5 +30,4 @@ export default {
 </script>
 
 <style>
-
 </style>
