@@ -26,13 +26,11 @@
           hover
           :ripple="false"
         >
-          <v-responsive :aspect-ratio="3/4">
             <v-card-title>
               <span class="white px-4 rounded-lg">{{ profile.displayName}}</span>
             </v-card-title>
-            <v-responsive :aspect-ratio="1/1">
               <v-layout justify-center>
-                <v-avatar width="80%" height="auto">
+                <v-avatar size="200">
                   <v-img v-show="!profile.avatarUrl"
                     :src="require('@/assets/image/default-user.jpg')"
                   />
@@ -41,7 +39,6 @@
                   />
                 </v-avatar>
               </v-layout>
-            </v-responsive>
             <v-card-actions>
               <v-btn @click.prevent="likeUser(currentUser, profile)"
                 color="red darken-1 white--text"
