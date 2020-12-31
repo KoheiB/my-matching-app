@@ -31,7 +31,7 @@
                 {{ getLike.displayname }}
               </v-card-title>
               <v-layout justify-center>
-                <v-avatar size="200">
+                <v-avatar width="80%" height="auto">
                   <v-img v-show="!getLike.avatarUrl"
                     :src="require('@/assets/image/default-user.jpg')"
                   />
@@ -72,7 +72,7 @@
                 {{ myLike.displayname }}
               </v-card-title>
               <v-layout justify-center>
-                <v-avatar size="200">
+                <v-avatar width="80%" height="auto">
                   <v-img v-show="!myLike.avatarUrl"
                     :src="require('@/assets/image/default-user.jpg')"
                   />
@@ -198,5 +198,8 @@ export default {
   border-radius: 50%;
   border: 1px solid #ccc;
   margin-left: 10px;
+}
+.v-tabs-items {
+  background-color: #ECEFF1 !important;
 }
 </style>

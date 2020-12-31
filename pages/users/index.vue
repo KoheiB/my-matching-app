@@ -14,7 +14,7 @@
     <!-- プロフィール一覧 -->
     <v-row>
       <v-col
-      cols="6" sm="4" md="4" lg="3" xl="3"
+      cols="6" sm="4" lg="3"
       v-for="profile in profiles"
       :key="profile.id"
       >
@@ -30,7 +30,7 @@
             <span class="white px-4 rounded-lg">{{ profile.displayName}}</span>
           </v-card-title>
           <v-layout justify-center>
-            <v-avatar size="200">
+            <v-avatar width="80%" height="auto">
               <v-img v-show="!profile.avatarUrl"
                 :src="require('@/assets/image/default-user.jpg')"
               />
