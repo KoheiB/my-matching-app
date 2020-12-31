@@ -12,7 +12,7 @@
           </v-avatar>
         </v-layout>
         <v-btn class="d-flex mt-4 mx-auto" @click="selectImage"
-          >プロフィール写真をアップロードする</v-btn
+          >プロフィール写真を変更する</v-btn
         >
         <input
           ref="image"
@@ -22,14 +22,20 @@
           @change="onSelectFile"
         />
         <v-form>
-          <v-text-field v-model="profile.displayName" outlined color="black" label="ニックネーム" class="mt-4"></v-text-field>
+          <v-row>
+            <v-col cols="8">
+              <v-text-field v-model="profile.displayName" outlined color="black" label="ニックネーム" class="mt-4"></v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-text-field class="mt-4" v-model="profile.age" outlined label="年齢" readonly></v-text-field>
+            </v-col>
+          </v-row>
           <v-textarea v-model="profile.body" auto-grow color="black" outlined label="自己紹介文" class="mt-4"></v-textarea>
         </v-form>
       </v-col>
       <v-col cols="12" md="6">
         <v-container>
           <v-form>
-            <Select :profile="profile.age" :label="labels.age" :items="selectAge"></Select>
             <Select :profile="profile.residence" :label="labels.residence" :items="items.locations"></Select>
             <Select :profile="profile.workLocation" :label="labels.workLocation" :items="items.locations"></Select>
             <Select :profile="profile.height" :label="labels.height" :items="selectHeight"></Select>
@@ -212,11 +218,6 @@ export default {
     };
   },
   computed: {
-    selectAge() {
-      const maxAge = 81;
-      const ageRange = [...Array(maxAge).keys()].reverse()
-      return ageRange.splice(0,63).reverse()
-    },
     selectHeight() {
       const maxAge = 201;
       const ageRange = [...Array(maxAge).keys()].reverse()
