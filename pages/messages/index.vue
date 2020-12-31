@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-skeleton-loader v-if="loading" type="card"/>
+    <v-skeleton-loader v-if="loading && !rooms" type="card"/>
     <v-card
       v-for="room in rooms"
       :key="room.id"
