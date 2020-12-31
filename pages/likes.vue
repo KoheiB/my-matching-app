@@ -90,17 +90,13 @@
       </v-tab-item>
     </v-tabs-items>
     
-    <v-skeleton-loader v-if="loading" type="card"/>
+    <v-skeleton-loader v-if="loading && !getLikes" type="card"/>
   </v-container>
 </template>
 
 <script>
-import LikeButton from "~/components/LikeButton.vue";
 export default {
   layout: "navbar",
-  components: {
-    LikeButton,
-  },
   data() {
     return {
       loading: true,

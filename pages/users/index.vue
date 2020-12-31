@@ -29,18 +29,26 @@
           <v-card-title>
             <span class="white px-4 rounded-lg">{{ profile.displayName}}</span>
           </v-card-title>
-          <v-layout justify-center>
-            <v-avatar width="80%" height="auto">
-              <v-img v-show="!profile.avatarUrl"
-                :src="require('@/assets/image/default-user.jpg')"
-              />
-              <v-img v-show="profile.avatarUrl"
-                :src="profile.avatarUrl"
-              />
-            </v-avatar>
-          </v-layout>
+            <v-layout justify-center>
+              <v-avatar size="200">
+                <v-img v-show="!profile.avatarUrl"
+                  :src="require('@/assets/image/default-user.jpg')"
+                />
+                <v-img v-show="profile.avatarUrl"
+                  :src="profile.avatarUrl"
+                />
+              </v-avatar>
+            </v-layout>
           <v-card-actions>
-            <LikeButton :profileId = "profile.id"></LikeButton>
+            <v-btn @click.prevent="likeUser(currentUser, profile)"
+              color="red darken-1 white--text"
+              height="50"
+              block
+              rounded
+              :disabled = profile.isLiked
+            >
+              <v-icon>mdi-thumb-up-outline</v-icon>いいね！
+            </v-btn>
           </v-card-actions>
         </v-card>
         <!-- カード部分END -->
@@ -52,12 +60,8 @@
 </template>
 
 <script>
-import LikeButton from '~/components/LikeButton.vue'
 export default {
   layout: 'navbar',
-  components: {
-    LikeButton,
-  },
   data() {
     return {
       loading: true,
@@ -78,7 +82,7 @@ export default {
     this.$fireAuth.onAuthStateChanged(async(user) => {
       this.currentUser = user
 
-      // いいねしたユーザーのドキュメントリファレンスを取得。
+      // いいねしたユーザーの一覧を取得。
       const likedProfilesData = await this.$firestore.collection('users').doc(user.uid).collection('likedProfiles').get().then((querySnapshot) => {
         return querySnapshot.docs.map((doc) => {
           return doc.data()
@@ -93,15 +97,67 @@ export default {
       const allUsersRef = allUsersQuerySnapshot.docs.map(doc => doc.ref)
 
       // すべてのユーザーからいいねしたユーザーを弾く。
-      const usersRef = allUsersRef.filter(i => likedProfilesRef.indexOf(i) == -1)
+      const usersRef = []
+      const likedProfilesId = likedProfilesRef.map(ref => ref.id)
+      allUsersRef.forEach((ref) => {
+        if(!likedProfilesId.includes(ref.id)) {
+          usersRef.push(ref)
+        }
+      })
 
       // ユーザーを表示する。
       usersRef.map(async(user) => {
         const userRef = await user.get()
-        this.profiles.push(userRef.data())
+        const userData = userRef.data()
+        userData.isLiked = false
+        this.profiles.push(userData)
       })
       this.loading = false
     })
+  },
+  methods: {
+    async likeUser(user, profile) {
+      // 追加
+      const batch = this.$firestore.batch()
+  
+      // likedProfiles: ログインユーザーがいいねしたProfileのリスト
+      // usersのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
+      const likedProfileRef = await this.$firestore.collection('profiles').doc(`${profile.id}`)
+      batch.set(
+        // エラーが起きて、言われるがままにインデックスの除外を追加した。
+        // 参考：https://note.com/fsxfcu7y/n/nf195177b6e23
+        this.$firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('likedProfiles')
+          .doc(),
+        {
+          likedProfileRef: likedProfileRef,
+          isApproved: false,
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp()
+        }
+      )
+      
+      // 該当ユーザーをいいねしたuserのリスト
+      // いいねされた該当ユーザーのコレクションprofileのサブコレクションlikedProfileUsersにログインユーザーのデータを追加
+      const likedUserRef = await this.$firestore.collection('profiles').doc(user.uid)
+      batch.set(
+        this.$firestore
+          .collection('profiles')
+          .doc(profile.id)
+          .collection('likedProfileUsers')
+          .doc(),
+        {
+          likedUserRef: likedUserRef,
+          isApproved: false,
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp()
+        }
+      )
+
+      await batch.commit()
+      alert('you liked')
+      profile.isLiked = true
+    },
   },
 }
 </script>
