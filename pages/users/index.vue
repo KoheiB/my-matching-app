@@ -26,31 +26,30 @@
           hover
           :ripple="false"
         >
-            <v-card-title>
-              <span class="white px-4 rounded-lg">{{ profile.displayName}}</span>
-            </v-card-title>
-              <v-layout justify-center>
-                <v-avatar size="200">
-                  <v-img v-show="!profile.avatarUrl"
-                    :src="require('@/assets/image/default-user.jpg')"
-                  />
-                  <v-img v-show="profile.avatarUrl"
-                    :src="profile.avatarUrl"
-                  />
-                </v-avatar>
-              </v-layout>
-            <v-card-actions>
-              <v-btn @click.prevent="likeUser(currentUser, profile)"
-                color="red darken-1 white--text"
-                height="50"
-                block
-                rounded
-                :disabled = profile.isLiked
-              >
-                <v-icon>mdi-thumb-up-outline</v-icon>いいね！
-              </v-btn>
-            </v-card-actions>
-          </v-responsive>
+          <v-card-title>
+            <span class="white px-4 rounded-lg">{{ profile.displayName}}</span>
+          </v-card-title>
+            <v-layout justify-center>
+              <v-avatar size="200">
+                <v-img v-show="!profile.avatarUrl"
+                  :src="require('@/assets/image/default-user.jpg')"
+                />
+                <v-img v-show="profile.avatarUrl"
+                  :src="profile.avatarUrl"
+                />
+              </v-avatar>
+            </v-layout>
+          <v-card-actions>
+            <v-btn @click.prevent="likeUser(currentUser, profile)"
+              color="red darken-1 white--text"
+              height="50"
+              block
+              rounded
+              :disabled = profile.isLiked
+            >
+              <v-icon>mdi-thumb-up-outline</v-icon>いいね！
+            </v-btn>
+          </v-card-actions>
         </v-card>
         <!-- カード部分END -->
       </v-col>
