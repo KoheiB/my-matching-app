@@ -63,9 +63,7 @@ export default {
   data() {
     return {
       name: "aaa",
-      profile: {
-        avatarUrl: "",
-      },
+      profile: {},
       labels: {
         age: "年齢",
         residence: "居住地",
@@ -264,11 +262,17 @@ export default {
       }, { merge: true})
     }
   },
-  async created () {
+  async created() {
     const user = await this.$auth()
     const snapshot = await this.$firestore.collection('profiles').doc(user.uid).get()
     const profileData = snapshot.data()
     this.profile = profileData
+  },
+  async destroyed() {
+    const user = await this.$auth()
+    const profile = this.profile
+    console.log(profile)
+    this.$firestore.collection('profiles').doc(user.uid).set(profile, {merge: true})
   }
 };
 </script>
