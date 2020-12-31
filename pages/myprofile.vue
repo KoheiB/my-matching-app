@@ -1,7 +1,7 @@
 <template>
-  <v-container class="info">
+  <v-container>
     <v-row>
-      <v-col cols="12" md="6" lg="4" class="green">
+      <v-col cols="12" md="6">
         <v-layout justify-center>
           <v-avatar size="200">
             <v-img
@@ -21,26 +21,30 @@
           accept="image/*"
           @change="onSelectFile"
         />
+        <v-form>
+          <v-text-field outlined color="black" label="ニックネーム" class="mt-4"></v-text-field>
+          <v-textarea v-model="profile.body" auto-grow color="black" outlined label="自己紹介文" class="mt-4"></v-textarea>
+        </v-form>
       </v-col>
-      <v-col cols="12" md="6" lg="8">
-        <v-form class="red">
+      <v-col cols="12" md="6">
+        <v-form>
           <v-row>
             <v-col cols="6">
               <v-row v-for="item in items" :key="item.name">
-                <v-col cols="3" align-self="center">
+                <v-col cols="4" align-self="center">
                   {{ item.name }}
                 </v-col>
-                <v-col cols="9" align-self="center">
+                <v-col cols="8" align-self="center">
                   <v-text-field v-model="name"></v-text-field>
                 </v-col>
               </v-row>
             </v-col>
             <v-col cols="6">
               <v-row v-for="item in items" :key="item.name">
-                <v-col cols="3" align-self="center">
+                <v-col cols="4" align-self="center">
                   {{ item.name }}
                 </v-col>
-                <v-col cols="9" align-self="center">
+                <v-col cols="8" align-self="center">
                   <v-text-field v-model="name"></v-text-field>
                 </v-col>
               </v-row>
