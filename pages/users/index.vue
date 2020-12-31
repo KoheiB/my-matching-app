@@ -77,11 +77,30 @@ export default {
   created () {
     this.$fireAuth.onAuthStateChanged(async(user) => {
       this.currentUser = user
-      this.$firestore.collection('profiles').where('id', '!=', this.currentUser.uid).get().then((querySnapshot) => {
-        this.profiles = querySnapshot.docs.map(doc => doc.data())
-        this.loading = false
-        console.log(this.profiles)
+
+      // いいねしたユーザーのドキュメントリファレンスを取得。
+      const likedProfilesData = await this.$firestore.collection('users').doc(user.uid).collection('likedProfiles').get().then((querySnapshot) => {
+        return querySnapshot.docs.map((doc) => {
+          return doc.data()
+        })
       })
+      const likedProfilesRef = likedProfilesData.map((data) => {
+        return data.likedProfileRef
+      })
+
+      // すべてのユーザー一覧を取得。
+      const allUsersQuerySnapshot = await this.$firestore.collection('profiles').where('id', '!=', this.currentUser.uid).get()
+      const allUsersRef = allUsersQuerySnapshot.docs.map(doc => doc.ref)
+
+      // すべてのユーザーからいいねしたユーザーを弾く。
+      const usersRef = allUsersRef.filter(i => likedProfilesRef.indexOf(i) == -1)
+
+      // ユーザーを表示する。
+      usersRef.map(async(user) => {
+        const userRef = await user.get()
+        this.profiles.push(userRef.data())
+      })
+      this.loading = false
     })
   },
 }
