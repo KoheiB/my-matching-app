@@ -92,13 +92,27 @@ export default {
         return data.likedProfileRef
       })
 
+      //いいねされたユーザーの一覧を取得。
+      const likedProfileUsersData = await this.$firestore.collection('profiles').doc(user.uid).collection('likedProfileUsers').get().then((querySnapshot) => {
+        return querySnapshot.docs.map((doc) => {
+          return doc.data()
+        })
+      })
+      const likedProfileUsersRef = likedProfileUsersData.map((data) => {
+        return data.likedUserRef
+      })
+
       // すべてのユーザー一覧を取得。
       const allUsersQuerySnapshot = await this.$firestore.collection('profiles').where('id', '!=', this.currentUser.uid).get()
       const allUsersRef = allUsersQuerySnapshot.docs.map(doc => doc.ref)
 
+      // いいねした/いいねされたユーザーの一覧をマージ。
+      const excludeProfilesRef = [...likedProfilesRef, ...likedProfileUsersRef]
+      console.log(excludeProfilesRef)
+
       // すべてのユーザーからいいねしたユーザーを弾く。
       const usersRef = []
-      const likedProfilesId = likedProfilesRef.map(ref => ref.id)
+      const likedProfilesId = excludeProfilesRef.map(ref => ref.id)
       allUsersRef.forEach((ref) => {
         if(!likedProfilesId.includes(ref.id)) {
           usersRef.push(ref)

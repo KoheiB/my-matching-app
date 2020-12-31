@@ -28,10 +28,10 @@
               :to="`/users/${getLike.userId}`"
             >
               <v-card-title>
-                {{ getLike.displayname }}
+                {{ getLike.displayName }}
               </v-card-title>
               <v-layout justify-center>
-                <v-avatar width="80%" height="auto">
+                <v-avatar size="200">
                   <v-img v-show="!getLike.avatarUrl"
                     :src="require('@/assets/image/default-user.jpg')"
                   />
@@ -72,7 +72,7 @@
                 {{ myLike.displayname }}
               </v-card-title>
               <v-layout justify-center>
-                <v-avatar width="80%" height="auto">
+                <v-avatar size="200">
                   <v-img v-show="!myLike.avatarUrl"
                     :src="require('@/assets/image/default-user.jpg')"
                   />
