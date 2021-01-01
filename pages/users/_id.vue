@@ -36,10 +36,10 @@
       <v-col cols="12" md="6">
         <v-container>
           <v-form>
-            <Select v-model="profile.residence" :profile="profile.residence" :label="labels.residence" :items="items.locations" ></Select>
-            <Select v-model="profile.workLocation" :label="labels.workLocation" :items="items.locations" :isReadonly="true"></Select>
-            <Select v-model="profile.height" :label="labels.height" :items="selectHeight" :isReadonly="true"></Select>
-            <Select v-model="profile.bodyType" :label="labels.bodyType" :items="items.bodyType" :isReadonly="true"></Select>
+            <Select :profile="profile.residence" :label="labels.residence" :items="items.locations" ></Select>
+            <Select :profile="profile.workLocation" :label="labels.workLocation" :items="items.locations" :isReadonly="true"></Select>
+            <Select :profile="profile.height" :label="labels.height" :items="selectHeight" :isReadonly="true"></Select>
+            <Select :profile="profile.bodyType" :label="labels.bodyType" :items="items.bodyType" :isReadonly="true"></Select>
             <Select v-model="profile.occupation" :label="labels.occupation" :items="items.occupation" :isReadonly="true"></Select>
             <Select v-model="profile.holiday" :label="labels.holiday" :items="items.holiday" :isReadonly="true"></Select>
             <Select v-model="profile.drink" :label="labels.drink" :items="items.drink" :isReadonly="true"></Select>
@@ -47,7 +47,7 @@
             <Select v-model="profile.housemate" :label="labels.housemate" :items="items.housemate" :isReadonly="true"></Select>
             <Select v-model="profile.marriageDesire" :label="labels.marriageDesire" :items="items.marriageDesire" :isReadonly="true"></Select>
           </v-form>
-          {{profile}}
+          {{profile.residence}}
         </v-container>
       </v-col>
     </v-row>

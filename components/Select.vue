@@ -1,5 +1,5 @@
 <template>
-  <v-select class="mt-4" dense color="info" item-color="blue" :label="label" :items= items :readonly="isReadonly"></v-select>
+  <v-select v-model="profile" class="mt-4" dense color="info" item-color="blue" :label="label" :items="items" :readonly="isReadonly"></v-select>
 </template>
 
 <script>
