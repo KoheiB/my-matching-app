@@ -11,16 +11,14 @@
             <v-img v-show="profile.avatarUrl" :src="profile.avatarUrl" />
           </v-avatar>
         </v-layout>
-        <!-- <v-btn class="d-flex mt-4 mx-auto" @click="selectImage"
-          >プロフィール写真を変更する</v-btn
-        > -->
-        <!-- <input
-          ref="image"
-          type="file"
-          style="display: none"
-          accept="image/*"
-          @change="onSelectFile"
-        /> -->
+        <v-layout class="mt-4" justify-space-around>
+          <v-btn rounded @click="likeUser">
+            <v-icon>mdi-thumb-up-outline</v-icon>いいね！
+          </v-btn>
+          <v-btn rounded @click="likeUser">
+            <v-icon>mdi-email</v-icon>メッセージを送る
+          </v-btn>
+        </v-layout>
         <v-form>
           <v-row>
             <v-col cols="8">
@@ -221,6 +219,11 @@ export default {
       const maxAge = 201;
       const ageRange = [...Array(maxAge).keys()].reverse()
       return ageRange.splice(0,80).reverse()
+    }
+  },
+  methods: {
+    likeUser() {
+      console.log('liked')
     }
   },
   async created() {
