@@ -1,5 +1,5 @@
 <template>
-  <v-select @change="updateValue($event)" class="mt-4" dense color="info" item-color="blue" :label="label" :items="items" :readonly="isNotActive"></v-select>
+  <v-select @change="updateValue($event)" :value="profile" class="mt-4" dense color="info" item-color="blue" :label="label" :items="items" :readonly="isNotActive"></v-select>
 </template>
 
 <script>
