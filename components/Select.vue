@@ -1,9 +1,13 @@
 <template>
-  <v-select v-model="profile" class="mt-4" dense color="info" item-color="blue" :label="label" :items="items" :readonly="isNotActive"></v-select>
+  <v-select @change="updateValue($event)" class="mt-4" dense color="info" item-color="blue" :label="label" :items="items" :readonly="isNotActive"></v-select>
 </template>
 
 <script>
 export default {
+  model: {
+    prop: 'profile',
+    event: 'change'
+  },
   props: {
     profile: {
       type: String || Number,
@@ -19,8 +23,8 @@ export default {
     }
   },
   methods: {
-    updateProfile: function(e) {
-      this.$emit("input", e.target.value);
+    updateValue: function(e) {
+      this.$emit("change", e);
     }
   },
 }
