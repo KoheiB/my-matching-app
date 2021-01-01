@@ -36,7 +36,7 @@
       <v-col cols="12" md="6">
         <v-container>
           <v-form>
-            <Select v-model="profile.residence" :profile="profile.residence" :label="labels.residence" :items="items.locations"></Select>
+            <Select v-model="profile.residence" :label="labels.residence" :items="items.locations"></Select>
             <Select v-model="profile.workLocation" :label="labels.workLocation" :items="items.locations"></Select>
             <Select v-model="profile.height" :label="labels.height" :items="selectHeight"></Select>
             <Select v-model="profile.bodyType" :label="labels.bodyType" :items="items.bodyType"></Select>
