@@ -37,7 +37,7 @@
         <v-container>
           <v-form>
             <Select v-model="profile.residence" :label="labels.residence" :items="items.locations"></Select>
-            <!-- <Select v-model="profile.workLocation" :label="labels.workLocation" :items="items.locations"></Select>
+            <Select v-model="profile.workLocation" :label="labels.workLocation" :items="items.locations"></Select>
             <Select v-model="profile.height" :label="labels.height" :items="selectHeight"></Select>
             <Select v-model="profile.bodyType" :label="labels.bodyType" :items="items.bodyType"></Select>
             <Select v-model="profile.occupation" :label="labels.occupation" :items="items.occupation"></Select>
@@ -45,7 +45,7 @@
             <Select v-model="profile.drink" :label="labels.drink" :items="items.drink"></Select>
             <Select v-model="profile.tobacco" :label="labels.tobacco" :items="items.tobacco"></Select>
             <Select v-model="profile.housemate" :label="labels.housemate" :items="items.housemate"></Select>
-            <Select v-model="profile.marriageDesire" :label="labels.marriageDesire" :items="items.marriageDesire"></Select> -->
+            <Select v-model="profile.marriageDesire" :label="labels.marriageDesire" :items="items.marriageDesire"></Select>
           </v-form>
           {{profile}}
         </v-container>
