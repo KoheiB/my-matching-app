@@ -218,9 +218,13 @@ export default {
   },
   computed: {
     selectHeight() {
-      const maxAge = 201;
-      const ageRange = [...Array(maxAge).keys()].reverse()
-      return ageRange.splice(0,80).reverse()
+      const maxHeight = 200;
+      const array = [...Array(maxHeight).keys()]
+      const stringArray = array.map(number => String(number))
+      stringArray.splice(0, 131)
+      stringArray.unshift('未設定', '130cm以下')
+      stringArray.push('200cm以上')
+      return stringArray
     }
   },
   methods: {
