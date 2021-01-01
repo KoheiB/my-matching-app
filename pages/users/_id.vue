@@ -12,12 +12,16 @@
           </v-avatar>
         </v-layout>
         <v-layout class="mt-4" justify-space-around>
-          <v-btn rounded @click="likeUser">
+          <v-btn :disabled="relationStatus.hasLiked" rounded @click="likeUser" v-show="!relationStatus.isLiked">
             <v-icon>mdi-thumb-up-outline</v-icon>いいね！
           </v-btn>
-          <v-btn rounded @click="likeUser">
+          <v-btn @click="approveLike" v-show="relationStatus.isLiked" :disabled="relationStatus.isMatched">
+            ありがとう！
+          </v-btn>
+          <v-btn :disabled="!relationStatus.isMatched" rounded nuxt to>
             <v-icon>mdi-email</v-icon>メッセージを送る
           </v-btn>
+          {{ relationStatus }}
         </v-layout>
         <v-form>
           <v-row>
@@ -135,6 +139,11 @@ export default {
   data() {
     return {
       profile: {},
+      relationStatus: {
+        hasLiked: false,
+        isLiked: false,
+        isMatched: false,
+      },
       labels: {
         age: "年齢",
         residence: "居住地",
@@ -285,6 +294,9 @@ export default {
     likeUser() {
       console.log("liked");
     },
+    approveLike() {
+      console.log('approved')
+    }
   },
   async created() {
     // ログインユーザーを取得。
@@ -300,8 +312,34 @@ export default {
     const profileData = snapshot.data();
     this.profile = profileData;
 
-    // ルームを取得し、ユーザーとのメッセージルームがあるか確認。
+    // ログインユーザーがいいねしているユーザーをクエリし、該当ユーザーをいいねしているか確認。
+    const hasLiked = await this.$firestore
+      .collection("users")
+      .doc(currentUser.uid)
+      .collection("likedProfiles")
+      .where("likedProfileRef", "==", "profileId")
+      .get()
+      .then((querySnapshot) => querySnapshot.size);
+    console.log("hasLiked", hasLiked);
+    if (hasLiked) {
+      this.relationStatus.hasLiked = true;
+    }
 
+    // ログインユーザーがいいねされているユーザーをクエリし、該当ユーザーにいいねされているか確認。
+    const profileRef = this.$firestore.collection("users").doc(profileId);
+    const isLiked = await this.$firestore
+      .collection("profiles")
+      .doc(currentUser.uid)
+      .collection("likedProfileUsers")
+      .where("likedUserRef", "==", profileRef)
+      .get()
+      .then((querySnapshot) => querySnapshot.size);
+    console.log("isLiked", isLiked);
+    if (isLiked) {
+      this.relationStatus.isLiked = true;
+    }
+
+    // ルームを取得し、ユーザーとのメッセージルームがあるか確認。
     // ユーザーのルーム一覧を取得。
     const querySnapshot = await this.$firestore
       .collection("rooms")
@@ -309,25 +347,30 @@ export default {
       .get();
 
     // ルーム参加者のIDを取得
-    const attendUsersId = querySnapshot.docs.map(doc => doc.data().attendUsersId)
+    const attendUsersId = querySnapshot.docs.map(
+      (doc) => doc.data().attendUsersId
+    );
+
+
 
     // 自分ではない参加ユーザーのIDをフィルターして取得。
     const partnerUserIds = attendUsersId.map((ids) => {
-      console.log('id',ids)
+      console.log("id", ids);
       return ids.filter((id) => {
-        return id !== currentUser.uid
-      })
-    })
+        return id !== currentUser.uid;
+      });
+    });
 
     // 自分ではない参加ユーザーのIDが該当ユーザーのIDか判定。
     // 配列に中身があればマッチング済。
-    const isMatching = partnerUserIds.filter((id) => {
-      return id[0] === profileId
-    })
-    console.log(isMatching)
+    const isMatched = partnerUserIds.filter((id) => {
+      return id[0] === profileId;
+    });
+    console.log("isMatched", isMatched.length);
+    if (isMatched.length) {
+      this.relationStatus.isMatched = true
+    }
     
-    // ログインユーザーがいいねされたユーザーを取得し、該当ユーザーにいいねされているか確認。
-    // this.$firestore.collection('profiles').doc(user.uid).collection('')
   },
 };
 </script>
