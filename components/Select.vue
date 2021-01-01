@@ -1,31 +1,25 @@
 <template>
-  <v-select class="mt-4" dense color="info" item-color="blue" :label="label" v-model="profileData" :items= items></v-select>
+  <v-select v-bind:value="profile" @change="updateProfile" class="mt-4" dense color="info" item-color="blue" :label="label" :items= items></v-select>
 </template>
 
 <script>
 export default {
   props: {
-    label: {
-      type: String,
-    },
     profile: {
       type: String || Number,
+    },
+    label: {
+      type: String,
     },
     items: {
       type: Array
     }
   },
-  data() {
-    return {
-      profileData: this.profile
+  methods: {
+    updateProfile: function(e) {
+      this.$emit("input", e.target.value);
     }
   },
-  watch: {
-    profile() {
-      this.profileData = this.profile
-    }
-  }
-
 }
 </script>
 

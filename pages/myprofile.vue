@@ -36,17 +36,18 @@
       <v-col cols="12" md="6">
         <v-container>
           <v-form>
-            <Select :profile="profile.residence" :label="labels.residence" :items="items.locations"></Select>
-            <Select :profile="profile.workLocation" :label="labels.workLocation" :items="items.locations"></Select>
-            <Select :profile="profile.height" :label="labels.height" :items="selectHeight"></Select>
-            <Select :profile="profile.bodyType" :label="labels.bodyType" :items="items.bodyType"></Select>
-            <Select :profile="profile.occupation" :label="labels.occupation" :items="items.occupation"></Select>
-            <Select :profile="profile.holiday" :label="labels.holiday" :items="items.holiday"></Select>
-            <Select :profile="profile.drink" :label="labels.drink" :items="items.drink"></Select>
-            <Select :profile="profile.tobacco" :label="labels.tobacco" :items="items.tobacco"></Select>
-            <Select :profile="profile.housemate" :label="labels.housemate" :items="items.housemate"></Select>
-            <Select :profile="profile.marriageDesire" :label="labels.marriageDesire" :items="items.marriageDesire"></Select>
+            <Select v-model="profile.residence" :profile="profile.residence" :label="labels.residence" :items="items.locations"></Select>
+            <Select v-model="profile.workLocation" :label="labels.workLocation" :items="items.locations"></Select>
+            <Select v-model="profile.height" :label="labels.height" :items="selectHeight"></Select>
+            <Select v-model="profile.bodyType" :label="labels.bodyType" :items="items.bodyType"></Select>
+            <Select v-model="profile.occupation" :label="labels.occupation" :items="items.occupation"></Select>
+            <Select v-model="profile.holiday" :label="labels.holiday" :items="items.holiday"></Select>
+            <Select v-model="profile.drink" :label="labels.drink" :items="items.drink"></Select>
+            <Select v-model="profile.tobacco" :label="labels.tobacco" :items="items.tobacco"></Select>
+            <Select v-model="profile.housemate" :label="labels.housemate" :items="items.housemate"></Select>
+            <Select v-model="profile.marriageDesire" :label="labels.marriageDesire" :items="items.marriageDesire"></Select>
           </v-form>
+          {{profile}}
         </v-container>
       </v-col>
     </v-row>
