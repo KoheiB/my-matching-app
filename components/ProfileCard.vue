@@ -1,5 +1,5 @@
 <template>
-  <v-card 
+  <v-card
     class="card mb-5 teal lighten-5"
     nuxt
     :to="`/users/${profileId}`"
@@ -11,21 +11,21 @@
     </v-card-title>
     <v-layout justify-center>
       <v-avatar size="200">
-        <v-img v-show="!avatarUrl"
+        <v-img
+          v-show="!avatarUrl"
           :src="require('@/assets/image/default-user.jpg')"
         />
-        <v-img v-show="avatarUrl"
-          :src="avatarUrl"
-        />
+        <v-img v-show="avatarUrl" :src="avatarUrl" />
       </v-avatar>
     </v-layout>
     <v-card-actions>
-      <v-btn @click.prevent="onclick(currentUser)"
+      <v-btn
+        @click.prevent="onclick(currentUser)"
         color="red darken-1 white--text"
         height="50"
         block
         rounded
-        :disabled = !currentUser
+        :disabled="!currentUser"
       >
         <v-icon>mdi-thumb-up-outline</v-icon>いいね！
       </v-btn>
@@ -35,83 +35,86 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      currentUser: {}
-    }
+      currentUser: {},
+    };
   },
   props: {
     prodileId: {
       type: String,
-      required: true
+      required: true,
     },
     avatarUrl: {
       type: String,
-      required: true
+      required: true,
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     age: {
       type: Number,
-      required: true
+      required: true,
     },
     likedCount: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
-  
+
   methods: {
     async onclick(user) {
       // 追加
-      const batch = this.$firestore.batch()
-      
+      const batch = this.$firestore.batch();
+
       // likedProfiles: ログインユーザーがいいねしたProfileのリスト
       // usersのサブコレクションlikedProfilesにいいねしたユーザーのデータを追加
-      const likedProfileRef = await this.$firestore.collection('profiles').doc(`${this.profileId}`)
+      const likedProfileRef = await this.$firestore
+        .collection("profiles")
+        .doc(`${this.profileId}`);
       batch.set(
         // エラーが起きて、言われるがままにインデックスの除外を追加した。
         // 参考：https://note.com/fsxfcu7y/n/nf195177b6e23
         this.$firestore
-          .collection('users')
+          .collection("users")
           .doc(user.uid)
-          .collection('likedProfiles')
+          .collection("likedProfiles")
           .doc(),
         {
           likedProfileRef: likedProfileRef,
           isApproved: false,
-          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp()
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
         }
-      )
-      
+      );
+
       // 該当ユーザーをいいねしたuserのリスト
       // いいねされた該当ユーザーのコレクションprofileのサブコレクションlikedProfileUsersにログインユーザーのデータを追加
-      const likedUserRef = await this.$firestore.collection('users').doc(user.uid)
+      const likedUserRef = await this.$firestore
+        .collection("users")
+        .doc(user.uid);
       batch.set(
         this.$firestore
-          .collection('profiles')
+          .collection("profiles")
           .doc(this.profileId)
-          .collection('likedProfileUsers')
+          .collection("likedProfileUsers")
           .doc(),
         {
           likedUserRef: likedUserRef,
           isApproved: false,
-          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp()
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
         }
-      )
+      );
 
-      await batch.commit()
-      alert('you liked')
+      await batch.commit();
+      alert("you liked");
     },
   },
   created() {
-    this.currentUser = this.$fireAuth.currentUser
-  }
-}
+    this.currentUser = this.$fireAuth.currentUser;
+  },
+};
 </script>
 
 <style>
-
 </style>

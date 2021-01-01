@@ -1,66 +1,40 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-    color="teal lighten-3"
-    clipped
-    app
-    fixed>
+    <v-navigation-drawer color="teal lighten-3" clipped app fixed>
       <v-list shaped>
-        <v-list-item-group
-        v-model="selectedItem"
-        color="teal darken-3"
-        >
-          <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
-          </v-list-item-content>
+        <v-list-item-group v-model="selectedItem" color="teal darken-3">
+          <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router>
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn block>
-            Logout
-          </v-btn>
+          <v-btn block> Logout </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
-    <v-app-bar
-    color="teal darken-1"
-    elevation="2"
-    app
-    clipped-left>
-      <v-toolbar-title>
-        MyMatchingApp
-      </v-toolbar-title>
+    <v-app-bar color="teal darken-1" elevation="2" app clipped-left>
+      <v-toolbar-title> MyMatchingApp </v-toolbar-title>
       <v-container v-if="currentUser">
         <v-btn
           class="btn"
           icon
-          :style="'background-image: url('+currentUser.photoURL+')'" 
-          ></v-btn>
+          :style="'background-image: url(' + currentUser.photoURL + ')'"
+        ></v-btn>
         <v-btn>
           {{ currentUserName }}
         </v-btn>
-        <v-btn @click="logOut">
-          ログアウト
-        </v-btn>
+        <v-btn @click="logOut"> ログアウト </v-btn>
       </v-container>
       <v-container v-else>
-        <v-btn @click="logIn">
-          ログイン
-        </v-btn>
-        <v-btn @click="logIn">
-          新規登録
-        </v-btn>
+        <v-btn @click="logIn"> ログイン </v-btn>
+        <v-btn @click="logIn"> 新規登録 </v-btn>
       </v-container>
       <Login v-if="!currentUser"></Login>
       <Signup v-if="!currentUser"></Signup>
@@ -74,12 +48,12 @@
 </template>
 
 <script>
-import Login from '~/components/Login.vue'
-import Signup from '~/components/Signup.vue'
+import Login from "~/components/Login.vue";
+import Signup from "~/components/Signup.vue";
 export default {
   components: {
     Login,
-    Signup
+    Signup,
   },
   data() {
     return {
@@ -88,86 +62,86 @@ export default {
       fixed: false,
       selectedItem: 1,
       currentUser: {},
-      currentUserName: '',
-      items:[
+      currentUserName: "",
+      items: [
         {
-          icon: 'mdi-magnify',
-          title: 'Search',
-          to: '/users/'
+          icon: "mdi-magnify",
+          title: "Search",
+          to: "/users/",
         },
         {
-          icon: 'mdi-thumb-up',
-          title: 'Like',
-          to: '/likes'
+          icon: "mdi-thumb-up",
+          title: "Like",
+          to: "/likes",
         },
         {
-          icon: 'mdi-email',
-          title: 'Message',
-          to: '/messages/'
+          icon: "mdi-email",
+          title: "Message",
+          to: "/messages/",
         },
         {
-          icon: 'mdi-account',
-          title: 'Profile',
-          to: '/myprofile'
+          icon: "mdi-account",
+          title: "Profile",
+          to: "/myprofile",
         },
         {
-          icon: 'mdi-cog',
-          title: 'Setting',
-          to: '/setting'
+          icon: "mdi-cog",
+          title: "Setting",
+          to: "/setting",
         },
       ],
-    }
+    };
   },
-  created () {
-    this.$fireAuth.onAuthStateChanged(async(user) => {
-      this.currentUser = user
+  created() {
+    this.$fireAuth.onAuthStateChanged(async (user) => {
+      this.currentUser = user;
       try {
         const documentSnapshot = await this.$firestore
-          .collection('profiles').doc(user.uid)
-          .get()
-        const documentData = documentSnapshot.data()
-        this.currentUserName = documentData.displayName
+          .collection("profiles")
+          .doc(user.uid)
+          .get();
+        const documentData = documentSnapshot.data();
+        this.currentUserName = documentData.displayName;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    })
+    });
   },
   methods: {
     logIn() {
-      const provider = new this.$firebase.auth.GoogleAuthProvider()
-      this.$fireAuth.signInWithPopup(provider)
-      .then((result) => {
-        alert('Hello, '+result.user.displayName+'!')
-        this.createUser(result.user)
-      })
+      const provider = new this.$firebase.auth.GoogleAuthProvider();
+      this.$fireAuth.signInWithPopup(provider).then((result) => {
+        alert("Hello, " + result.user.displayName + "!");
+        this.createUser(result.user);
+      });
     },
-    logOut () {
-      if (window.confirm('Are You Sure to Sign Out?')) {
-        this.$fireAuth.signOut()
-        .then(() => {
-          alert('You Safely Signed Out.')
-          this.$router.push('/'),
-          location.reload()
-        })
+    logOut() {
+      if (window.confirm("Are You Sure to Sign Out?")) {
+        this.$fireAuth.signOut().then(() => {
+          alert("You Safely Signed Out.");
+          this.$router.push("/"), location.reload();
+        });
       }
     },
-    createUser (user) {
-      this.$firestore.collection('users').doc(user.uid).set({
-        'name': user.displayName,
-        'photoURL': user.photoURL,
-        'email':user.email,
-      }, { merge: true })
+    createUser(user) {
+      this.$firestore.collection("users").doc(user.uid).set(
+        {
+          name: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email,
+        },
+        { merge: true }
+      );
     },
     logInWithGithub() {
-      const provider = new this.$firebase.auth.GithubAuthProvider()
-      this.$fireAuth.signInWithPopup(provider)
-      .then((result) => {
-        alert('Hello, '+result.user.displayName+'!')
-        this.createUser(result.user)
-      })
+      const provider = new this.$firebase.auth.GithubAuthProvider();
+      this.$fireAuth.signInWithPopup(provider).then((result) => {
+        alert("Hello, " + result.user.displayName + "!");
+        this.createUser(result.user);
+      });
     },
-  }
-}
+  },
+};
 </script>
 
 <style>
@@ -176,6 +150,6 @@ export default {
 }
 
 .v-main__wrap {
-  background-color: #ECEFF1;
+  background-color: #eceff1;
 }
 </style>

@@ -2,13 +2,7 @@
   <v-container>
     <v-skeleton-loader v-if="loading && !rooms" type="card" />
     <v-row>
-      <v-col
-        cols="6"
-        sm="4"
-        lg="3"
-        v-for="room in rooms"
-        :key="room.id"
-      >
+      <v-col cols="6" sm="4" lg="3" v-for="room in rooms" :key="room.id">
         <v-card hover nuxt :to="`/messages/${room.id}`">
           <v-card-title>
             {{ room.partnerName }}
@@ -19,7 +13,10 @@
                 v-show="!room.partnerAvatarUrl"
                 :src="require('@/assets/image/default-user.jpg')"
               />
-              <v-img v-show="room.partnerAvatarUrl" :src="room.partnerAvatarUrl" />
+              <v-img
+                v-show="room.partnerAvatarUrl"
+                :src="room.partnerAvatarUrl"
+              />
             </v-avatar>
           </v-layout>
           <v-card-subtitle>
@@ -29,7 +26,6 @@
       </v-col>
     </v-row>
     {{ rooms }}
-
   </v-container>
 </template>
 
@@ -67,7 +63,7 @@ export default {
           const documentData = documentSnapshot.data();
           room.partnerId = partnerId;
           room.partnerName = documentData.displayName;
-          room.partnerAvatarUrl = documentData.avatarUrl
+          room.partnerAvatarUrl = documentData.avatarUrl;
           room.updatedAt = room.updatedAt
             .toDate()
             .toLocaleString("ja-JP-u-ca-japanese");
