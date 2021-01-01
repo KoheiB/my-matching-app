@@ -36,16 +36,16 @@
       <v-col cols="12" md="6">
         <v-container>
           <v-form>
-            <Select :profile="profile.residence" :label="labels.residence" :items="items.locations" ></Select>
-            <Select :profile="profile.workLocation" :label="labels.workLocation" :items="items.locations" :isReadonly="true"></Select>
-            <Select :profile="profile.height" :label="labels.height" :items="selectHeight" :isReadonly="true"></Select>
-            <Select :profile="profile.bodyType" :label="labels.bodyType" :items="items.bodyType" :isReadonly="true"></Select>
-            <Select v-model="profile.occupation" :label="labels.occupation" :items="items.occupation" :isReadonly="true"></Select>
-            <Select v-model="profile.holiday" :label="labels.holiday" :items="items.holiday" :isReadonly="true"></Select>
-            <Select v-model="profile.drink" :label="labels.drink" :items="items.drink" :isReadonly="true"></Select>
-            <Select v-model="profile.tobacco" :label="labels.tobacco" :items="items.tobacco" :isReadonly="true"></Select>
-            <Select v-model="profile.housemate" :label="labels.housemate" :items="items.housemate" :isReadonly="true"></Select>
-            <Select v-model="profile.marriageDesire" :label="labels.marriageDesire" :items="items.marriageDesire" :isReadonly="true"></Select>
+            <Select :profile="profile.residence" :label="labels.residence" :items="items.locations" :isNotActive="true"></Select>
+            <Select :profile="profile.workLocation" :label="labels.workLocation" :items="items.locations" :isNotActive="true"></Select>
+            <Select :profile="profile.height" :label="labels.height" :items="selectHeight" :isNotActive="true"></Select>
+            <Select :profile="profile.bodyType" :label="labels.bodyType" :items="items.bodyType" :isNotActive="true"></Select>
+            <Select v-model="profile.occupation" :label="labels.occupation" :items="items.occupation" :isNotActive="true"></Select>
+            <Select v-model="profile.holiday" :label="labels.holiday" :items="items.holiday" :isNotActive="true"></Select>
+            <Select v-model="profile.drink" :label="labels.drink" :items="items.drink" :isNotActive="true"></Select>
+            <Select v-model="profile.tobacco" :label="labels.tobacco" :items="items.tobacco" :isNotActive="true"></Select>
+            <Select v-model="profile.housemate" :label="labels.housemate" :items="items.housemate" :isNotActive="true"></Select>
+            <Select v-model="profile.marriageDesire" :label="labels.marriageDesire" :items="items.marriageDesire" :isNotActive="true"></Select>
           </v-form>
           {{profile.residence}}
         </v-container>

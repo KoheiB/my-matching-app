@@ -1,5 +1,5 @@
 <template>
-  <v-select v-model="profile" class="mt-4" dense color="info" item-color="blue" :label="label" :items="items" :readonly="isReadonly"></v-select>
+  <v-select v-model="profile" class="mt-4" dense color="info" item-color="blue" :label="label" :items="items" :readonly="isNotActive"></v-select>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
     items: {
       type: Array
     },
-    isReadonly: {
+    isNotActive: {
       type: Boolean,
     }
   },
@@ -27,4 +27,7 @@ export default {
 </script>
 
 <style>
+.theme--light.v-select .v-select__selection--disabled {
+  color: black;
+}
 </style>
