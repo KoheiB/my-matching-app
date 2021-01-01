@@ -12,16 +12,30 @@
           </v-avatar>
         </v-layout>
         <v-layout class="mt-4" justify-space-around>
-          <v-btn :disabled="relationStatus.hasLiked" rounded @click="likeUser" v-show="!relationStatus.isLiked">
+          <v-btn
+            :disabled="relationStatus.hasLiked"
+            rounded
+            @click="likeProfile(profile)"
+            v-show="!relationStatus.isLiked"
+          >
             <v-icon>mdi-thumb-up-outline</v-icon>いいね！
           </v-btn>
-          <v-btn @click="approveLike" v-show="relationStatus.isLiked" :disabled="relationStatus.isMatched">
-            ありがとう！
+          <v-btn
+            @click="approveLike(profile)"
+            v-show="relationStatus.isLiked"
+            :disabled="relationStatus.isMatched"
+            rounded
+          >
+            <v-icon>mdi-heart</v-icon>ありがとう！
           </v-btn>
-          <v-btn :disabled="!relationStatus.isMatched" rounded nuxt to>
+          <v-btn
+            :disabled="!relationStatus.isMatched"
+            rounded
+            nuxt
+            :to="`/messages/${roomId}`"
+          >
             <v-icon>mdi-email</v-icon>メッセージを送る
           </v-btn>
-          {{ relationStatus }}
         </v-layout>
         <v-form>
           <v-row>
@@ -56,6 +70,7 @@
             readonly
           ></v-textarea>
         </v-form>
+        {{ relationStatus }}
       </v-col>
       <v-col cols="12" md="6">
         <v-container>
@@ -121,7 +136,7 @@
               :isNotActive="true"
             ></Select>
           </v-form>
-          {{ profile.residence }}
+          {{ profile }}
         </v-container>
       </v-col>
     </v-row>
@@ -139,6 +154,7 @@ export default {
   data() {
     return {
       profile: {},
+      roomId: "",
       relationStatus: {
         hasLiked: false,
         isLiked: false,
@@ -291,12 +307,110 @@ export default {
     },
   },
   methods: {
-    likeUser() {
-      console.log("liked");
+    async likeProfile(profile) {
+      const currentUser = await this.$auth();
+      const batch = this.$firestore.batch();
+
+      // いいねしたプロフィールのリファレンスを取得。
+      const likedProfileRef = this.$firestore
+        .collection("profiles")
+        .doc(`${profile.id}`);
+
+      // ログインユーザーのサブコレクションにいいねしたプロフィールのデータを追加
+      batch.set(
+        this.$firestore
+          .collection("users")
+          .doc(currentUser.uid)
+          .collection("likedProfiles")
+          .doc(),
+        {
+          likedProfileRef: likedProfileRef,
+          isApproved: false,
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
+        }
+      );
+      // ログインユーザーのリファレンスを追加
+      const likedUserRef = this.$firestore
+        .collection("profiles")
+        .doc(currentUser.uid);
+
+      // いいねされたプロフィールのサブコレクションにログインユーザーのデータを追加
+      batch.set(
+        this.$firestore
+          .collection("profiles")
+          .doc(profile.id)
+          .collection("likedProfileUsers")
+          .doc(),
+        {
+          likedUserRef: likedUserRef,
+          isApproved: false,
+          createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
+        }
+      );
+
+      // 一括処理
+      await batch.commit();
+      alert("you liked");
+      this.relationStatus.hasLiked = true;
     },
-    approveLike() {
-      console.log('approved')
-    }
+    async approveLike(profile) {
+      const currentUser = await this.$auth();
+      const batch = this.$firestore.batch();
+
+      // Firestore上のデータを更新。
+      // １、ログインユーザーのプロフィールをいいねしたユーザーのデータを更新。
+      const profileRef = this.$firestore.collection("profiles").doc(profile.id);
+      const likedQuerySnapshot = await this.$firestore
+        .collection("profiles")
+        .doc(currentUser.uid)
+        .collection("likedProfileUsers")
+        .where("likedUserRef", "==", profileRef)
+        .get();
+      const likedRef = likedQuerySnapshot.docs[0].ref;
+      batch.update(
+        this.$firestore
+          .collection("profiles")
+          .doc(currentUser.uid)
+          .collection("likedProfileUsers")
+          .doc(likedRef.id),
+        {
+          isApproved: true,
+        }
+      );
+
+      // ２、該当ユーザーがいいねしたユーザーのデータを更新。
+      const currentUserProfileRef = this.$firestore
+        .collection("profiles")
+        .doc(currentUser.uid);
+      const likeQuerySnapshot = await this.$firestore
+        .collection("users")
+        .doc(profile.id)
+        .collection("likedProfiles")
+        .where("likedProfileRef", "==", currentUserProfileRef)
+        .get();
+      const likeRef = likeQuerySnapshot.docs[0].ref;
+      batch.update(
+        this.$firestore
+          .collection("users")
+          .doc(profile.id)
+          .collection("likedProfiles")
+          .doc(likeRef.id),
+        {
+          isApproved: true,
+        }
+      );
+
+      // ３、ルーム作成
+      batch.set(this.$firestore.collection("rooms").doc(), {
+        attendUsersId: [currentUser.uid, profile.id],
+        updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // 一括処理
+      await batch.commit();
+      alert("approved");
+      this.relationStatus.isMatched = true;
+    },
   },
   async created() {
     // ログインユーザーを取得。
@@ -304,7 +418,6 @@ export default {
 
     // 該当ユーザーのプロフィールのデータを取得。
     const profileId = this.$route.params.id;
-    console.log(profileId);
     const snapshot = await this.$firestore
       .collection("profiles")
       .doc(profileId)
@@ -313,20 +426,19 @@ export default {
     this.profile = profileData;
 
     // ログインユーザーがいいねしているユーザーをクエリし、該当ユーザーをいいねしているか確認。
+    const profileRef = this.$firestore.collection("profiles").doc(profileId);
     const hasLiked = await this.$firestore
       .collection("users")
       .doc(currentUser.uid)
       .collection("likedProfiles")
-      .where("likedProfileRef", "==", "profileId")
+      .where("likedProfileRef", "==", profileRef)
       .get()
       .then((querySnapshot) => querySnapshot.size);
-    console.log("hasLiked", hasLiked);
     if (hasLiked) {
       this.relationStatus.hasLiked = true;
     }
 
     // ログインユーザーがいいねされているユーザーをクエリし、該当ユーザーにいいねされているか確認。
-    const profileRef = this.$firestore.collection("users").doc(profileId);
     const isLiked = await this.$firestore
       .collection("profiles")
       .doc(currentUser.uid)
@@ -334,43 +446,28 @@ export default {
       .where("likedUserRef", "==", profileRef)
       .get()
       .then((querySnapshot) => querySnapshot.size);
-    console.log("isLiked", isLiked);
     if (isLiked) {
       this.relationStatus.isLiked = true;
     }
 
-    // ルームを取得し、ユーザーとのメッセージルームがあるか確認。
-    // ユーザーのルーム一覧を取得。
-    const querySnapshot = await this.$firestore
+    // 参加ユーザーがログインユーザーと該当ユーザーのルームを取得して存在するか確認。配列の並び順により２パターン検証。
+    const isMatched1 = await this.$firestore
       .collection("rooms")
-      .where("attendUsersId", "array-contains", currentUser.uid)
+      .where("attendUsersId", "==", [currentUser.uid, profileId])
       .get();
-
-    // ルーム参加者のIDを取得
-    const attendUsersId = querySnapshot.docs.map(
-      (doc) => doc.data().attendUsersId
-    );
-
-
-
-    // 自分ではない参加ユーザーのIDをフィルターして取得。
-    const partnerUserIds = attendUsersId.map((ids) => {
-      console.log("id", ids);
-      return ids.filter((id) => {
-        return id !== currentUser.uid;
-      });
-    });
-
-    // 自分ではない参加ユーザーのIDが該当ユーザーのIDか判定。
-    // 配列に中身があればマッチング済。
-    const isMatched = partnerUserIds.filter((id) => {
-      return id[0] === profileId;
-    });
-    console.log("isMatched", isMatched.length);
-    if (isMatched.length) {
-      this.relationStatus.isMatched = true
+    const isMatched2 = await this.$firestore
+      .collection("rooms")
+      .where("attendUsersId", "==", [profileId, currentUser.uid])
+      .get();
+    if (isMatched1.size == 1) {
+      this.relationStatus.isMatched = true;
+      this.roomId = isMatched1.docs[0].ref.id;
+      return;
+    } else if (isMatched2.size == 1) {
+      this.relationStatus.isMatched = true;
+      this.roomId = isMatched2.docs[0].ref.id;
+      return;
     }
-    
   },
 };
 </script>
