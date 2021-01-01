@@ -1,5 +1,5 @@
 <template>
-  <v-select v-bind:value="profile" @change="updateProfile" class="mt-4" dense color="info" item-color="blue" :label="label" :items= items></v-select>
+  <v-select class="mt-4" dense color="info" item-color="blue" :label="label" :items= items :readonly="isReadonly"></v-select>
 </template>
 
 <script>
@@ -13,6 +13,9 @@ export default {
     },
     items: {
       type: Array
+    },
+    isReadonly: {
+      type: Boolean,
     }
   },
   methods: {
