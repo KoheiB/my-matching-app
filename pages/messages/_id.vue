@@ -412,8 +412,9 @@ export default {
       messagesArea.scrollTop = messagesArea.scrollHeight;
     },
     startScroll() {
+      console.log("Starting")
       window.scrollTo({
-        top: this.$refs.targetContent.offsetTop - 30,
+        top: 0,
         behavior: "smooth",
       });
     },
