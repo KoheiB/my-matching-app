@@ -156,6 +156,7 @@ export default {
   components: {
     Select,
   },
+  middleware: ['checkLogin'],
   data() {
     return {
       loading: true,

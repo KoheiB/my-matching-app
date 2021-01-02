@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-btn x-large rounded nuxt to="/users/">ユーザー一覧ページへ</v-btn>
     <v-row>
       <v-col cols="6">
         <v-card>

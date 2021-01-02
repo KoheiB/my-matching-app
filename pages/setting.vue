@@ -32,6 +32,7 @@
 <script>
 export default {
   layout: "navbar",
+  middleware: ['checkLogin'],
   data() {
     return {
       email: "sss@gmail.com",

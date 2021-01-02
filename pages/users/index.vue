@@ -85,6 +85,7 @@
           </v-layout>
           <v-card-actions>
             <v-btn
+              v-show="currentUser"
               @click.prevent="likeUser(currentUser, profile)"
               color="red darken-1 white--text"
               height="50"
@@ -99,7 +100,6 @@
         <!-- カード部分END -->
       </v-col>
     </v-row>
-    {{ this.profiles }}
   </v-container>
   <!-- プロフィール一覧END -->
 </template>
@@ -130,65 +130,77 @@ export default {
     this.$fireAuth.onAuthStateChanged(async (user) => {
       this.currentUser = user;
 
-      // いいねしたユーザーの一覧を取得。
-      const likedProfilesData = await this.$firestore
-        .collection("users")
-        .doc(user.uid)
-        .collection("likedProfiles")
-        .get()
-        .then((querySnapshot) => {
-          return querySnapshot.docs.map((doc) => {
-            return doc.data();
+      if (this.currentUser) {
+        // いいねしたユーザーの一覧を取得。
+        const likedProfilesData = await this.$firestore
+          .collection("users")
+          .doc(user.uid)
+          .collection("likedProfiles")
+          .get()
+          .then((querySnapshot) => {
+            return querySnapshot.docs.map((doc) => {
+              return doc.data();
+            });
           });
+        const likedProfilesRef = likedProfilesData.map((data) => {
+          return data.likedProfileRef;
         });
-      const likedProfilesRef = likedProfilesData.map((data) => {
-        return data.likedProfileRef;
-      });
 
-      //いいねされたユーザーの一覧を取得。
-      const likedProfileUsersData = await this.$firestore
-        .collection("profiles")
-        .doc(user.uid)
-        .collection("likedProfileUsers")
-        .get()
-        .then((querySnapshot) => {
-          return querySnapshot.docs.map((doc) => {
-            return doc.data();
+        //いいねされたユーザーの一覧を取得。
+        const likedProfileUsersData = await this.$firestore
+          .collection("profiles")
+          .doc(user.uid)
+          .collection("likedProfileUsers")
+          .get()
+          .then((querySnapshot) => {
+            return querySnapshot.docs.map((doc) => {
+              return doc.data();
+            });
           });
+        const likedProfileUsersRef = likedProfileUsersData.map((data) => {
+          return data.likedUserRef;
         });
-      const likedProfileUsersRef = likedProfileUsersData.map((data) => {
-        return data.likedUserRef;
-      });
 
-      // すべてのユーザー一覧を取得。
-      const allUsersQuerySnapshot = await this.$firestore
-        .collection("profiles")
-        .where("id", "!=", this.currentUser.uid)
-        .get();
-      const allUsersRef = allUsersQuerySnapshot.docs.map((doc) => doc.ref);
+        // すべてのユーザー一覧を取得。
+        const allUsersQuerySnapshot = await this.$firestore
+          .collection("profiles")
+          .where("id", "!=", this.currentUser.uid)
+          .get();
+        const allUsersRef = allUsersQuerySnapshot.docs.map((doc) => doc.ref);
 
-      // いいねした/いいねされたユーザーの一覧をマージ。
-      const excludeProfilesRef = [...likedProfilesRef, ...likedProfileUsersRef];
-      console.log(excludeProfilesRef);
+        // いいねした/いいねされたユーザーの一覧をマージ。
+        const excludeProfilesRef = [
+          ...likedProfilesRef,
+          ...likedProfileUsersRef,
+        ];
+        console.log(excludeProfilesRef);
 
-      // すべてのユーザーからいいねしたユーザーを弾く。
-      const usersRef = [];
-      const likedProfilesId = excludeProfilesRef.map((ref) => ref.id);
-      allUsersRef.forEach((ref) => {
-        if (!likedProfilesId.includes(ref.id)) {
-          usersRef.push(ref);
-        }
-      });
+        // すべてのユーザーからいいねしたユーザーを弾く。
+        const usersRef = [];
+        const likedProfilesId = excludeProfilesRef.map((ref) => ref.id);
+        allUsersRef.forEach((ref) => {
+          if (!likedProfilesId.includes(ref.id)) {
+            usersRef.push(ref);
+          }
+        });
 
-      // ユーザーを表示する。
-      usersRef.map(async (user) => {
-        const userRef = await user.get();
-        const userData = userRef.data();
-        userData.isLiked = false;
-        this.profiles.push(userData);
-      });
-      this.loading = await false;
-      this.allProfiles = this.profiles;
+        // ユーザーを表示する。
+        usersRef.map(async (user) => {
+          const userRef = await user.get();
+          const userData = userRef.data();
+          userData.isLiked = false;
+          this.profiles.push(userData);
+        });
+        this.loading = await false;
+        this.allProfiles = this.profiles;
+      }
+      else {
+        const allUsersQuerySnapshot = await this.$firestore
+          .collection("profiles")
+          .get();
+        this.profiles = allUsersQuerySnapshot.docs.map((doc) => doc.data());
+        this.loading = await false;
+      }
     });
   },
   methods: {
