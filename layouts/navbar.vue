@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer color="teal lighten-3" clipped app fixed mobile-breakpoint="960">
+    <v-navigation-drawer v-model="drawer" color="teal lighten-3" clipped app mobile-breakpoint="960">
       <v-list shaped>
         <v-list-item-group v-model="selectedItem" color="teal darken-3">
           <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router>
@@ -20,6 +20,7 @@
       </template>
     </v-navigation-drawer>
     <v-app-bar color="teal darken-1" elevation="2" app clipped-left>
+      <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
       <v-toolbar-title> MyMatchingApp </v-toolbar-title>
       <v-container v-if="currentUser">
         <v-btn
@@ -58,7 +59,7 @@ export default {
   data() {
     return {
       clipped: false,
-      drawer: false,
+      drawer: null,
       fixed: false,
       selectedItem: 1,
       currentUser: {},
