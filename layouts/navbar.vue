@@ -1,6 +1,12 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" color="teal lighten-3" clipped app mobile-breakpoint="960">
+    <v-navigation-drawer
+      v-model="drawer"
+      color="teal lighten-3"
+      clipped
+      app
+      mobile-breakpoint="960"
+    >
       <v-list shaped>
         <v-list-item-group v-model="selectedItem" color="teal darken-3">
           <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router>
@@ -20,12 +26,12 @@
       </template>
     </v-navigation-drawer>
     <v-app-bar color="teal darken-1" elevation="2" app clipped-left>
-      <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer" class="d-none d-md-block"></v-app-bar-nav-icon>
       <v-toolbar-title> MyMatchingApp </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="currentUser">
         <v-btn depressed x-large min-width="200" nuxt to="/setting">
-          <v-avatar size="40"  color="white" class="mr-3">
+          <v-avatar size="40" color="white" class="mr-3">
             <v-img
               v-show="!userData.avatarUrl"
               :src="require('@/assets/image/default-user.jpg')"
@@ -44,6 +50,12 @@
       <Login v-if="!currentUser"></Login>
       <Signup v-if="!currentUser"></Signup>
     </v-app-bar>
+    <v-bottom-navigation app grow class="d-md-none">
+      <v-btn v-for="(item, i) in items" :key="i" nuxt :to="item.to">
+        <span>{{ item.title }}</span>
+        <v-icon>{{ item.icon }} </v-icon>
+      </v-btn>
+    </v-bottom-navigation>
     <v-main>
       <v-container>
         <Nuxt />
