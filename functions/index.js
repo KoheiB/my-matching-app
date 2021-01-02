@@ -1,10 +1,62 @@
-// const functions = require('firebase-functions');
-// const https = functions.region("asia-northeast1").https;
-// const admin = require("firebase-admin");
-// admin.initializeApp();
-// const db = admin.firestore();
-// const auth = admin.auth()
+const functions = require('firebase-functions');
+const https = functions.region("asia-northeast1").https;
+const admin = require("firebase-admin");
+admin.initializeApp();
+const db = admin.firestore();
+const auth = admin.auth()
 
+exports.onDeleteUser = functions.auth.user().onDelete(async (user) => {
+  const batch = db.batch()
+
+  // ユーザードキュメントの削除
+  const userDoc = db.collection('users').doc(user.uid)
+  batch.delete(userDoc)
+  console.log(userDoc)
+
+  // プロフィールドキュメントの削除
+  const profile = db.collection('profiles').doc(user.uid)
+  batch.delete(profile)
+
+  // サブコレクションの削除
+  const userSubcollection = await userDoc.collection('likedProfiles').get()
+  userSubcollection.docs.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+
+  const profileSubcollection = await profile.collection('likedProfileUsers').get()
+  profileSubcollection.docs.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+
+  // 削除されたユーザーのリファレンスを持つドキュメントを削除
+  const likedProfilesCollectionGroup = await db.collectionGroup('likedProfiles').where('likedProfileRef', '==', '/profiles/' + user.uid).get()
+  likedProfilesCollectionGroup.docs.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+
+  
+  const likedProfileUsersCollectionGroup = await db.collectionGroup('likedProfileUsers').where('likedUserRef', '==', '/profiles/' + user.uid).get()
+  likedProfileUsersCollectionGroup.docs.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+
+  // 入室していたルームの削除
+  const rooms = await db.collection('room').where('attendUsersId', 'array-contains', user.uid).get()
+  rooms.docs.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+
+  // 一括処理
+  await batch.commit()
+
+  // Storageの削除
+  const firebaseConfig = process.env.FIREBASE_CONFIG
+  const firebaseConfigObj = JSON.parse(firebaseConfig)
+  const bucket = admin.storage().bucket(firebaseConfigObj.storageBucket)
+  return bucket.deleteFiles({
+    prefix: `images/${user.uid}`
+  })
+});
 
 // exports.addImageUrl = functions.storage.object().onFinalize((object) => {
 //   console.log('OBJECT', object)
