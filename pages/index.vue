@@ -1,5 +1,22 @@
 <template>
-  
+  <v-container>
+    <v-row>
+      <v-col cols="6">
+        <v-card>
+          <v-card-title>
+            ログイン
+          </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6">
+        <v-card>
+          <v-card-title>
+            新規登録
+          </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
