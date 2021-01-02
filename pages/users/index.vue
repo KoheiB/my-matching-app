@@ -13,13 +13,15 @@
           <v-row>
             <v-col cols="12" sm="6">
               <div>
-                <v-row>
+                <v-row align="center" justify="end">
                   <v-col cols="6"> 性別 </v-col>
                   <v-col cols="6">
                     <v-select
                       @change="filterProfiles"
                       v-model="selectedItem.sex"
                       :items="items.sex"
+                      item-color="blue"
+                      color="info"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -27,13 +29,14 @@
             </v-col>
             <v-col cols="12" sm="6">
               <div>
-                <v-row>
+                <v-row align="center">
                   <v-col cols="6">並び順</v-col>
                   <v-col cols="6">
                     <v-select
                       @change="orderProfiles"
                       v-model="selectedItem.orderBy"
                       :items="items.orderBy"
+                      item-color="blue"
                     ></v-select>
                   </v-col>
                 </v-row>

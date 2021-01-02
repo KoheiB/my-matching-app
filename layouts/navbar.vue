@@ -1,6 +1,12 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" color="teal lighten-3" clipped app mobile-breakpoint="960">
+    <v-navigation-drawer
+      v-model="drawer"
+      color="teal lighten-3"
+      clipped
+      app
+      mobile-breakpoint="960"
+    >
       <v-list shaped>
         <v-list-item-group v-model="selectedItem" color="teal darken-3">
           <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router>
@@ -13,33 +19,41 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block> Logout </v-btn>
-        </div>
-      </template>
     </v-navigation-drawer>
     <v-app-bar color="teal darken-1" elevation="2" app clipped-left>
-      <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click="drawer = !drawer"
+        class="d-none d-md-block"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title> MyMatchingApp </v-toolbar-title>
-      <v-container v-if="currentUser">
-        <v-btn
-          class="btn"
-          icon
-          :style="'background-image: url(' + currentUser.photoURL + ')'"
-        ></v-btn>
-        <v-btn>
-          {{ currentUserName }}
+      <v-spacer></v-spacer>
+      <div v-if="currentUser">
+        <v-btn depressed x-large min-width="200" nuxt to="/setting">
+          <v-avatar size="40" color="white" class="mr-3">
+            <v-img
+              v-show="!userData.avatarUrl"
+              :src="require('@/assets/image/default-user.jpg')"
+            />
+            <v-img v-show="userData.avatarUrl" :src="userData.avatarUrl" />
+          </v-avatar>
+          {{ userData.displayName }}
         </v-btn>
-        <v-btn @click="logOut"> ログアウト </v-btn>
-      </v-container>
-      <v-container v-else>
-        <v-btn @click="logIn"> ログイン </v-btn>
-        <v-btn @click="logIn"> 新規登録 </v-btn>
-      </v-container>
+      </div>
+      <div v-else>
+        <div class="d-flex justify-space-around" style="max-width: 200px">
+          <v-btn @click="logIn"> ログイン </v-btn>
+          <v-btn @click="logIn"> 新規登録 </v-btn>
+        </div>
+      </div>
       <Login v-if="!currentUser"></Login>
       <Signup v-if="!currentUser"></Signup>
     </v-app-bar>
+    <v-bottom-navigation app grow class="d-md-none">
+      <v-btn v-for="(item, i) in items" :key="i" nuxt :to="item.to">
+        <span>{{ item.title }}</span>
+        <v-icon>{{ item.icon }} </v-icon>
+      </v-btn>
+    </v-bottom-navigation>
     <v-main>
       <v-container>
         <Nuxt />
@@ -63,7 +77,7 @@ export default {
       fixed: false,
       selectedItem: 1,
       currentUser: {},
-      currentUserName: "",
+      userData: "",
       items: [
         {
           icon: "mdi-magnify",
@@ -101,8 +115,7 @@ export default {
           .collection("profiles")
           .doc(user.uid)
           .get();
-        const documentData = documentSnapshot.data();
-        this.currentUserName = documentData.displayName;
+        this.userData = documentSnapshot.data();
       } catch (error) {
         console.log(error);
       }
