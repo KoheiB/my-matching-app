@@ -42,44 +42,41 @@ export default {
     return {
       loading: true,
       rooms: [],
-      currentUser: {},
     };
   },
-  created() {
-    this.$fireAuth.onAuthStateChanged(async (user) => {
-      this.currentUser = user;
-      try {
-        const querySnapshot = await this.$firestore
-          .collection("rooms")
-          .where("attendUsersId", "array-contains", user.uid)
+  async created() {
+    const currentUser = await this.$auth();
+    try {
+      const querySnapshot = await this.$firestore
+        .collection("rooms")
+        .where("attendUsersId", "array-contains", currentUser.uid)
+        .get();
+      const rooms = querySnapshot.docs.map((doc) => {
+        const result = doc.data();
+        result.id = doc.id;
+        return result;
+      });
+      rooms.forEach(async (room) => {
+        const partnerId = room.attendUsersId.filter(
+          (attendUserId) => attendUserId !== currentUser.uid
+        )[0];
+        const documentSnapshot = await this.$firestore
+          .collection("profiles")
+          .doc(partnerId)
           .get();
-        const rooms = querySnapshot.docs.map((doc) => {
-          const result = doc.data();
-          result.id = doc.id;
-          return result;
-        });
-        rooms.forEach(async (room) => {
-          const partnerId = room.attendUsersId.filter(
-            (attendUserId) => attendUserId !== this.currentUser.uid
-          )[0];
-          const documentSnapshot = await this.$firestore
-            .collection("profiles")
-            .doc(partnerId)
-            .get();
-          const documentData = documentSnapshot.data();
-          room.partnerId = partnerId;
-          room.partnerName = documentData.displayName;
-          room.partnerAvatarUrl = documentData.avatarUrl;
-          room.updatedAt = room.updatedAt
-            .toDate()
-            .toLocaleString("ja-JP-u-ca-japanese");
-          this.rooms.push(room);
-          this.loading = false;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    });
+        const documentData = documentSnapshot.data();
+        room.partnerId = partnerId;
+        room.partnerName = documentData.displayName;
+        room.partnerAvatarUrl = documentData.avatarUrl;
+        room.updatedAt = room.updatedAt
+          .toDate()
+          .toLocaleString("ja-JP-u-ca-japanese");
+        this.rooms.push(room);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    this.loading = await false;
   },
 };
 </script>
