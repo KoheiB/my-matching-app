@@ -1,48 +1,49 @@
 <template>
   <v-container class="message-wrapper">
-    <v-btn>相手のプロフィールを確認する</v-btn>
+    <v-btn @click="scrollToEnd">相手のプロフィールを確認する</v-btn>
     <v-card
-      class="teal lighten-4 mt-2 mb-2 overflow-auto d-flex flex-column"
+      class="teal lighten-4 mt-2 mb-2 overflow-y-auto d-flex flex-column"
       outlined
       height="500"
+      ref="targetContent"
+      id="targetContent"
     >
-    <v-row align="end">
-      <v-col class="pa-0 ma-0">
-        <div v-for="message in messages" :key="message.id" v-show="messages">
-          <div v-if="isMyMessage(message.userId)" >
-            <v-row align="center">
-              <v-col cols="2"></v-col>
-              <v-col cols="8" class="d-flex justify-end">
-                <div class="teal lighten-5 pa-2 rounded-lg">
-                  {{ message.body }}
-                </div>
-              </v-col>
-              <v-col cols="2">
-                <v-avatar size="40">
-                  <v-img :src="require('@/assets/image/default-user.jpg')" />
-                </v-avatar>
-              </v-col>
-            </v-row>
+      <v-row align="end">
+        <v-col class="pa-0 ma-0">
+          <div v-for="message in messages" :key="message.id" v-show="messages">
+            <div v-if="isMyMessage(message.userId)">
+              <v-row align="center">
+                <v-col cols="2"></v-col>
+                <v-col cols="8" class="d-flex justify-end">
+                  <div class="teal lighten-5 pa-2 rounded-lg">
+                    {{ message.body }}
+                  </div>
+                </v-col>
+                <v-col cols="2">
+                  <v-avatar size="40">
+                    <v-img :src="require('@/assets/image/default-user.jpg')" />
+                  </v-avatar>
+                </v-col>
+              </v-row>
+            </div>
+            <div v-else>
+              <v-row>
+                <v-col cols="2" class="d-flex justify-end">
+                  <v-avatar size="40">
+                    <v-img :src="require('@/assets/image/default-user.jpg')" />
+                  </v-avatar>
+                </v-col>
+                <v-col cols="8" class="d-flex">
+                  <div class="teal lighten-5 pa-2 rounded-lg">
+                    {{ message.body }}
+                  </div>
+                </v-col>
+                <v-col cols="2"></v-col>
+              </v-row>
+            </div>
           </div>
-          <div v-else>
-            <v-row>
-              <v-col cols="2" class="d-flex justify-end">
-                <v-avatar size="40">
-                  <v-img :src="require('@/assets/image/default-user.jpg')" />
-                </v-avatar>
-              </v-col>
-              <v-col cols="8" class="d-flex">
-                <div class="teal lighten-5 pa-2 rounded-lg">
-                  {{ message.body }}
-                </div>
-              </v-col>
-              <v-col cols="2"></v-col>
-            </v-row>
-          </div>
-        </div>
-
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
       <v-container v-show="!messages">
         <p>まだチャットがありません</p>
       </v-container>
@@ -107,25 +108,40 @@ export default {
       const { uid } = this.$fireAuth.currentUser;
       return userId === uid;
     },
-    onSubmit() {
+    async onSubmit() {
       if (this.sendingMessage.trim()) {
-        this.$firestore
-          .collection("rooms")
-          .doc(this.roomId)
-          .collection("messages")
-          .add({
-            userId: this.currentUser.uid,
-            body: this.sendingMessage,
-            createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        console.log("submit");
-        this.sendingMessage = "";
+        try {
+          await this.$firestore
+            .collection("rooms")
+            .doc(this.roomId)
+            .collection("messages")
+            .add({
+              userId: this.currentUser.uid,
+              body: this.sendingMessage,
+              createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          console.log("submit");
+          this.sendingMessage = "";
+          await this.scrollToEnd()
+        } catch (error) {
+          alert(error)
+        }
       }
+    },
+    scrollToEnd() {
+      const messagesArea = document.getElementById("targetContent");
+      messagesArea.scrollTop = messagesArea.scrollHeight;
     },
   },
   created() {
     this.getMessages();
   },
+  // mounted() {
+  //   console.log('mounted')
+  //   const messagesArea = document.getElementById("targetContent");
+  //   console.log(messageArea)
+  //   messagesArea.scrollTop = messagesArea.scrollHeight;
+  // },
   destroyed() {
     this.messages = [];
     if (this.unsubscribe) {
