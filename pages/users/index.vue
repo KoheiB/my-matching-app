@@ -8,6 +8,21 @@
         </v-col>
       </v-row>
     </div>
+    <!--  検索窓-->
+    <v-expansion-panels>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          条件を指定して検索する
+          <v-icon>mdi-search</v-icon>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          {{profiles}}
+          <v-select>
+
+          </v-select>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <!-- プロフィール一覧 -->
     <v-row>
       <v-col
