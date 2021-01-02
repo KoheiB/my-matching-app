@@ -159,15 +159,46 @@ export default {
   methods: {
     async approveLike(like) {
       const batch = this.$firestore.batch();
-      like.isApproved = true;
+      const currentUser = await this.$auth()
 
-      // Firestore上のデータを更新
+      // Firestore上のデータを更新。
+      // １、ログインユーザーのプロフィールをいいねした該当ユーザーのデータを更新。
+      const profileRef = this.$firestore.collection("profiles").doc(like.userId);
+      const likedQuerySnapshot = await this.$firestore
+        .collection("profiles")
+        .doc(currentUser.uid)
+        .collection("likedProfileUsers")
+        .where("likedUserRef", "==", profileRef)
+        .get();
+      const likedRef = likedQuerySnapshot.docs[0].ref;
       batch.update(
         this.$firestore
           .collection("profiles")
-          .doc(this.currentUser.uid)
+          .doc(currentUser.uid)
           .collection("likedProfileUsers")
-          .doc(like.id),
+          .doc(likedRef.id),
+        {
+          isApproved: true,
+        }
+      );
+
+      // ２、該当ユーザーがいいねしたログインユーザーのデータを更新。
+      const currentUserProfileRef = this.$firestore
+        .collection("profiles")
+        .doc(currentUser.uid);
+      const likeQuerySnapshot = await this.$firestore
+        .collection("users")
+        .doc(like.userId)
+        .collection("likedProfiles")
+        .where("likedProfileRef", "==", currentUserProfileRef)
+        .get();
+      const likeRef = likeQuerySnapshot.docs[0].ref;
+      batch.update(
+        this.$firestore
+          .collection("users")
+          .doc(like.userId)
+          .collection("likedProfiles")
+          .doc(likeRef.id),
         {
           isApproved: true,
         }
@@ -181,6 +212,8 @@ export default {
 
       // 一括処理
       await batch.commit();
+      like.isApproved = true;
+
     },
   },
 };

@@ -358,7 +358,7 @@ export default {
       const batch = this.$firestore.batch();
 
       // Firestore上のデータを更新。
-      // １、ログインユーザーのプロフィールをいいねしたユーザーのデータを更新。
+      // １、ログインユーザーのプロフィールをいいねした該当ユーザーのデータを更新。
       const profileRef = this.$firestore.collection("profiles").doc(profile.id);
       const likedQuerySnapshot = await this.$firestore
         .collection("profiles")
@@ -378,7 +378,7 @@ export default {
         }
       );
 
-      // ２、該当ユーザーがいいねしたユーザーのデータを更新。
+      // ２、該当ユーザーがいいねしたログインユーザーのデータを更新。
       const currentUserProfileRef = this.$firestore
         .collection("profiles")
         .doc(currentUser.uid);
