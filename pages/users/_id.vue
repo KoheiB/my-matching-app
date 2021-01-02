@@ -141,7 +141,6 @@
               :isNotActive="true"
             ></Select>
           </v-form>
-          {{ profile }}
         </v-container>
       </v-col>
     </v-row>

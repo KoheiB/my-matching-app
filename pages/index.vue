@@ -29,7 +29,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="logInWithEmailAndPassword" width="30%"
+                    <v-btn @click="logIn" width="30%"
                       >Login</v-btn
                     >
                   </v-col>
@@ -73,7 +73,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="logInWithEmailAndPassword" width="30%"
+                    <v-btn @click="signUp" width="30%"
                       >SignUp</v-btn
                     >
                   </v-col>
@@ -107,6 +107,31 @@ export default {
       }
     };
   },
+  methods: {
+    logIn() {
+      console.log('login')
+      this.$fireAuth
+        .signInWithEmailAndPassword(this.login.email, this.login.password)
+        .then((user) => {
+          this.$router.push('/users/')
+        })
+        .catch(function (error) {
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
+    },
+    signUp() {
+      this.$fireAuth
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((result) => {
+          alert("SingUp Success");
+        })
+        .catch(function (error) {
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
+    }
+  }
 };
 </script>
 
