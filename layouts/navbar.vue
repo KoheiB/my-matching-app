@@ -22,21 +22,23 @@
     <v-app-bar color="teal darken-1" elevation="2" app clipped-left>
       <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
       <v-toolbar-title> MyMatchingApp </v-toolbar-title>
-      <v-container v-if="currentUser">
-        <v-btn
-          class="btn"
-          icon
-          :style="'background-image: url(' + currentUser.photoURL + ')'"
-        ></v-btn>
-        <v-btn>
-          {{ currentUserName }}
+      <v-spacer></v-spacer>
+      <div v-if="currentUser">
+        <v-btn depressed x-large min-width="200">
+          <v-avatar size="40"  color="white" class="mr-2">
+            <v-img
+              v-show="!userData.avatarUrl"
+              :src="require('@/assets/image/default-user.jpg')"
+            />
+            <v-img v-show="userData.avatarUrl" :src="userData.avatarUrl" />
+          </v-avatar>
+          {{ userData.displayName }}
         </v-btn>
-        <v-btn @click="logOut"> ログアウト </v-btn>
-      </v-container>
-      <v-container v-else>
+      </div>
+      <div v-else>
         <v-btn @click="logIn"> ログイン </v-btn>
         <v-btn @click="logIn"> 新規登録 </v-btn>
-      </v-container>
+      </div>
       <Login v-if="!currentUser"></Login>
       <Signup v-if="!currentUser"></Signup>
     </v-app-bar>
@@ -63,7 +65,7 @@ export default {
       fixed: false,
       selectedItem: 1,
       currentUser: {},
-      currentUserName: "",
+      userData: "",
       items: [
         {
           icon: "mdi-magnify",
@@ -101,8 +103,7 @@ export default {
           .collection("profiles")
           .doc(user.uid)
           .get();
-        const documentData = documentSnapshot.data();
-        this.currentUserName = documentData.displayName;
+        this.userData = documentSnapshot.data();
       } catch (error) {
         console.log(error);
       }
