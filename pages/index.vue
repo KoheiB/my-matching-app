@@ -29,9 +29,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="logIn" width="30%"
-                      >Login</v-btn
-                    >
+                    <v-btn @click="logIn" width="30%">Login</v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -73,9 +71,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="signUp" width="30%"
-                      >SignUp</v-btn
-                    >
+                    <v-btn @click="signUp" width="30%">SignUp</v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -93,27 +89,26 @@ export default {
     return {
       tab: null,
       login: {
-        email: '',
-        password: '',
+        email: "",
+        password: "",
       },
       signup: {
-        nickname: '',
+        nickname: "",
         sex: null,
-        email: '',
-        password: '',
+        email: "",
+        password: "",
       },
       items: {
-        sex: ['男性', '女性']
-      }
+        sex: ["男性", "女性"],
+      },
     };
   },
   methods: {
     logIn() {
-      console.log('login')
       this.$fireAuth
         .signInWithEmailAndPassword(this.login.email, this.login.password)
         .then((user) => {
-          this.$router.push('/users/')
+          this.$router.push("/users/");
         })
         .catch(function (error) {
           const errorMessage = error.message;
@@ -122,16 +117,66 @@ export default {
     },
     signUp() {
       this.$fireAuth
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then((result) => {
-          alert("SingUp Success");
+        .createUserWithEmailAndPassword(this.signup.email, this.signup.password)
+        .then(async (result) => {
+          const user = result.user
+          user.updateProfile({
+            displayName: this.signup.nickname,
+          });
+          try {
+            const batch = this.$firestore.batch();
+
+            // usersコレクションに登録ユーザーを追加
+            batch.set(
+              this.$firestore.collection("users").doc(user.uid),
+              {
+                name: this.signup.nickname,
+                createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
+              },
+              { merge: true }
+            );
+
+            // profilesコレクションに登録ユーザーのプロフィールを追加
+            batch.set(
+              this.$firestore.collection("profiles").doc(user.uid),
+              {
+                id: user.uid,
+                avatarUrl: "",
+                displayName: this.signup.nickname,
+                sex: this.signup.sex,
+                age: "未設定",
+                body: "未設定",
+                residence: "未設定",
+                workLocation: "未設定",
+                height: "未設定",
+                bodyType: "未設定",
+                occupation: "未設定",
+                holiday: "未設定",
+                drink: "未設定",
+                tobacco: "未設定",
+                housemate: "未設定",
+                marriageDesire: "未設定",
+                likedCount: 0,
+                createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
+              },
+              { merge: true }
+            ),
+              // 一括更新をコミット
+              await batch.commit();
+              this.$router.push("/users/");
+          } catch (error) {
+            await this.fireAuth.user.delete();
+            console.log(error);
+            alert("エラーが発生しました。もう一度登録し直してください。");
+          }
         })
         .catch(function (error) {
           const errorMessage = error.message;
           alert(errorMessage);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

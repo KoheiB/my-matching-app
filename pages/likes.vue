@@ -8,7 +8,7 @@
     <!-- 画面タブここまで -->
 
     <!-- ローダー部分 -->
-    <div v-if="loading">
+    <div v-if="loading && getLikes.length">
       <v-row>
         <v-col cols="6" sm="4" lg="3" v-for="n of 4" :key="n">
           <v-skeleton-loader type="card-heading, card" />

@@ -24,7 +24,9 @@
     <v-divider class="mt-2 mb-6"></v-divider>
     <div>
       <v-btn rounded @click="logOut">ログアウト</v-btn>
-      <v-btn class="red white--text ml-2" rounded>退会する</v-btn>
+      <v-btn @click="unregister" class="red white--text ml-2" rounded
+        >退会する</v-btn
+      >
     </div>
   </v-container>
 </template>
@@ -32,7 +34,7 @@
 <script>
 export default {
   layout: "navbar",
-  middleware: ['checkLogin'],
+  middleware: ["checkLogin"],
   data() {
     return {
       email: "sss@gmail.com",
@@ -66,17 +68,19 @@ export default {
         });
     },
     logOut() {
-      if (window.confirm("Are You Sure to Sign Out?")) {
+      if (window.confirm("ログアウトしますか？")) {
         this.$fireAuth.signOut().then(() => {
-          alert("You Safely Signed Out.");
-          this.$router.push("/"), location.reload();
+          this.$router.push("/");
         });
       }
     },
-    unregister() {
-      if (window.confirm("Are You Sure to unregister?")) {
+    async unregister() {
+      if (window.confirm("本当に退会しますか？")) {
+        await this.$fireAuth.currentUser.delete().then(() => {
+          this.$router.push("/");
+        });
       }
-    }
+    },
   },
   created() {
     console.log(this.user);
