@@ -5,6 +5,7 @@
 // const db = admin.firestore();
 // const auth = admin.auth()
 
+
 // exports.addImageUrl = functions.storage.object().onFinalize((object) => {
 //   console.log('OBJECT', object)
 //   const userId = object.name.split('/')[1]
