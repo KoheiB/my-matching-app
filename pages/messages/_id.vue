@@ -4,7 +4,7 @@
     <v-btn @click="startScroll">scroll</v-btn>
     <div
       class="teal lighten-4 mt-2 mb-2 overflow-y-auto d-flex flex-column"
-      style="height: 500px; overflow-y: scroll"
+      style="height: 500px; overflow-y: scroll; overflow-x: hidden"
       outlined
       ref="targetContent"
     >
@@ -400,16 +400,20 @@ export default {
             });
           console.log("submit");
           this.sendingMessage = "";
-          await this.scrollToEnd();
+          await this.scrollOnsubmit();
         } catch (error) {
           alert(error);
         }
       }
     },
-    startScroll() {
-      console.log("Starting")
+    scrollOnCreated() {
       this.$refs.targetContent.scrollTo({
-        top: this.$refs.targetContent.height,
+        top: this.$refs.targetContent.scrollHeight,
+      });
+    },
+    scrollOnSubmit() {
+      this.$refs.targetContent.scrollTo({
+        top: this.$refs.targetContent.scrollHeight,
         behavior: "smooth",
       });
     },
@@ -442,6 +446,7 @@ export default {
       .get();
     const profileData = snapshot.data();
     this.profile = profileData;
+    this.scrollOnCreated()
   },
   destroyed() {
     this.messages = [];
