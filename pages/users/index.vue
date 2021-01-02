@@ -1,13 +1,5 @@
 <template>
   <v-container>
-    <!-- ローダー部分 -->
-    <div v-if="loading">
-      <v-row>
-        <v-col cols="6" sm="4" lg="3" v-for="n of 12" :key="n">
-          <v-skeleton-loader type="card-heading, card" />
-        </v-col>
-      </v-row>
-    </div>
     <!--  検索窓-->
     <v-expansion-panels>
       <v-expansion-panel>
@@ -51,6 +43,14 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <!-- ローダー部分 -->
+    <div v-if="loading">
+      <v-row>
+        <v-col cols="6" sm="4" lg="3" v-for="n of 4" :key="n">
+          <v-skeleton-loader type="card-heading, card" />
+        </v-col>
+      </v-row>
+    </div>
     <!-- プロフィール一覧 -->
     <v-row>
       <v-col
@@ -184,7 +184,7 @@ export default {
         userData.isLiked = false;
         this.profiles.push(userData);
       });
-      this.loading = false;
+      this.loading = await false;
       this.allProfiles = this.profiles;
     });
   },

@@ -1,7 +1,6 @@
 <template>
   <v-container class="message-wrapper">
     <v-btn @click="dialog = true">相手のプロフィールを確認する</v-btn>
-    <v-btn @click="startScroll">scroll</v-btn>
     <div
       class="teal lighten-4 mt-2 mb-2 overflow-y-auto d-flex flex-column"
       style="height: 500px; overflow-y: scroll; overflow-x: hidden"

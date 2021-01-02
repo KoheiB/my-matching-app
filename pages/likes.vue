@@ -7,6 +7,15 @@
     </v-tabs>
     <!-- 画面タブここまで -->
 
+    <!-- ローダー部分 -->
+    <div v-if="loading">
+      <v-row>
+        <v-col cols="6" sm="4" lg="3" v-for="n of 4" :key="n">
+          <v-skeleton-loader type="card-heading, card" />
+        </v-col>
+      </v-row>
+    </div>
+
     <!-- タブ内容 -->
     <v-tabs-items v-model="tab">
       <!-- 相手から -->
@@ -159,11 +168,13 @@ export default {
   methods: {
     async approveLike(like) {
       const batch = this.$firestore.batch();
-      const currentUser = await this.$auth()
+      const currentUser = await this.$auth();
 
       // Firestore上のデータを更新。
       // １、ログインユーザーのプロフィールをいいねした該当ユーザーのデータを更新。
-      const profileRef = this.$firestore.collection("profiles").doc(like.userId);
+      const profileRef = this.$firestore
+        .collection("profiles")
+        .doc(like.userId);
       const likedQuerySnapshot = await this.$firestore
         .collection("profiles")
         .doc(currentUser.uid)
@@ -213,7 +224,6 @@ export default {
       // 一括処理
       await batch.commit();
       like.isApproved = true;
-
     },
   },
 };

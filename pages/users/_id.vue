@@ -3,6 +3,11 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-layout justify-center>
+          <!-- ローダー部分 -->
+          <div v-if="loading">
+            <v-skeleton-loader type="image" />
+          </div>
+          <!-- ローダーここまで -->
           <v-avatar size="200">
             <v-img
               v-show="!profile.avatarUrl"
@@ -153,6 +158,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       profile: {},
       roomId: "",
       relationStatus: {
@@ -468,6 +474,7 @@ export default {
       this.roomId = isMatched2.docs[0].ref.id;
       return;
     }
+    this.loading = await false;
   },
 };
 </script>
