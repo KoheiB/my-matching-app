@@ -1,6 +1,6 @@
 <template>
   <v-container class="message-wrapper">
-    <v-btn @click="scrollToEnd">相手のプロフィールを確認する</v-btn>
+    <v-btn nuxt :to="`/users/${partnerId}`">相手のプロフィールを確認する</v-btn>
     <v-card
       class="teal lighten-4 mt-2 mb-2 overflow-y-auto d-flex flex-column"
       outlined
@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       roomId: this.$route.params.id,
+      partnerId: '',
       unsubscribe: null,
       currentUser: {},
       messages: [],
@@ -133,8 +134,13 @@ export default {
       messagesArea.scrollTop = messagesArea.scrollHeight;
     },
   },
-  created() {
+  async created() {
     this.getMessages();
+    const currentUser = await this.$auth()
+    const roomId = this.$route.params.id
+    const docData = await this.$firestore.collection('rooms').doc(roomId).get().then(doc => doc.data())
+    this.partnerId = docData.attendUsersId.filter(id => id !== currentUser.uid)[0]
+    
   },
   // mounted() {
   //   console.log('mounted')
