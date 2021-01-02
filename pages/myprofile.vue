@@ -3,6 +3,11 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-layout justify-center>
+          <!-- ローダー部分 -->
+          <div v-if="loading">
+            <v-skeleton-loader type="image" />
+          </div>
+          <!-- ローダーここまで -->
           <v-avatar size="200">
             <v-img
               v-show="!profile.avatarUrl"
@@ -123,7 +128,7 @@ export default {
   },
   data() {
     return {
-      name: "aaa",
+      loading: true,
       profile: {},
       labels: {
         age: "年齢",
@@ -325,7 +330,8 @@ export default {
       .doc(user.uid)
       .get();
     const profileData = snapshot.data();
-    this.profile = profileData;
+    this.profile = await profileData;
+    this.loading = await false;
   },
   async destroyed() {
     const user = await this.$auth();

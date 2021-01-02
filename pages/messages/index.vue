@@ -1,6 +1,12 @@
 <template>
   <v-container>
-    <v-skeleton-loader v-if="loading && !rooms" type="card" />
+    <div v-if="loading && rooms">
+      <v-row>
+        <v-col cols="6" sm="4" lg="3" v-for="n of 4" :key="n">
+          <v-skeleton-loader type="card-heading, card" />
+        </v-col>
+      </v-row>
+    </div>
     <v-row>
       <v-col cols="6" sm="4" lg="3" v-for="room in rooms" :key="room.id">
         <v-card hover nuxt :to="`/messages/${room.id}`">
