@@ -40,13 +40,8 @@
         </v-btn>
       </div>
       <div v-else>
-        <div class="d-flex justify-space-around" style="max-width: 200px">
-          <v-btn @click="logIn"> ログイン </v-btn>
-          <v-btn @click="logIn"> 新規登録 </v-btn>
-        </div>
+          <v-btn nuxt to="/"> ログインまたは新規登録 </v-btn>
       </div>
-      <Login v-if="!currentUser"></Login>
-      <Signup v-if="!currentUser"></Signup>
     </v-app-bar>
     <v-bottom-navigation app grow class="d-md-none">
       <v-btn v-for="(item, i) in items" :key="i" nuxt :to="item.to">

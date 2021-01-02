@@ -112,7 +112,6 @@
               :items="items.marriageDesire"
             ></Select>
           </v-form>
-          {{ profile }}
         </v-container>
       </v-col>
     </v-row>
@@ -126,6 +125,7 @@ export default {
   components: {
     Select,
   },
+  middleware: ['checkLogin'],
   data() {
     return {
       loading: true,

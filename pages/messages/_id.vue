@@ -195,6 +195,7 @@ export default {
   components: {
     Select,
   },
+  middleware: ['checkLogin'],
   data() {
     return {
       roomId: this.$route.params.id,

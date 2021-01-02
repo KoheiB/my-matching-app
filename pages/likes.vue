@@ -100,6 +100,7 @@
 <script>
 export default {
   layout: "navbar",
+  middleware: ['checkLogin'],
   data() {
     return {
       loading: true,

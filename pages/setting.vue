@@ -32,6 +32,7 @@
 <script>
 export default {
   layout: "navbar",
+  middleware: ['checkLogin'],
   data() {
     return {
       email: "sss@gmail.com",
@@ -65,7 +66,16 @@ export default {
         });
     },
     logOut() {
-
+      if (window.confirm("Are You Sure to Sign Out?")) {
+        this.$fireAuth.signOut().then(() => {
+          alert("You Safely Signed Out.");
+          this.$router.push("/"), location.reload();
+        });
+      }
+    },
+    unregister() {
+      if (window.confirm("Are You Sure to unregister?")) {
+      }
     }
   },
   created() {
