@@ -19,14 +19,12 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn @click="logOut" block> ログアウト </v-btn>
-        </div>
-      </template>
     </v-navigation-drawer>
     <v-app-bar color="teal darken-1" elevation="2" app clipped-left>
-      <v-app-bar-nav-icon @click="drawer = !drawer" class="d-none d-md-block"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click="drawer = !drawer"
+        class="d-none d-md-block"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title> MyMatchingApp </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="currentUser">

@@ -23,10 +23,8 @@
     </div>
     <v-divider class="mt-2 mb-6"></v-divider>
     <div>
-      <v-btn class="red white--text" rounded>退会する</v-btn>
-      <p class="mt-4">
-        すべてのユーザーデータが削除されます。一度削除したら、元に戻すことはできません。
-      </p>
+      <v-btn rounded @click="logOut">ログアウト</v-btn>
+      <v-btn class="red white--text ml-2" rounded>退会する</v-btn>
     </div>
   </v-container>
 </template>
@@ -66,6 +64,9 @@ export default {
           console.log(error);
         });
     },
+    logOut() {
+
+    }
   },
   created() {
     console.log(this.user);
