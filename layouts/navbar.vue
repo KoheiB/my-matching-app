@@ -15,7 +15,7 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn block> Logout </v-btn>
+          <v-btn @click="logOut" block> ログアウト </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -24,8 +24,8 @@
       <v-toolbar-title> MyMatchingApp </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="currentUser">
-        <v-btn depressed x-large min-width="200">
-          <v-avatar size="40"  color="white" class="mr-2">
+        <v-btn depressed x-large min-width="200" nuxt to="/setting">
+          <v-avatar size="40"  color="white" class="mr-3">
             <v-img
               v-show="!userData.avatarUrl"
               :src="require('@/assets/image/default-user.jpg')"
@@ -36,8 +36,10 @@
         </v-btn>
       </div>
       <div v-else>
-        <v-btn @click="logIn"> ログイン </v-btn>
-        <v-btn @click="logIn"> 新規登録 </v-btn>
+        <div class="d-flex justify-space-around" style="max-width: 200px">
+          <v-btn @click="logIn"> ログイン </v-btn>
+          <v-btn @click="logIn"> 新規登録 </v-btn>
+        </div>
       </div>
       <Login v-if="!currentUser"></Login>
       <Signup v-if="!currentUser"></Signup>
