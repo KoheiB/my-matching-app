@@ -31,7 +31,6 @@
         </v-card>
       </v-col>
     </v-row>
-    {{ rooms }}
   </v-container>
 </template>
 

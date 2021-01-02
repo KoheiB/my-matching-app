@@ -38,14 +38,15 @@
               ></v-text-field>
             </v-col>
             <v-col cols="4">
-              <v-text-field
+              <v-select
                 class="mt-4"
                 v-model="profile.age"
                 color="info"
                 outlined
                 label="年齢"
-                readonly
-              ></v-text-field>
+                item-color="blue"
+                :items="selectAge"
+              ></v-select>
             </v-col>
           </v-row>
           <v-textarea
@@ -273,10 +274,19 @@ export default {
     selectHeight() {
       const maxHeight = 200;
       const array = [...Array(maxHeight).keys()];
-      const stringArray = array.map((number) => String(number));
+      const stringArray = array.map((number) => String(number) + 'cm');
       stringArray.splice(0, 131);
       stringArray.unshift("未設定", "130cm以下");
       stringArray.push("200cm以上");
+      return stringArray;
+    },
+    selectAge() {
+      const maxAge = 70;
+      const array = [...Array(maxAge).keys()];
+      const stringArray = array.map((number) => String(number) + '歳');
+      stringArray.splice(0, 18);
+      stringArray.unshift("未設定");
+      stringArray.push("70歳以上");
       return stringArray;
     },
   },
