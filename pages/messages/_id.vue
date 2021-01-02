@@ -1,84 +1,56 @@
 <template>
-  <v-row>
-    <!-- 左半分 プロフィール画面 -->
-    <v-col cols="6">
-      <v-container>
-        <div class="text-h4">Name</div>
-        <v-img :src="picture" width="100px" />
-        <v-divider />
-        <v-container class="text-h4">Profile</v-container>
-        <v-form>
-          <v-container>
-            <v-row v-for="item in items" :key="item.name">
+  <v-container class="message-wrapper">
+    <v-btn>相手のプロフィールを確認する</v-btn>
+    <v-card
+      class="teal lighten-4 mt-2 mb-2 overflow-auto d-flex flex-column"
+      outlined
+      height="500"
+    >
+    <v-row align="end">
+      <v-col class="pa-0 ma-0">
+        <div v-for="message in messages" :key="message.id" v-show="messages">
+          <div v-if="isMyMessage(message.userId)" >
+            <v-row align="center">
               <v-col cols="2"></v-col>
-              <v-col cols="2" align-self="center">
-                {{ item.name }}
+              <v-col cols="8" class="d-flex justify-end">
+                <div class="teal lighten-5 pa-2 rounded-lg">
+                  {{ message.body }}
+                </div>
               </v-col>
-              <v-col cols="6" align-self="center">
-                <v-text-field v-model="name"></v-text-field>
+              <v-col cols="2">
+                <v-avatar size="40">
+                  <v-img :src="require('@/assets/image/default-user.jpg')" />
+                </v-avatar>
+              </v-col>
+            </v-row>
+          </div>
+          <div v-else>
+            <v-row>
+              <v-col cols="2" class="d-flex justify-end">
+                <v-avatar size="40">
+                  <v-img :src="require('@/assets/image/default-user.jpg')" />
+                </v-avatar>
+              </v-col>
+              <v-col cols="8" class="d-flex">
+                <div class="teal lighten-5 pa-2 rounded-lg">
+                  {{ message.body }}
+                </div>
               </v-col>
               <v-col cols="2"></v-col>
             </v-row>
-          </v-container>
-        </v-form>
-      </v-container>
-    </v-col>
-
-    <!-- ディバイダー -->
-    <v-divider vertical></v-divider>
-
-    <!-- 右半分 メッセージ画面 -->
-    <v-col cols="5">
-      <v-container class="box">
-        <v-card class="teal lighten-4 mb-2 overflow-auto" outlined height="500">
-          <div v-for="message in messages" :key="message.id" v-show="messages">
-            <div v-if="isMyMessage(message.userId)">
-              <v-row>
-                <v-col cols="2"> </v-col>
-                <v-col cols="8" class="d-flex justify-end">
-                  <div class="teal lighten-5 pa-2 rounded-lg">
-                    {{ message.body }}
-                  </div>
-                </v-col>
-                <v-col cols="2" class="d-flex">
-                  <v-avatar size="30">
-                    <v-img :src="require('@/assets/image/default-user.jpg')" />
-                  </v-avatar>
-                </v-col>
-              </v-row>
-            </div>
-            <div v-else>
-              <v-row>
-                <v-col cols="2" class="d-flex justify-end">
-                  <v-avatar size="30">
-                    <v-img :src="require('@/assets/image/default-user.jpg')" />
-                  </v-avatar>
-                </v-col>
-                <v-col cols="8" class="d-flex">
-                  <div class="teal lighten-5 pa-2 rounded-lg">
-                    {{ message.body }}
-                  </div>
-                </v-col>
-                <v-col cols="2"></v-col>
-              </v-row>
-            </div>
           </div>
-          <v-container v-show="!messages">
-            <p>まだチャットがありません</p>
-          </v-container>
-        </v-card>
-        <v-form @submit.prevent="onSubmit">
-          <v-text-field
-            v-model="sendingMessage"
-            placeholder="メッセージを入力"
-          />
-          <div class="d-flex justify-end">
-            <v-btn type="submit">送信</v-btn>
-          </div>
-        </v-form>
+        </div>
+
+      </v-col>
+    </v-row>
+      <v-container v-show="!messages">
+        <p>まだチャットがありません</p>
       </v-container>
-    </v-col>
-  </v-row>
+    </v-card>
+    <v-form @submit.prevent="onSubmit">
+      <v-text-field v-model="sendingMessage" label="メッセージを入力" />
+    </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -163,6 +135,8 @@ export default {
   },
 };
 </script>
-
 <style>
+.message-wrapper {
+  max-width: 600px;
+}
 </style>
