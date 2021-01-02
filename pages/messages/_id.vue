@@ -47,14 +47,13 @@
           </div>
         </v-col>
       </v-row>
-      <v-container v-show="!messages">
+      <v-container v-show="!messages.length">
         <p>まだチャットがありません</p>
       </v-container>
     </div>
     <v-form @submit.prevent="onSubmit">
-      <v-text-field v-model="sendingMessage" label="メッセージを入力" />
+      <v-text-field v-model="sendingMessage" label="メッセージを入力" color="info" />
     </v-form>
-    <v-btn class="ma-2" @click="dialog = true"> ダイアログ </v-btn>
     <v-dialog
       v-model="dialog"
       hide-overlay

@@ -75,13 +75,7 @@
             <span class="white px-4 rounded-lg">{{ profile.displayName }}</span>
           </v-card-title>
           <v-layout justify-center>
-            <v-avatar size="200">
-              <v-img
-                v-show="!profile.avatarUrl"
-                :src="require('@/assets/image/default-user.jpg')"
-              />
-              <v-img v-show="profile.avatarUrl" :src="profile.avatarUrl" />
-            </v-avatar>
+            <Avatar :url="profile.avatarUrl" :size="avatarSize"></Avatar>
           </v-layout>
           <v-card-actions>
             <v-btn
@@ -105,8 +99,12 @@
 </template>
 
 <script>
+import Avatar from "~/components/Avatar.vue";
 export default {
   layout: "navbar",
+  components: {
+    Avatar
+  },
   data() {
     return {
       loading: true,
@@ -124,6 +122,22 @@ export default {
         orderBy: "おまかせ",
       },
     };
+  },
+  computed :{
+    avatarSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 180;
+        case "sm":
+          return 160;
+        case "md":
+          return 190;
+        case "lg":
+          return 200;
+        case "xl":
+          return 200;
+      }
+    },
   },
   // 表示するプロフィールの配列を取得する。
   created() {

@@ -8,13 +8,7 @@
             <v-skeleton-loader type="image" />
           </div>
           <!-- ローダーここまで -->
-          <v-avatar size="200">
-            <v-img
-              v-show="!profile.avatarUrl"
-              :src="require('@/assets/image/default-user.jpg')"
-            />
-            <v-img v-show="profile.avatarUrl" :src="profile.avatarUrl" />
-          </v-avatar>
+          <Avatar :url="profile.avatarUrl" :size="200"></Avatar>
         </v-layout>
         <v-layout class="mt-4" justify-space-around>
           <v-btn
@@ -160,10 +154,12 @@
 
 
 <script>
+import Avatar from "~/components/Avatar.vue";
 import Select from "~/components/Select.vue";
 export default {
   layout: "navbar",
   components: {
+    Avatar,
     Select,
   },
   middleware: ['checkLogin'],
