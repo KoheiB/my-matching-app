@@ -257,12 +257,12 @@ export default {
           break;
         case "男性":
           this.profiles = this.allProfiles.filter(
-            (profile) => profile.sex == "male"
+            (profile) => profile.sex == "男性"
           );
           break;
         case "女性":
           this.profiles = this.allProfiles.filter(
-            (profile) => profile.sex == "female"
+            (profile) => profile.sex == "女性"
           );
           break;
         default:

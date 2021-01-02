@@ -28,7 +28,7 @@
         />
         <v-form>
           <v-row>
-            <v-col cols="8">
+            <v-col cols="6">
               <v-text-field
                 v-model="profile.displayName"
                 outlined
@@ -37,7 +37,19 @@
                 class="mt-4"
               ></v-text-field>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="3">
+              <v-select
+                class="mt-4"
+                v-model="profile.sex"
+                color="info"
+                outlined
+                :label="labels.sex"
+                item-color="blue"
+                :items="items.sex"
+                readonly
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
               <v-select
                 class="mt-4"
                 v-model="profile.age"
@@ -132,6 +144,7 @@ export default {
       loading: true,
       profile: {},
       labels: {
+        sex: '性別',
         age: "年齢",
         residence: "居住地",
         workLocation: "勤務地",
@@ -145,6 +158,10 @@ export default {
         marriageDesire: "結婚に対する意志",
       },
       items: {
+        sex: [
+          "男性",
+          "女性"
+        ],
         locations: [
           "未設定",
           "北海道",
