@@ -2,12 +2,11 @@
   <v-container class="message-wrapper">
     <v-btn @click="dialog = true">相手のプロフィールを確認する</v-btn>
     <v-btn @click="startScroll">scroll</v-btn>
-    <v-card
+    <div
       class="teal lighten-4 mt-2 mb-2 overflow-y-auto d-flex flex-column"
+      style="height: 500px; overflow-y: scroll"
       outlined
-      height="500"
       ref="targetContent"
-      id="targetContent"
     >
       <v-row align="end">
         <v-col class="pa-0 ma-0">
@@ -52,7 +51,7 @@
       <v-container v-show="!messages">
         <p>まだチャットがありません</p>
       </v-container>
-    </v-card>
+    </div>
     <v-form @submit.prevent="onSubmit">
       <v-text-field v-model="sendingMessage" label="メッセージを入力" />
     </v-form>
@@ -407,14 +406,10 @@ export default {
         }
       }
     },
-    scrollToEnd() {
-      const messagesArea = document.getElementById("targetContent");
-      messagesArea.scrollTop = messagesArea.scrollHeight;
-    },
     startScroll() {
       console.log("Starting")
-      window.scrollTo({
-        top: 0,
+      this.$refs.targetContent.scrollTo({
+        top: this.$refs.targetContent.height,
         behavior: "smooth",
       });
     },
@@ -448,12 +443,6 @@ export default {
     const profileData = snapshot.data();
     this.profile = profileData;
   },
-  // mounted() {
-  //   console.log('mounted')
-  //   const messagesArea = document.getElementById("targetContent");
-  //   console.log(messageArea)
-  //   messagesArea.scrollTop = messagesArea.scrollHeight;
-  // },
   destroyed() {
     this.messages = [];
     if (this.unsubscribe) {
