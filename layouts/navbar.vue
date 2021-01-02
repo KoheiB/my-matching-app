@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer color="teal lighten-3" clipped app fixed>
+    <v-navigation-drawer color="teal lighten-3" clipped app fixed mobile-breakpoint="960">
       <v-list shaped>
         <v-list-item-group v-model="selectedItem" color="teal darken-3">
           <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router>
