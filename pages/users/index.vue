@@ -8,6 +8,49 @@
         </v-col>
       </v-row>
     </div>
+    <!--  検索窓-->
+    <v-expansion-panels>
+      <v-expansion-panel>
+        <v-expansion-panel-header color="info">
+          <span>
+            <v-icon>mdi-account-search</v-icon>
+            条件を指定してフィルター/並べ替えする
+          </span>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <div>
+                <v-row>
+                  <v-col cols="6"> 性別 </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      @change="filterProfiles"
+                      v-model="selectedItem.sex"
+                      :items="items.sex"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+              </div>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <div>
+                <v-row>
+                  <v-col cols="6">並び順</v-col>
+                  <v-col cols="6">
+                    <v-select
+                      @change="orderProfiles"
+                      v-model="selectedItem.orderBy"
+                      :items="items.orderBy"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+              </div>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <!-- プロフィール一覧 -->
     <v-row>
       <v-col
@@ -65,12 +108,21 @@ export default {
     return {
       loading: true,
       currentUser: {},
+      allProfiles: [],
       profiles: [],
       model: 0,
       colors: ["primary", "secondary", "yellow darken-2", "red", "orange"],
+      items: {
+        sex: ["全て", "男性", "女性"],
+        orderBy: ["おまかせ", "登録日が新しい順", "いいね数が多い順"],
+      },
+      selectedItem: {
+        sex: "全て",
+        orderBy: "おまかせ",
+      },
     };
   },
-  // 表示するプロフィールの配列をコレクショングループで取得しておく。
+  // 表示するプロフィールの配列を取得する。
   created() {
     this.$fireAuth.onAuthStateChanged(async (user) => {
       this.currentUser = user;
@@ -133,6 +185,7 @@ export default {
         this.profiles.push(userData);
       });
       this.loading = false;
+      this.allProfiles = this.profiles;
     });
   },
   methods: {
@@ -181,6 +234,50 @@ export default {
       await batch.commit();
       alert("you liked");
       profile.isLiked = true;
+    },
+    filterProfiles(sex) {
+      switch (sex) {
+        case "全て":
+          this.profiles = this.allProfiles;
+          break;
+        case "男性":
+          this.profiles = this.allProfiles.filter(
+            (profile) => profile.sex == "male"
+          );
+          break;
+        case "女性":
+          this.profiles = this.allProfiles.filter(
+            (profile) => profile.sex == "female"
+          );
+          break;
+        default:
+          console.log(`Sorry, we are out of ${sex}.`);
+          break;
+      }
+    },
+    orderProfiles(orderBy) {
+      switch (orderBy) {
+        case "おまかせ":
+          this.profiles = this.allProfiles;
+          break;
+        case "登録日が新しい順":
+          this.profiles = this.allProfiles.slice().sort(function (a, b) {
+            if (a.createdAt < b.createdAt) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+          break;
+        case "いいね数が多い順":
+          // this.profiles = this.allProfiles.filter(
+          //   (profile) => profile.sex == "female"
+          // );
+          break;
+        default:
+          console.log(`Sorry, we are out of ${orderBy}.`);
+          break;
+      }
     },
   },
 };
