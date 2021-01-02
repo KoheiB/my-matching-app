@@ -14,16 +14,7 @@
             {{ room.partnerName }}
           </v-card-title>
           <v-layout justify-center>
-            <v-avatar size="200">
-              <v-img
-                v-show="!room.partnerAvatarUrl"
-                :src="require('@/assets/image/default-user.jpg')"
-              />
-              <v-img
-                v-show="room.partnerAvatarUrl"
-                :src="room.partnerAvatarUrl"
-              />
-            </v-avatar>
+            <Avatar :url="room.partnerAvatarUrl" :size="avatarSize"></Avatar>
           </v-layout>
           <v-card-subtitle>
             最新のメッセージ:<br />{{ room.updatedAt }}
@@ -35,14 +26,34 @@
 </template>
 
 <script>
+import Avatar from "~/components/Avatar.vue";
 export default {
   layout: "navbar",
-  middleware: ['checkLogin'],
+  components: {
+    Avatar,
+  },
+  middleware: ["checkLogin"],
   data() {
     return {
       loading: true,
       rooms: [],
     };
+  },
+  computed :{
+    avatarSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 180;
+        case "sm":
+          return 160;
+        case "md":
+          return 190;
+        case "lg":
+          return 200;
+        case "xl":
+          return 200;
+      }
+    },
   },
   async created() {
     const currentUser = await this.$auth();

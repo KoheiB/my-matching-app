@@ -3,18 +3,7 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-layout justify-center>
-          <!-- ローダー部分 -->
-          <div v-if="loading">
-            <v-skeleton-loader type="image" />
-          </div>
-          <!-- ローダーここまで -->
-          <v-avatar size="200">
-            <v-img
-              v-show="!profile.avatarUrl"
-              :src="require('@/assets/image/default-user.jpg')"
-            />
-            <v-img v-show="profile.avatarUrl" :src="profile.avatarUrl" />
-          </v-avatar>
+          <Avatar :url="profile.avatarUrl" :size="200"></Avatar>
         </v-layout>
         <v-btn class="d-flex mt-4 mx-auto" @click="selectImage"
           >プロフィール写真を変更する</v-btn
@@ -132,19 +121,21 @@
 </template>
 
 <script>
+import Avatar from "~/components/Avatar.vue";
 import Select from "~/components/Select.vue";
 export default {
   layout: "navbar",
   components: {
+    Avatar,
     Select,
   },
-  middleware: ['checkLogin'],
+  middleware: ["checkLogin"],
   data() {
     return {
       loading: true,
       profile: {},
       labels: {
-        sex: '性別',
+        sex: "性別",
         age: "年齢",
         residence: "居住地",
         workLocation: "勤務地",
@@ -158,10 +149,7 @@ export default {
         marriageDesire: "結婚に対する意志",
       },
       items: {
-        sex: [
-          "男性",
-          "女性"
-        ],
+        sex: ["男性", "女性"],
         locations: [
           "未設定",
           "北海道",
@@ -291,7 +279,7 @@ export default {
     selectHeight() {
       const maxHeight = 200;
       const array = [...Array(maxHeight).keys()];
-      const stringArray = array.map((number) => String(number) + 'cm');
+      const stringArray = array.map((number) => String(number) + "cm");
       stringArray.splice(0, 131);
       stringArray.unshift("未設定", "130cm以下");
       stringArray.push("200cm以上");
@@ -300,7 +288,7 @@ export default {
     selectAge() {
       const maxAge = 70;
       const array = [...Array(maxAge).keys()];
-      const stringArray = array.map((number) => String(number) + '歳');
+      const stringArray = array.map((number) => String(number) + "歳");
       stringArray.splice(0, 18);
       stringArray.unshift("未設定");
       stringArray.push("70歳以上");

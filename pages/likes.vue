@@ -33,13 +33,7 @@
                 {{ getLike.displayName }}
               </v-card-title>
               <v-layout justify-center>
-                <v-avatar size="200">
-                  <v-img
-                    v-show="!getLike.avatarUrl"
-                    :src="require('@/assets/image/default-user.jpg')"
-                  />
-                  <v-img v-show="getLike.avatarUrl" :src="getLike.avatarUrl" />
-                </v-avatar>
+                <Avatar :url="getLike.avatarUrl" :size="avatarSize"></Avatar>
               </v-layout>
               <v-card-subtitle>
                 いいねされた日時:<br />{{ getLike.createdAt }}
@@ -98,9 +92,13 @@
 </template>
 
 <script>
+import Avatar from "~/components/Avatar.vue";
 export default {
   layout: "navbar",
-  middleware: ['checkLogin'],
+  components: {
+    Avatar,
+  },
+  middleware: ["checkLogin"],
   data() {
     return {
       loading: true,
@@ -109,6 +107,22 @@ export default {
       myLikes: [],
       tab: null,
     };
+  },
+  computed :{
+    avatarSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 180;
+        case "sm":
+          return 160;
+        case "md":
+          return 190;
+        case "lg":
+          return 200;
+        case "xl":
+          return 200;
+      }
+    },
   },
   created() {
     this.$fireAuth.onAuthStateChanged(async (user) => {
