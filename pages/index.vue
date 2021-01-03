@@ -19,13 +19,16 @@
                       v-model="login.email"
                       outlined
                       label="Email"
+                      color="info"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
+                      type="password"
                       v-model="login.password"
                       outlined
                       label="Password"
+                      color="info"
                     ></v-text-field>
                   </v-col>
                   <v-col>
@@ -46,6 +49,7 @@
                       v-model="signup.nickname"
                       outlined
                       label="Nickname"
+                      color="info"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -61,13 +65,16 @@
                       v-model="signup.email"
                       outlined
                       label="Email"
+                      color="info"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
+                      type="password"
                       v-model="signup.password"
                       outlined
                       label="Password"
+                      color="info"
                     ></v-text-field>
                   </v-col>
                   <v-col>
@@ -119,7 +126,7 @@ export default {
       this.$fireAuth
         .createUserWithEmailAndPassword(this.signup.email, this.signup.password)
         .then(async (result) => {
-          const user = result.user
+          const user = result.user;
           user.updateProfile({
             displayName: this.signup.nickname,
           });
@@ -164,7 +171,7 @@ export default {
             ),
               // 一括更新をコミット
               await batch.commit();
-              this.$router.push("/users/");
+            this.$router.push("/users/");
           } catch (error) {
             await this.fireAuth.user.delete();
             console.log(error);

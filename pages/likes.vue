@@ -108,7 +108,7 @@ export default {
       tab: null,
     };
   },
-  computed :{
+  computed: {
     avatarSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -133,6 +133,7 @@ export default {
           .collection("profiles")
           .doc(user.uid)
           .collection("likedProfileUsers")
+          .orderBy("createdAt", "desc")
           .get();
         const getLikes = querySnapshot.docs.map((doc) => {
           const result = doc.data();
