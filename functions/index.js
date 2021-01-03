@@ -41,7 +41,7 @@ exports.onDeleteUser = functions.auth.user().onDelete(async (user) => {
   });
 
   // 入室していたルームの削除
-  const rooms = await db.collection('room').where('attendUsersId', 'array-contains', user.uid).get()
+  const rooms = await db.collection('rooms').where('attendUsersId', 'array-contains', user.uid).get()
   rooms.docs.forEach(doc => {
     batch.delete(doc.ref);
   });
