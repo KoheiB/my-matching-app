@@ -39,7 +39,7 @@ export default {
       rooms: [],
     };
   },
-  computed :{
+  computed: {
     avatarSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -61,6 +61,7 @@ export default {
       const querySnapshot = await this.$firestore
         .collection("rooms")
         .where("attendUsersId", "array-contains", currentUser.uid)
+        .orderBy("updatedAt", "desc")
         .get();
       const rooms = querySnapshot.docs.map((doc) => {
         const result = doc.data();

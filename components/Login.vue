@@ -61,6 +61,7 @@
                   v-model="email"
                   outlined
                   placeholder="Email"
+                  color="info"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -69,6 +70,7 @@
                   v-model="password"
                   outlined
                   placeholder="Password"
+                  color="info"
                 ></v-text-field>
               </v-col>
               <v-col>

@@ -2,17 +2,24 @@
   <v-container class="">
     <div class="text-h4">ユーザー設定</div>
     <v-divider class="mt-2 mb-6"></v-divider>
-    <div class="">
+    <div>
       <span>現在登録されているメールアドレス：</span>
       <div class="d-inline">
-        <div class="d-inline" v-if="true">
+        <div class="my-5" v-show="change">
           {{ email }}
         </div>
-        <div class="d-inline" v-if="false">
-          <v-text-field></v-text-field>
-        </div>
+        <v-form v-show="!change" style="width: 500px">
+          <v-row align="center">
+            <v-col cols="10">
+          <v-text-field type="text" color="info" label="新しいメールアドレス"></v-text-field>
+            </v-col>
+            <v-col cols="2">
+              <v-btn rounded @click='changeEmail'>変更</v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
       </div>
-      <v-btn @click="onClick" rounded>変更</v-btn>
+      <v-btn @click="change = !change" rounded>メールアドレスを変更する</v-btn>
     </div>
     <v-divider class="mt-2 mb-6"></v-divider>
     <div>
@@ -37,35 +44,46 @@ export default {
   middleware: ["checkLogin"],
   data() {
     return {
-      email: "sss@gmail.com",
-      bool: true,
+      email: "",
+      change: true,
     };
   },
   methods: {
-    onClick() {
-      const user = this.$fireAuth.currentUser;
+    changeEmail() {
+      const user = this.$auth();
       user
-        .updateEmail("user@example.com")
+        .updateEmail(this.email)
         .then(function () {
-          // Update successful.
+          this.email = "";
+          alert("メールアドレスが正常に変更されました。");
         })
         .catch(function (error) {
-          // An error happened.
+          console.log("error");
+          alert(
+            "メールアドレスが正常に変更されませんでした。もう一度入力し直してください。"
+          );
+          this.email = "";
         });
     },
     passwordReset() {
-      const user = this.$fireAuth.currentUser;
-      this.$fireAuth
-        .sendPasswordResetEmail(user.email)
-        .then(function () {
-          // Email sent.
-          console.log("Email sent.");
-          alert("Email sent");
-        })
-        .catch(function (error) {
-          // An error happened.
-          console.log(error);
-        });
+      if (
+        window.confirm(
+          "パスワードを変更しますか？登録メールアドレスにパスワード変更のメールが送信されます。"
+        )
+      ) {
+        const user = this.$fireAuth.currentUser;
+        this.$fireAuth
+          .sendPasswordResetEmail(user.email)
+          .then(function () {
+            // Email sent.
+            console.log("Email sent.");
+            alert("Email sent");
+          })
+          .catch(function (error) {
+            // An error happened.
+            console.log(error);
+          });
+      }
     },
     logOut() {
       if (window.confirm("ログアウトしますか？")) {
@@ -82,8 +100,9 @@ export default {
       }
     },
   },
-  created() {
-    console.log(this.user);
+  async created() {
+    const user = await this.$auth();
+    this.email = user.email;
   },
 };
 </script>

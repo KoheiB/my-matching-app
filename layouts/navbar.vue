@@ -40,7 +40,7 @@
         </v-btn>
       </div>
       <div v-else>
-          <v-btn nuxt to="/"> ログインまたは新規登録 </v-btn>
+        <v-btn nuxt to="/"> ログインまたは新規登録 </v-btn>
       </div>
     </v-app-bar>
     <v-bottom-navigation app grow class="d-md-none">

@@ -103,7 +103,7 @@ import Avatar from "~/components/Avatar.vue";
 export default {
   layout: "navbar",
   components: {
-    Avatar
+    Avatar,
   },
   data() {
     return {
@@ -123,7 +123,7 @@ export default {
       },
     };
   },
-  computed :{
+  computed: {
     avatarSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -207,8 +207,7 @@ export default {
         });
         this.loading = await false;
         this.allProfiles = this.profiles;
-      }
-      else {
+      } else {
         const allUsersQuerySnapshot = await this.$firestore
           .collection("profiles")
           .get();
