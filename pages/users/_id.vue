@@ -381,7 +381,7 @@ export default {
 
       // 一括処理
       await batch.commit();
-      alert("you liked");
+      alert(profile.displayName + "さんにいいねを贈りました！");
       this.relationStatus.hasLiked = true;
     },
     async approveLike(profile) {
@@ -439,7 +439,7 @@ export default {
 
       // 一括処理
       await batch.commit();
-      alert("approved");
+      alert(profile.displayName + 'さんとメッセージのやりとりが出来るようになりました！')
       this.relationStatus.isMatched = true;
     },
   },

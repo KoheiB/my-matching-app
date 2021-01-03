@@ -399,7 +399,7 @@ export default {
             });
           console.log("submit");
           this.sendingMessage = "";
-          await this.scrollOnsubmit();
+          this.scrollOnSubmit();
         } catch (error) {
           alert(error);
         }
