@@ -88,6 +88,7 @@ export default {
     logOut() {
       if (window.confirm("ログアウトしますか？")) {
         this.$fireAuth.signOut().then(() => {
+          alert('ログアウトしました。')
           this.$router.push("/");
         });
       }
@@ -95,6 +96,7 @@ export default {
     async unregister() {
       if (window.confirm("本当に退会しますか？")) {
         await this.$fireAuth.currentUser.delete().then(() => {
+          alert('退会が完了しました。ユーザーに関わるすべてのデータを削除しました。')
           this.$router.push("/");
         });
       }

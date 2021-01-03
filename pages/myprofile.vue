@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <div class="d-flex justify-end">
+      <v-btn @click="saveChanges" color="secondary"
+        >プロフィールの変更を保存する</v-btn
+      >
+    </div>
+    <v-divider class="mt-2"></v-divider>
     <v-row>
       <v-col cols="12" md="6">
         <v-layout justify-center>
@@ -336,6 +342,16 @@ export default {
         },
         { merge: true }
       );
+      alert("写真を変更しました。");
+    },
+    async saveChanges() {
+      const user = await this.$auth();
+      const profile = this.profile;
+      this.$firestore
+        .collection("profiles")
+        .doc(user.uid)
+        .set(profile, { merge: true });
+      alert("変更を保存しました");
     },
   },
   async created() {
@@ -347,15 +363,6 @@ export default {
     const profileData = snapshot.data();
     this.profile = await profileData;
     this.loading = await false;
-  },
-  async destroyed() {
-    const user = await this.$auth();
-    const profile = this.profile;
-    console.log(profile);
-    this.$firestore
-      .collection("profiles")
-      .doc(user.uid)
-      .set(profile, { merge: true });
   },
 };
 </script>

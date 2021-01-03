@@ -260,7 +260,7 @@ export default {
       );
 
       await batch.commit();
-      alert("you liked");
+      alert(profile.displayName + "さんにいいねを贈りました！");
       profile.isLiked = true;
     },
     filterProfiles(sex) {

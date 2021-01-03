@@ -239,6 +239,7 @@ export default {
 
       // 一括処理
       await batch.commit();
+      alert(like.displayName + 'さんとメッセージのやりとりが出来るようになりました！')
       like.isApproved = true;
     },
   },

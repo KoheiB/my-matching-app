@@ -115,6 +115,7 @@ export default {
       this.$fireAuth
         .signInWithEmailAndPassword(this.login.email, this.login.password)
         .then((user) => {
+          alert("ログインに成功しました。");
           this.$router.push("/users/");
         })
         .catch(function (error) {
@@ -171,6 +172,7 @@ export default {
             ),
               // 一括更新をコミット
               await batch.commit();
+            alert("新規ユーザーとして登録されました。");
             this.$router.push("/users/");
           } catch (error) {
             await this.fireAuth.user.delete();
