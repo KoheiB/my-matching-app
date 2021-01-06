@@ -33,7 +33,16 @@
               <v-row>
                 <v-col cols="2" class="d-flex justify-end">
                   <v-avatar size="40" style="cursor: pointer">
-                    <v-img @click="dialog = true" :src="profile.avatarUrl" />
+                    <v-img
+                      @click="dialog = true"
+                      v-show="!profile.avatarUrl"
+                      :src="require('@/assets/image/default-user.jpg')"
+                    />
+                    <v-img
+                      v-show="profile.avatarUrl"
+                      @click="dialog = true"
+                      :src="profile.avatarUrl"
+                    />
                   </v-avatar>
                 </v-col>
                 <v-col cols="8" class="d-flex">
@@ -52,138 +61,147 @@
       </v-container>
     </div>
     <v-form @submit.prevent="onSubmit">
-      <v-text-field v-model="sendingMessage" label="メッセージを入力" color="info" />
+      <v-text-field
+        v-model="sendingMessage"
+        label="メッセージを入力"
+        color="info"
+      />
     </v-form>
-    <v-dialog
-      v-model="dialog"
-      hide-overlay
-      transition="dialog-bottom-transition"
-      scrollable
-    >
-      <v-card>
-        <v-toolbar color="info">
-          <v-spacer></v-spacer>
-          <v-btn icon @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <!-- 相手のプロフィールを確認する画面 -->
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-layout justify-center>
-                <v-avatar size="200">
-                  <v-img
-                    v-show="!profile.avatarUrl"
-                    :src="require('@/assets/image/default-user.jpg')"
-                  />
-                  <v-img v-show="profile.avatarUrl" :src="profile.avatarUrl" />
-                </v-avatar>
-              </v-layout>
-              <v-form>
-                <v-row>
-                  <v-col cols="8">
-                    <v-text-field
-                      v-model="profile.displayName"
-                      outlined
-                      color="info"
-                      label="ニックネーム"
-                      class="mt-4"
-                      readonly
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="4">
-                    <v-text-field
-                      class="mt-4"
-                      v-model="profile.age"
-                      color="info"
-                      outlined
-                      label="年齢"
-                      readonly
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-textarea
-                  v-model="profile.body"
-                  auto-grow
-                  color="info"
-                  outlined
-                  label="自己紹介文"
-                  class="mt-4"
-                  readonly
-                ></v-textarea>
-              </v-form>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-container>
+    <v-lazy>
+      <v-dialog
+        v-model="dialog"
+        hide-overlay
+        transition="dialog-bottom-transition"
+        scrollable
+      >
+        <v-card>
+          <v-toolbar color="info">
+            <v-spacer></v-spacer>
+            <v-btn icon @click="dialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <!-- 相手のプロフィールを確認する画面 -->
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-layout justify-center>
+                  <v-avatar size="200">
+                    <v-img
+                      v-show="!profile.avatarUrl"
+                      :src="require('@/assets/image/default-user.jpg')"
+                    />
+                    <v-img
+                      v-show="profile.avatarUrl"
+                      :src="profile.avatarUrl"
+                    />
+                  </v-avatar>
+                </v-layout>
                 <v-form>
-                  <Select
-                    :profile="profile.residence"
-                    :label="labels.residence"
-                    :items="items.locations"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    :profile="profile.workLocation"
-                    :label="labels.workLocation"
-                    :items="items.locations"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    :profile="profile.height"
-                    :label="labels.height"
-                    :items="selectHeight"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    :profile="profile.bodyType"
-                    :label="labels.bodyType"
-                    :items="items.bodyType"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    v-model="profile.occupation"
-                    :label="labels.occupation"
-                    :items="items.occupation"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    v-model="profile.holiday"
-                    :label="labels.holiday"
-                    :items="items.holiday"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    v-model="profile.drink"
-                    :label="labels.drink"
-                    :items="items.drink"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    v-model="profile.tobacco"
-                    :label="labels.tobacco"
-                    :items="items.tobacco"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    v-model="profile.housemate"
-                    :label="labels.housemate"
-                    :items="items.housemate"
-                    :isNotActive="true"
-                  ></Select>
-                  <Select
-                    v-model="profile.marriageDesire"
-                    :label="labels.marriageDesire"
-                    :items="items.marriageDesire"
-                    :isNotActive="true"
-                  ></Select>
+                  <v-row>
+                    <v-col cols="8">
+                      <v-text-field
+                        v-model="profile.displayName"
+                        outlined
+                        color="info"
+                        label="ニックネーム"
+                        class="mt-4"
+                        readonly
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field
+                        class="mt-4"
+                        v-model="profile.age"
+                        color="info"
+                        outlined
+                        label="年齢"
+                        readonly
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-textarea
+                    v-model="profile.body"
+                    auto-grow
+                    color="info"
+                    outlined
+                    label="自己紹介文"
+                    class="mt-4"
+                    readonly
+                  ></v-textarea>
                 </v-form>
-              </v-container>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-container>
+                  <v-form>
+                    <Select
+                      :profile="profile.residence"
+                      :label="labels.residence"
+                      :items="items.locations"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      :profile="profile.workLocation"
+                      :label="labels.workLocation"
+                      :items="items.locations"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      :profile="profile.height"
+                      :label="labels.height"
+                      :items="selectHeight"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      :profile="profile.bodyType"
+                      :label="labels.bodyType"
+                      :items="items.bodyType"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      v-model="profile.occupation"
+                      :label="labels.occupation"
+                      :items="items.occupation"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      v-model="profile.holiday"
+                      :label="labels.holiday"
+                      :items="items.holiday"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      v-model="profile.drink"
+                      :label="labels.drink"
+                      :items="items.drink"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      v-model="profile.tobacco"
+                      :label="labels.tobacco"
+                      :items="items.tobacco"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      v-model="profile.housemate"
+                      :label="labels.housemate"
+                      :items="items.housemate"
+                      :isNotActive="true"
+                    ></Select>
+                    <Select
+                      v-model="profile.marriageDesire"
+                      :label="labels.marriageDesire"
+                      :items="items.marriageDesire"
+                      :isNotActive="true"
+                    ></Select>
+                  </v-form>
+                </v-container>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-lazy>
   </v-container>
 </template>
 
@@ -194,7 +212,7 @@ export default {
   components: {
     Select,
   },
-  middleware: ['checkLogin'],
+  middleware: ["checkLogin"],
   data() {
     return {
       roomId: this.$route.params.id,
@@ -354,32 +372,29 @@ export default {
   },
   methods: {
     getMessages() {
-      this.$fireAuth.onAuthStateChanged(async (user) => {
-        this.currentUser = user;
-        this.unsubscribe = this.$firestore
-          .collection("rooms")
-          .doc(this.roomId)
-          .collection("messages")
-          .orderBy("createdAt", "asc")
-          .onSnapshot(
-            (snapshot) => {
-              snapshot.docs.map((doc) => {
-                const docData = doc.data();
-                docData.id = doc.id;
-                const ids = [];
-                this.messages.map((msg) => {
-                  ids.push(msg.id);
-                });
-                if (!ids.includes(docData.id)) {
-                  this.messages.push(docData);
-                }
+      this.unsubscribe = this.$firestore
+        .collection("rooms")
+        .doc(this.roomId)
+        .collection("messages")
+        .orderBy("createdAt", "asc")
+        .onSnapshot(
+          (snapshot) => {
+            snapshot.docs.map((doc) => {
+              const docData = doc.data();
+              docData.id = doc.id;
+              const ids = [];
+              this.messages.map((msg) => {
+                ids.push(msg.id);
               });
-            },
-            function (error) {
-              console.log(error);
-            }
-          );
-      });
+              if (!ids.includes(docData.id)) {
+                this.messages.push(docData);
+              }
+            });
+          },
+          function (error) {
+            console.log(error);
+          }
+        );
     },
     isMyMessage(userId) {
       const { uid } = this.$fireAuth.currentUser;
@@ -445,7 +460,7 @@ export default {
       .get();
     const profileData = snapshot.data();
     this.profile = profileData;
-    this.scrollOnCreated()
+    this.scrollOnCreated();
   },
   destroyed() {
     this.messages = [];

@@ -58,28 +58,28 @@ export default {
   async created() {
     const currentUser = await this.$auth();
     try {
-      const querySnapshot = await this.$firestore
+      const roomsQuerySnapshot = await this.$firestore
         .collection("rooms")
         .where("attendUsersId", "array-contains", currentUser.uid)
         .orderBy("updatedAt", "desc")
         .get();
-      const rooms = querySnapshot.docs.map((doc) => {
+      const rooms = roomsQuerySnapshot.docs.map((doc) => {
         const result = doc.data();
         result.id = doc.id;
         return result;
       });
-      rooms.forEach(async (room) => {
+      rooms.map(async (room) => {
         const partnerId = room.attendUsersId.filter(
           (attendUserId) => attendUserId !== currentUser.uid
         )[0];
-        const documentSnapshot = await this.$firestore
+        const partnerProfileSnapshot = await this.$firestore
           .collection("profiles")
           .doc(partnerId)
           .get();
-        const documentData = documentSnapshot.data();
+        const partnerProfile = partnerProfileSnapshot.data();
         room.partnerId = partnerId;
-        room.partnerName = documentData.displayName;
-        room.partnerAvatarUrl = documentData.avatarUrl;
+        room.partnerName = partnerProfile.displayName;
+        room.partnerAvatarUrl = partnerProfile.avatarUrl;
         room.updatedAt = room.updatedAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");

@@ -9,41 +9,43 @@
             条件を指定してフィルター/並べ替えする
           </span>
         </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-row>
-            <v-col cols="12" sm="6">
-              <div>
-                <v-row align="center" justify="end">
-                  <v-col cols="6"> 性別 </v-col>
-                  <v-col cols="6">
-                    <v-select
-                      @change="filterProfiles"
-                      v-model="selectedItem.sex"
-                      :items="items.sex"
-                      item-color="blue"
-                      color="info"
-                    ></v-select>
-                  </v-col>
-                </v-row>
-              </div>
-            </v-col>
-            <v-col cols="12" sm="6">
-              <div>
-                <v-row align="center">
-                  <v-col cols="6">並び順</v-col>
-                  <v-col cols="6">
-                    <v-select
-                      @change="orderProfiles"
-                      v-model="selectedItem.orderBy"
-                      :items="items.orderBy"
-                      item-color="blue"
-                    ></v-select>
-                  </v-col>
-                </v-row>
-              </div>
-            </v-col>
-          </v-row>
-        </v-expansion-panel-content>
+        <v-lazy>
+          <v-expansion-panel-content>
+            <v-row>
+              <v-col cols="12" sm="6">
+                <div>
+                  <v-row align="center" justify="end">
+                    <v-col cols="6"> 性別 </v-col>
+                    <v-col cols="6">
+                      <v-select
+                        @change="filterProfiles"
+                        v-model="selectedItem.sex"
+                        :items="items.sex"
+                        item-color="blue"
+                        color="info"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </div>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <div>
+                  <v-row align="center">
+                    <v-col cols="6">並び順</v-col>
+                    <v-col cols="6">
+                      <v-select
+                        @change="orderProfiles"
+                        v-model="selectedItem.orderBy"
+                        :items="items.orderBy"
+                        item-color="blue"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </div>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-content>
+        </v-lazy>
       </v-expansion-panel>
     </v-expansion-panels>
     <!-- ローダー部分 -->
@@ -108,7 +110,6 @@ export default {
   data() {
     return {
       loading: true,
-      currentUser: {},
       allProfiles: [],
       profiles: [],
       model: 0,
@@ -140,81 +141,75 @@ export default {
     },
   },
   // 表示するプロフィールの配列を取得する。
-  created() {
-    this.$fireAuth.onAuthStateChanged(async (user) => {
-      this.currentUser = user;
+  async created() {
+    const currentUser = await this.$auth();
 
-      if (this.currentUser) {
-        // いいねしたユーザーの一覧を取得。
-        const likedProfilesData = await this.$firestore
-          .collection("users")
-          .doc(user.uid)
-          .collection("likedProfiles")
-          .get()
-          .then((querySnapshot) => {
-            return querySnapshot.docs.map((doc) => {
-              return doc.data();
-            });
+    if (currentUser) {
+      // いいねしたユーザーの一覧を取得。
+      const likedProfilesData = await this.$firestore
+        .collection("users")
+        .doc(currentUser.uid)
+        .collection("likedProfiles")
+        .get()
+        .then((querySnapshot) => {
+          return querySnapshot.docs.map((doc) => {
+            return doc.data();
           });
-        const likedProfilesRef = likedProfilesData.map((data) => {
-          return data.likedProfileRef;
         });
+      const likedProfilesRef = likedProfilesData.map((data) => {
+        return data.likedProfileRef;
+      });
 
-        //いいねされたユーザーの一覧を取得。
-        const likedProfileUsersData = await this.$firestore
-          .collection("profiles")
-          .doc(user.uid)
-          .collection("likedProfileUsers")
-          .get()
-          .then((querySnapshot) => {
-            return querySnapshot.docs.map((doc) => {
-              return doc.data();
-            });
+      //いいねされたユーザーの一覧を取得。
+      const likedProfileUsersData = await this.$firestore
+        .collection("profiles")
+        .doc(currentUser.uid)
+        .collection("likedProfileUsers")
+        .get()
+        .then((querySnapshot) => {
+          return querySnapshot.docs.map((doc) => {
+            return doc.data();
           });
-        const likedProfileUsersRef = likedProfileUsersData.map((data) => {
-          return data.likedUserRef;
         });
+      const likedProfileUsersRef = likedProfileUsersData.map((data) => {
+        return data.likedUserRef;
+      });
 
-        // すべてのユーザー一覧を取得。
-        const allUsersQuerySnapshot = await this.$firestore
-          .collection("profiles")
-          .where("id", "!=", this.currentUser.uid)
-          .get();
-        const allUsersRef = allUsersQuerySnapshot.docs.map((doc) => doc.ref);
+      // すべてのユーザー一覧を取得。
+      const allUsersQuerySnapshot = await this.$firestore
+        .collection("profiles")
+        .where("id", "!=", currentUser.uid)
+        .get();
+      const allUsersRef = allUsersQuerySnapshot.docs.map((doc) => doc.ref);
 
-        // いいねした/いいねされたユーザーの一覧をマージ。
-        const excludeProfilesRef = [
-          ...likedProfilesRef,
-          ...likedProfileUsersRef,
-        ];
-        console.log(excludeProfilesRef);
+      // いいねした/いいねされたユーザーの一覧をマージ。
+      const excludeProfilesRef = [...likedProfilesRef, ...likedProfileUsersRef];
 
-        // すべてのユーザーからいいねしたユーザーを弾く。
-        const usersRef = [];
-        const likedProfilesId = excludeProfilesRef.map((ref) => ref.id);
-        allUsersRef.forEach((ref) => {
-          if (!likedProfilesId.includes(ref.id)) {
-            usersRef.push(ref);
-          }
-        });
+      // すべてのユーザーからいいねしたユーザーを弾く。
+      const usersRef = [];
+      const likedProfilesId = excludeProfilesRef.map((ref) => ref.id);
+      allUsersRef.forEach((ref) => {
+        if (!likedProfilesId.includes(ref.id)) {
+          usersRef.push(ref);
+        }
+      });
 
-        // ユーザーを表示する。
-        usersRef.map(async (user) => {
-          const userRef = await user.get();
-          const userData = userRef.data();
-          userData.isLiked = false;
-          this.profiles.push(userData);
-        });
-        this.loading = await false;
-        this.allProfiles = this.profiles;
-      } else {
-        const allUsersQuerySnapshot = await this.$firestore
-          .collection("profiles")
-          .get();
-        this.profiles = allUsersQuerySnapshot.docs.map((doc) => doc.data());
-        this.loading = await false;
-      }
-    });
+      // ユーザーを表示する。
+      usersRef.map(async (user) => {
+        const userRef = await user.get();
+        const userData = userRef.data();
+        userData.isLiked = false;
+        this.profiles.push(userData);
+      });
+      this.loading = await false;
+      this.allProfiles = this.profiles;
+    } else {
+      const allUsersQuerySnapshot = await this.$firestore
+        .collection("profiles")
+        .get();
+      this.profiles = allUsersQuerySnapshot.docs.map((doc) => doc.data());
+      this.loading = await false;
+    }
   },
   methods: {
     async likeUser(user, profile) {
