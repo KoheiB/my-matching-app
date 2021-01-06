@@ -56,35 +56,37 @@
       </v-tab-item>
 
       <!-- 自分から -->
-      <v-tab-item>
-        <v-row>
-          <v-col
-            cols="6"
-            sm="4"
-            lg="3"
-            v-for="myLike in myLikes"
-            :key="myLike.id"
-          >
-            <v-card hover nuxt :to="`/users/${myLike.userId}`">
-              <v-card-title>
-                {{ myLike.displayname }}
-              </v-card-title>
-              <v-layout justify-center>
-                <v-avatar size="200">
-                  <v-img
-                    v-show="!myLike.avatarUrl"
-                    :src="require('@/assets/image/default-user.jpg')"
-                  />
-                  <v-img v-show="myLike.avatarUrl" :src="myLike.avatarUrl" />
-                </v-avatar>
-              </v-layout>
-              <v-card-subtitle>
-                いいねした日時:<br />{{ myLike.createdAt }}
-              </v-card-subtitle>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-tab-item>
+      <v-lazy>
+        <v-tab-item>
+          <v-row>
+            <v-col
+              cols="6"
+              sm="4"
+              lg="3"
+              v-for="myLike in myLikes"
+              :key="myLike.id"
+            >
+              <v-card hover nuxt :to="`/users/${myLike.userId}`">
+                <v-card-title>
+                  {{ myLike.displayname }}
+                </v-card-title>
+                <v-layout justify-center>
+                  <v-avatar size="200">
+                    <v-img
+                      v-show="!myLike.avatarUrl"
+                      :src="require('@/assets/image/default-user.jpg')"
+                    />
+                    <v-img v-show="myLike.avatarUrl" :src="myLike.avatarUrl" />
+                  </v-avatar>
+                </v-layout>
+                <v-card-subtitle>
+                  いいねした日時:<br />{{ myLike.createdAt }}
+                </v-card-subtitle>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-tab-item>
+      </v-lazy>
     </v-tabs-items>
 
     <v-skeleton-loader v-if="loading && !getLikes" type="card" />
@@ -124,62 +126,60 @@ export default {
       }
     },
   },
-  created() {
-    this.$fireAuth.onAuthStateChanged(async (user) => {
-      this.currentUser = user;
-      // 相手からのいいねを取得
-      try {
-        const querySnapshot = await this.$firestore
-          .collection("profiles")
-          .doc(user.uid)
-          .collection("likedProfileUsers")
-          .orderBy("createdAt", "desc")
-          .get();
-        const getLikes = querySnapshot.docs.map((doc) => {
-          const result = doc.data();
-          result.id = doc.id;
-          return result;
-        });
-        getLikes.forEach(async (getLike) => {
-          getLike.userId = getLike.likedUserRef.id;
-          const likedUser = await getLike.likedUserRef.get();
-          getLike.displayName = likedUser.data().displayName;
-          getLike.createdAt = getLike.createdAt
-            .toDate()
-            .toLocaleString("ja-JP-u-ca-japanese");
-          getLike.avatarUrl = likedUser.data().avatarUrl;
-          this.getLikes.push(getLike);
-          this.loading = false;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-      // 自分のいいねを取得。
-      try {
-        const querySnapshot = await this.$firestore
-          .collection("users")
-          .doc(user.uid)
-          .collection("likedProfiles")
-          .get();
-        const myLikes = querySnapshot.docs.map((doc) => {
-          const result = doc.data();
-          result.id = doc.id;
-          return result;
-        });
-        myLikes.forEach(async (myLike) => {
-          myLike.userId = myLike.likedProfileRef.id;
-          const likedProfile = await myLike.likedProfileRef.get();
-          myLike.displayName = likedProfile.data().displayName;
-          myLike.createdAt = myLike.createdAt
-            .toDate()
-            .toLocaleString("ja-JP-u-ca-japanese");
-          myLike.avatarUrl = likedProfile.data().avatarUrl;
-          this.myLikes.push(myLike);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    });
+  async created() {
+    const currentUser = await this.$auth();
+    // 相手からのいいねを取得
+    try {
+      const querySnapshot = await this.$firestore
+        .collection("profiles")
+        .doc(currentUser.uid)
+        .collection("likedProfileUsers")
+        .orderBy("createdAt", "desc")
+        .get();
+      const getLikes = querySnapshot.docs.map((doc) => {
+        const result = doc.data();
+        result.id = doc.id;
+        return result;
+      });
+      getLikes.forEach(async (getLike) => {
+        getLike.userId = getLike.likedUserRef.id;
+        const likedUser = await getLike.likedUserRef.get();
+        getLike.displayName = likedUser.data().displayName;
+        getLike.createdAt = getLike.createdAt
+          .toDate()
+          .toLocaleString("ja-JP-u-ca-japanese");
+        getLike.avatarUrl = likedUser.data().avatarUrl;
+        this.getLikes.push(getLike);
+        this.loading = false;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // 自分のいいねを取得。
+    try {
+      const querySnapshot = await this.$firestore
+        .collection("users")
+        .doc(currentUser.uid)
+        .collection("likedProfiles")
+        .get();
+      const myLikes = querySnapshot.docs.map((doc) => {
+        const result = doc.data();
+        result.id = doc.id;
+        return result;
+      });
+      myLikes.forEach(async (myLike) => {
+        myLike.userId = myLike.likedProfileRef.id;
+        const likedProfile = await myLike.likedProfileRef.get();
+        myLike.displayName = likedProfile.data().displayName;
+        myLike.createdAt = myLike.createdAt
+          .toDate()
+          .toLocaleString("ja-JP-u-ca-japanese");
+        myLike.avatarUrl = likedProfile.data().avatarUrl;
+        this.myLikes.push(myLike);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
     async approveLike(like) {
@@ -239,7 +239,10 @@ export default {
 
       // 一括処理
       await batch.commit();
-      alert(like.displayName + 'さんとメッセージのやりとりが出来るようになりました！')
+      alert(
+        like.displayName +
+          "さんとメッセージのやりとりが出来るようになりました！"
+      );
       like.isApproved = true;
     },
   },

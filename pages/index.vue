@@ -110,6 +110,7 @@ export default {
       },
     };
   },
+  middleware: ["checkLogout"],
   methods: {
     logIn() {
       this.$fireAuth
@@ -175,7 +176,7 @@ export default {
             alert("新規ユーザーとして登録されました。");
             this.$router.push("/users/");
           } catch (error) {
-            await this.fireAuth.user.delete();
+            await this.$fireAuth.user.delete();
             console.log(error);
             alert("エラーが発生しました。もう一度登録し直してください。");
           }
