@@ -11,7 +11,6 @@ exports.onDeleteUser = functions.auth.user().onDelete(async (user) => {
   // ユーザードキュメントの削除
   const userDoc = db.collection('users').doc(user.uid)
   batch.delete(userDoc)
-  console.log(userDoc)
 
   // プロフィールドキュメントの削除
   const profile = db.collection('profiles').doc(user.uid)
@@ -34,7 +33,6 @@ exports.onDeleteUser = functions.auth.user().onDelete(async (user) => {
     batch.delete(doc.ref);
   });
 
-  
   const likedProfileUsersCollectionGroup = await db.collectionGroup('likedProfileUsers').where('likedUserRef', '==', '/profiles/' + user.uid).get()
   likedProfileUsersCollectionGroup.docs.forEach(doc => {
     batch.delete(doc.ref);
@@ -57,6 +55,23 @@ exports.onDeleteUser = functions.auth.user().onDelete(async (user) => {
     prefix: `images/${user.uid}`
   })
 });
+
+exports.profileLiked = functions.firestore.document('profiles/{profileId}/likedProfileUsers/{likedProfileUsersId}')
+  .onCreate(async (snap, context) => {
+    // プロフィールにいいねが追加されたら、プロフィールのlikedCountをIncrement
+    db
+      .collection('profiles')
+      .doc(this.context.params.profileId)
+      .update({ likedCount: admin.firestore.FieldValue.increment(1) })
+  })
+exports.profileUnliked = functions.firestore.document('profiles/{profileId}/likedProfileUsers/{likedProfileUsersId}')
+  .onCreate(async (snap, context) => {
+    // いいねが削除されたら、プロフィールのlikedCountをDecrement
+    db
+      .collection('profiles')
+      .doc(this.context.params.profileId)
+      .update({ likedCount: admin.firestore.FieldValue.increment(-1) })
+  })
 
 // exports.addImageUrl = functions.storage.object().onFinalize((object) => {
 //   console.log('OBJECT', object)
