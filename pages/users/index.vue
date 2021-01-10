@@ -143,6 +143,7 @@ export default {
   // 表示するプロフィールの配列を取得する。
   async created() {
     const currentUser = await this.$auth();
+    this.currentUser = currentUser
 
     if (currentUser) {
       // いいねしたユーザーの一覧を取得。

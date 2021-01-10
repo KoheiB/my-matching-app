@@ -61,15 +61,15 @@ exports.profileLiked = functions.firestore.document('profiles/{profileId}/likedP
     // プロフィールにいいねが追加されたら、プロフィールのlikedCountをIncrement
     db
       .collection('profiles')
-      .doc(this.context.params.profileId)
+      .doc(context.params.profileId)
       .update({ likedCount: admin.firestore.FieldValue.increment(1) })
   })
 exports.profileUnliked = functions.firestore.document('profiles/{profileId}/likedProfileUsers/{likedProfileUsersId}')
-  .onCreate(async (snap, context) => {
+  .onDelete(async (snap, context) => {
     // いいねが削除されたら、プロフィールのlikedCountをDecrement
     db
       .collection('profiles')
-      .doc(this.context.params.profileId)
+      .doc(context.params.profileId)
       .update({ likedCount: admin.firestore.FieldValue.increment(-1) })
   })
 
