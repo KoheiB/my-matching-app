@@ -23,7 +23,7 @@
         />
         <v-form>
           <v-row>
-            <v-col cols="6">
+            <v-col cols="12" md="6">
               <v-text-field
                 v-model="profile.displayName"
                 outlined
@@ -34,7 +34,7 @@
                 validate-on-blur
               ></v-text-field>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="6" md="3">
               <v-select
                 class="mt-4"
                 v-model="profile.sex"
@@ -46,7 +46,7 @@
                 readonly
               ></v-select>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="6" md="3">
               <v-select
                 class="mt-4"
                 v-model="profile.age"
