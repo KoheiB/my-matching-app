@@ -33,7 +33,7 @@
             nuxt
             :to="`/messages/${roomId}`"
           >
-            <v-icon>mdi-email</v-icon>メッセージを送る
+            <v-icon>mdi-email</v-icon>メッセージ
           </v-btn>
         </v-layout>
         <v-form>
