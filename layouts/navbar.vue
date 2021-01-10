@@ -43,7 +43,7 @@
         <v-btn nuxt to="/"> ログインまたは新規登録 </v-btn>
       </div>
     </v-app-bar>
-    <v-bottom-navigation app grow class="d-md-none">
+    <v-bottom-navigation app grow class="d-md-none" fixed>
       <v-btn v-for="(item, i) in items" :key="i" nuxt :to="item.to">
         <span>{{ item.title }}</span>
         <v-icon>{{ item.icon }} </v-icon>

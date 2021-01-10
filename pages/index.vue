@@ -12,7 +12,7 @@
         <v-tabs-items v-model="tab">
           <v-tab-item class="white">
             <v-card-actions>
-              <v-form>
+              <v-form v-model="isValid.login">
                 <v-row class="text-center">
                   <v-col cols="12">
                     <v-text-field
@@ -20,6 +20,8 @@
                       outlined
                       label="Email"
                       color="info"
+                      :rules="[rules.required, rules.email]"
+                      validate-on-blur
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -28,11 +30,14 @@
                       v-model="login.password"
                       outlined
                       label="Password"
+                      placeholder="8文字以上20文字以下"
                       color="info"
+                      :rules="[rules.required, rules.password]"
+                      validate-on-blur
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="logIn" width="30%">Login</v-btn>
+                    <v-btn @click="logIn" width="30%" :disabled="!isValid.login">Login</v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -42,7 +47,7 @@
           <!-- 新規登録画面 -->
           <v-tab-item class="white">
             <v-card-actions>
-              <v-form>
+              <v-form v-model="isValid.signup">
                 <v-row class="text-center">
                   <v-col cols="12">
                     <v-text-field
@@ -50,6 +55,8 @@
                       outlined
                       label="Nickname"
                       color="info"
+                      :rules="[rules.required]"
+                      validate-on-blur
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -58,6 +65,8 @@
                       outlined
                       label="Sex"
                       :items="items.sex"
+                      :rules="[rules.required]"
+                      validate-on-blur
                     ></v-select>
                   </v-col>
                   <v-col cols="12">
@@ -66,6 +75,8 @@
                       outlined
                       label="Email"
                       color="info"
+                      :rules="[rules.required, rules.email]"
+                      validate-on-blur
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -74,11 +85,14 @@
                       v-model="signup.password"
                       outlined
                       label="Password"
+                      placeholder="8文字以上20文字以下"
                       color="info"
+                      :rules="[rules.required, rules.password]"
+                      validate-on-blur
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="signUp" width="30%">SignUp</v-btn>
+                    <v-btn @click="signUp" width="30%" :disabled="!isValid.signup">SignUp</v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -107,6 +121,24 @@ export default {
       },
       items: {
         sex: ["男性", "女性"],
+      },
+      isValid: {
+        login: false,
+        signup: false,
+      },
+      rules: {
+        required: (value) => !!value || "入力必須項目です。",
+        email: (value) => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "メールアドレスを入力してください。";
+        },
+        password: (value) => {
+          const pattern = /^[\w-]{8,24}$/;
+          return (
+            pattern.test(value) ||
+            "パスワードは8文字以上12文字以下で入力してください。"
+          );
+        },
       },
     };
   },
