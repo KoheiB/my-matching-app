@@ -8,7 +8,7 @@
             <v-skeleton-loader type="image" />
           </div>
           <!-- ローダーここまで -->
-          <Avatar :url="profile.avatarUrl" :size="200"></Avatar>
+          <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
         </v-layout>
         <v-layout class="mt-4" justify-space-around>
           <v-btn

@@ -86,7 +86,7 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-layout justify-center>
-                  <Avatar :url="profile.avatarUrl" :size="avatarSize"></Avatar>
+                  <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
                 </v-layout>
                 <v-form>
                   <v-row>
