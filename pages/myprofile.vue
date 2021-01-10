@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div class="d-flex justify-end">
-      <v-btn @click="saveChanges" color="secondary"
+      <v-btn @click="saveChanges" color="secondary" :disabled="!isValid.profile"
         >プロフィールの変更を保存する</v-btn
       >
     </div>
@@ -21,7 +21,7 @@
           accept="image/*"
           @change="onSelectFile"
         />
-        <v-form>
+        <v-form v-model="isValid.profile">
           <v-row>
             <v-col cols="6">
               <v-text-field
@@ -30,6 +30,8 @@
                 color="info"
                 label="ニックネーム"
                 class="mt-4"
+                :rules="[rules.required]"
+                validate-on-blur
               ></v-text-field>
             </v-col>
             <v-col cols="3">
@@ -140,6 +142,12 @@ export default {
     return {
       loading: true,
       profile: {},
+      isValid: {
+        profile: false,
+      },
+      rules: {
+        required: (value) => !!value || "入力必須項目です。",
+      },
       labels: {
         sex: "性別",
         age: "年齢",
