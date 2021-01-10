@@ -33,7 +33,11 @@
                 {{ getLike.displayName }}
               </v-card-title>
               <v-layout justify-center>
-                <Avatar :url="getLike.avatarUrl" :size="avatarSize" :likedCount="getLike.likedCount"></Avatar>
+                <Avatar
+                  :url="getLike.avatarUrl"
+                  :size="avatarSize"
+                  :likedCount="getLike.likedCount"
+                ></Avatar>
               </v-layout>
               <v-card-subtitle>
                 いいねされた日時:<br />{{ getLike.createdAt }}
@@ -71,7 +75,11 @@
                   {{ myLike.displayname }}
                 </v-card-title>
                 <v-layout justify-center>
-                  <Avatar :url="myLike.avatarUrl" :size="avatarSize" :likedCount="myLike.likedCount"></Avatar>
+                  <Avatar
+                    :url="myLike.avatarUrl"
+                    :size="avatarSize"
+                    :likedCount="myLike.likedCount"
+                  ></Avatar>
                 </v-layout>
                 <v-card-subtitle>
                   いいねした日時:<br />{{ myLike.createdAt }}
@@ -98,7 +106,6 @@ export default {
   data() {
     return {
       loading: true,
-      currentUser: {},
       getLikes: [],
       myLikes: [],
       tab: null,
@@ -229,7 +236,9 @@ export default {
 
       // ルーム作成
       batch.set(this.$firestore.collection("rooms").doc(), {
-        attendUsersId: [this.currentUser.uid, like.userId],
+        attendUsersId: [currentUser.uid, like.userId],
+        unreadCount: { [currentUser.uid]: 0, [like.userId]: 0 },
+        latestMessage: { sender: "", body: "" },
         updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
       });
 
