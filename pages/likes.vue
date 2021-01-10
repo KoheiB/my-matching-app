@@ -71,13 +71,7 @@
                   {{ myLike.displayname }}
                 </v-card-title>
                 <v-layout justify-center>
-                  <v-avatar size="200">
-                    <v-img
-                      v-show="!myLike.avatarUrl"
-                      :src="require('@/assets/image/default-user.jpg')"
-                    />
-                    <v-img v-show="myLike.avatarUrl" :src="myLike.avatarUrl" />
-                  </v-avatar>
+                  <Avatar :url="myLike.avatarUrl" :size="avatarSize"></Avatar>
                 </v-layout>
                 <v-card-subtitle>
                   いいねした日時:<br />{{ myLike.createdAt }}
