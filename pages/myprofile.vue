@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div class="d-flex justify-end">
-      <v-btn @click="saveChanges" color="secondary" :disabled="!isValid.profile"
+      <v-btn @click="saveChanges" color="secondary" :disabled="!profile.displayName"
         >プロフィールの変更を保存する</v-btn
       >
     </div>
@@ -21,7 +21,7 @@
           accept="image/*"
           @change="onSelectFile"
         />
-        <v-form v-model="isValid.profile">
+        <v-form>
           <v-row>
             <v-col cols="6">
               <v-text-field
@@ -142,9 +142,6 @@ export default {
     return {
       loading: true,
       profile: {},
-      isValid: {
-        profile: false,
-      },
       rules: {
         required: (value) => !!value || "入力必須項目です。",
       },
