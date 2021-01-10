@@ -86,16 +86,7 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-layout justify-center>
-                  <v-avatar size="200">
-                    <v-img
-                      v-show="!profile.avatarUrl"
-                      :src="require('@/assets/image/default-user.jpg')"
-                    />
-                    <v-img
-                      v-show="profile.avatarUrl"
-                      :src="profile.avatarUrl"
-                    />
-                  </v-avatar>
+                  <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
                 </v-layout>
                 <v-form>
                   <v-row>
@@ -207,10 +198,12 @@
 
 <script>
 import Select from "~/components/Select.vue";
+import Avatar from "~/components/Avatar.vue";
 export default {
   layout: "navbar",
   components: {
     Select,
+    Avatar,
   },
   middleware: ["checkLogin"],
   data() {
@@ -369,6 +362,20 @@ export default {
       const ageRange = [...Array(maxAge).keys()].reverse();
       return ageRange.splice(0, 80).reverse();
     },
+    avatarSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 180;
+        case "sm":
+          return 160;
+        case "md":
+          return 190;
+        case "lg":
+          return 200;
+        case "xl":
+          return 200;
+      }
+    },
   },
   methods: {
     getMessages() {
@@ -435,6 +442,7 @@ export default {
   async created() {
     this.getMessages();
     const currentUser = await this.$auth();
+    this.currentUser = currentUser
     const roomId = this.$route.params.id;
     const docData = await this.$firestore
       .collection("rooms")

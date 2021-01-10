@@ -33,7 +33,7 @@
                 {{ getLike.displayName }}
               </v-card-title>
               <v-layout justify-center>
-                <Avatar :url="getLike.avatarUrl" :size="avatarSize"></Avatar>
+                <Avatar :url="getLike.avatarUrl" :size="avatarSize" :likedCount="getLike.likedCount"></Avatar>
               </v-layout>
               <v-card-subtitle>
                 いいねされた日時:<br />{{ getLike.createdAt }}
@@ -71,13 +71,7 @@
                   {{ myLike.displayname }}
                 </v-card-title>
                 <v-layout justify-center>
-                  <v-avatar size="200">
-                    <v-img
-                      v-show="!myLike.avatarUrl"
-                      :src="require('@/assets/image/default-user.jpg')"
-                    />
-                    <v-img v-show="myLike.avatarUrl" :src="myLike.avatarUrl" />
-                  </v-avatar>
+                  <Avatar :url="myLike.avatarUrl" :size="avatarSize" :likedCount="myLike.likedCount"></Avatar>
                 </v-layout>
                 <v-card-subtitle>
                   いいねした日時:<br />{{ myLike.createdAt }}
@@ -145,6 +139,7 @@ export default {
         getLike.userId = getLike.likedUserRef.id;
         const likedUser = await getLike.likedUserRef.get();
         getLike.displayName = likedUser.data().displayName;
+        getLike.likedCount = likedUser.data().likedCount;
         getLike.createdAt = getLike.createdAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");
@@ -171,6 +166,7 @@ export default {
         myLike.userId = myLike.likedProfileRef.id;
         const likedProfile = await myLike.likedProfileRef.get();
         myLike.displayName = likedProfile.data().displayName;
+        myLike.likedCount = likedProfile.data().likedCount;
         myLike.createdAt = myLike.createdAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");

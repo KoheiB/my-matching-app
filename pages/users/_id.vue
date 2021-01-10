@@ -8,7 +8,7 @@
             <v-skeleton-loader type="image" />
           </div>
           <!-- ローダーここまで -->
-          <Avatar :url="profile.avatarUrl" :size="200"></Avatar>
+          <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
         </v-layout>
         <v-layout class="mt-4" justify-space-around>
           <v-btn
@@ -33,7 +33,7 @@
             nuxt
             :to="`/messages/${roomId}`"
           >
-            <v-icon>mdi-email</v-icon>メッセージを送る
+            <v-icon>mdi-email</v-icon>メッセージ
           </v-btn>
         </v-layout>
         <v-form>

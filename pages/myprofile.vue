@@ -9,7 +9,7 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-layout justify-center>
-          <Avatar :url="profile.avatarUrl" :size="200"></Avatar>
+          <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
         </v-layout>
         <v-btn class="d-flex mt-4 mx-auto" @click="selectImage"
           >プロフィール写真を変更する</v-btn

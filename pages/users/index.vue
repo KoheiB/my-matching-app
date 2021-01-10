@@ -77,7 +77,7 @@
             <span class="white px-4 rounded-lg">{{ profile.displayName }}</span>
           </v-card-title>
           <v-layout justify-center>
-            <Avatar :url="profile.avatarUrl" :size="avatarSize"></Avatar>
+            <Avatar :url="profile.avatarUrl" :size="avatarSize" :likedCount="profile.likedCount"></Avatar>
           </v-layout>
           <v-card-actions>
             <v-btn
@@ -143,6 +143,7 @@ export default {
   // 表示するプロフィールの配列を取得する。
   async created() {
     const currentUser = await this.$auth();
+    this.currentUser = currentUser
 
     if (currentUser) {
       // いいねしたユーザーの一覧を取得。

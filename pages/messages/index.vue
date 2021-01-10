@@ -14,7 +14,7 @@
             {{ room.partnerName }}
           </v-card-title>
           <v-layout justify-center>
-            <Avatar :url="room.partnerAvatarUrl" :size="avatarSize"></Avatar>
+            <Avatar :url="room.partnerAvatarUrl" :size="avatarSize" :likedCount="room.partnerLikedCount"></Avatar>
           </v-layout>
           <v-card-subtitle>
             最新のメッセージ:<br />{{ room.updatedAt }}
@@ -80,6 +80,7 @@ export default {
         room.partnerId = partnerId;
         room.partnerName = partnerProfile.displayName;
         room.partnerAvatarUrl = partnerProfile.avatarUrl;
+        room.partnerLikedCount = partnerProfile.likedCount
         room.updatedAt = room.updatedAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");
