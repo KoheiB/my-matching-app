@@ -436,7 +436,7 @@ export default {
       batch.set(this.$firestore.collection("rooms").doc(), {
         attendUsersId: [currentUser.uid, profile.id],
         unreadCount: { [currentUser.uid]: 0, [profile.id]: 0 },
-        latestMessage: { sender: "", body: "" },
+        latestMessage: { senderId: "", receiverId: "", body: "" },
         updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
       });
 
