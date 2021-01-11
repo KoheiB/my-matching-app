@@ -435,8 +435,9 @@ export default {
       // ３、ルーム作成
       batch.set(this.$firestore.collection("rooms").doc(), {
         attendUsersId: [currentUser.uid, profile.id],
-        unreadCount: { [currentUser.uid]: 0, [profile.id]: 0 },
-        latestMessage: { senderId: "", receiverId: "", body: "" },
+        [currentUser.uid]: 0,
+        [profile.id]: 0,
+        latestMessage: { senderId: "", body: "" },
         updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
       });
 

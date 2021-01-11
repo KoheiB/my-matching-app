@@ -84,7 +84,7 @@ exports.sendMessage = functions.firestore.document('rooms/{roomId}/messages/{mes
         // 最新のメッセージを書き換える
         latestMessage: { senderId: snap.data().senderId, body: snap.data().body },
         // 相手の未読数を増やす
-        unreadCount: { [snap.data().receiverId]: admin.firestore.FieldValue.increment(1) },
+        [snap.data().receiverId]: admin.firestore.FieldValue.increment(1),
         // updatedAtを更新する
         updatedAt: admin.firestore.FieldValue.serverTimestamp()
       }

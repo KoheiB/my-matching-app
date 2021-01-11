@@ -14,7 +14,18 @@
             {{ room.partnerName }}
           </v-card-title>
           <v-layout justify-center>
-            <Avatar :url="room.partnerAvatarUrl" :size="avatarSize" :likedCount="room.partnerLikedCount"></Avatar>
+            <v-badge
+              color="info"
+              overlap
+              :content="room.myUnreadCount"
+              :value="room.myUnreadCount"
+            >
+              <Avatar
+                :url="room.partnerAvatarUrl"
+                :size="avatarSize"
+                :likedCount="room.partnerLikedCount"
+              ></Avatar>
+            </v-badge>
           </v-layout>
           <v-card-subtitle>
             最新のメッセージ:<br />{{ room.updatedAt }}
@@ -80,7 +91,10 @@ export default {
         room.partnerId = partnerId;
         room.partnerName = partnerProfile.displayName;
         room.partnerAvatarUrl = partnerProfile.avatarUrl;
-        room.partnerLikedCount = partnerProfile.likedCount
+        room.partnerLikedCount = partnerProfile.likedCount;
+        room.myUnreadCount = room.currentUser.uid[unreadCount];
+        console.log(room.myUnreadCount);
+        // console.log(room.myUnreadCount)
         room.updatedAt = room.updatedAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");

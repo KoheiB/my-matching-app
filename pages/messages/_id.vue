@@ -443,15 +443,13 @@ export default {
       (id) => id !== currentUser.uid
     )[0];
 
-    // 入室時、ルームの自分の未読数を0にする
-    this.$firestore
-      .collection("rooms")
-      .doc(roomId)
-      .update(
-        {
-          unreadCount: {[currentUser.uid]: 0},
-        }
-      );
+    // 入室時、ルームの自分の未読数を0にする ※要修正
+    // const unreadCount = docData.unreadCount;
+    // unreadCount[currentUser.uid] = 0;
+
+    this.$firestore.collection("rooms").doc(roomId).update({
+      [currentUser.uid]: 0
+    });
 
     // 自分の画像を取得。
     const myProfileData = await this.$firestore
@@ -460,7 +458,7 @@ export default {
       .get()
       .then((doc) => doc.data());
     this.myAvatarUrl = myProfileData.avatarUrl;
-    this.myProfileName = myProfileData.displayName
+    this.myProfileName = myProfileData.displayName;
 
     // 該当ユーザーのプロフィールのデータを取得。
     const snapshot = await this.$firestore
