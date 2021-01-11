@@ -16,9 +16,10 @@
           <v-layout justify-center>
             <v-badge
               color="info"
-              overlap
               :content="room.myUnreadCount"
               :value="room.myUnreadCount"
+              offset-x="20"
+              offset-y="20"
             >
               <Avatar
                 :url="room.partnerAvatarUrl"
@@ -92,9 +93,7 @@ export default {
         room.partnerName = partnerProfile.displayName;
         room.partnerAvatarUrl = partnerProfile.avatarUrl;
         room.partnerLikedCount = partnerProfile.likedCount;
-        room.myUnreadCount = room.currentUser.uid[unreadCount];
-        console.log(room.myUnreadCount);
-        // console.log(room.myUnreadCount)
+        room.myUnreadCount = room[currentUser.uid];
         room.updatedAt = room.updatedAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");
