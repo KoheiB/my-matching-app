@@ -72,7 +72,7 @@
             >
               <v-card hover nuxt :to="`/users/${myLike.userId}`">
                 <v-card-title>
-                  {{ myLike.displayname }}
+                  {{ myLike.displayName }}
                 </v-card-title>
                 <v-layout justify-center>
                   <Avatar
