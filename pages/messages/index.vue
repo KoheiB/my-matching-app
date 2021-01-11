@@ -29,7 +29,16 @@
             </v-badge>
           </v-layout>
           <v-card-subtitle>
-            最新のメッセージ:<br />{{ room.updatedAt }}
+            <p
+              style="
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                margin-bottom: 4px;
+              "
+              >{{ room.latestSender }}:{{ room.latestMessage.body }}</p
+            >
+            <span>{{ room.updatedAt }}</span>
           </v-card-subtitle>
         </v-card>
       </v-col>
@@ -94,6 +103,11 @@ export default {
         room.partnerAvatarUrl = partnerProfile.avatarUrl;
         room.partnerLikedCount = partnerProfile.likedCount;
         room.myUnreadCount = room[currentUser.uid];
+        if (room.latestMessage.senderId === currentUser.uid) {
+          room.latestSender = "あなた";
+        } else {
+          room.latestSender = partnerProfile.displayName;
+        }
         room.updatedAt = room.updatedAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");
