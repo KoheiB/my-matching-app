@@ -73,6 +73,24 @@ exports.profileUnliked = functions.firestore.document('profiles/{profileId}/like
       .update({ likedCount: admin.firestore.FieldValue.increment(-1) })
   })
 
+exports.sendMessage = functions.firestore.document('rooms/{roomId}/messages/{messageId}')
+.onCreate(async (snap, context) => {
+  // メッセージが送信された場合の処理
+  db
+    .collection('rooms')
+    .doc(context.params.roomId)
+    .update(
+      {
+        // 最新のメッセージを書き換える
+        latestMessage: { senderId: snap.data().senderId, body: snap.data().body },
+        // 相手の未読数を増やす
+        [snap.data().receiverId]: admin.firestore.FieldValue.increment(1),
+        // updatedAtを更新する
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }
+    )
+})
+
 // exports.addImageUrl = functions.storage.object().onFinalize((object) => {
 //   console.log('OBJECT', object)
 //   const userId = object.name.split('/')[1]

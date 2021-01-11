@@ -30,7 +30,7 @@
                       v-model="login.password"
                       outlined
                       label="Password"
-                      placeholder="8文字以上20文字以下"
+                      placeholder="6文字以上24文字以下"
                       color="info"
                       :rules="[rules.required, rules.password]"
                       validate-on-blur
@@ -85,7 +85,7 @@
                       v-model="signup.password"
                       outlined
                       label="Password"
-                      placeholder="8文字以上20文字以下"
+                      placeholder="6文字以上24文字以下"
                       color="info"
                       :rules="[rules.required, rules.password]"
                       validate-on-blur
@@ -133,10 +133,10 @@ export default {
           return pattern.test(value) || "メールアドレスを入力してください。";
         },
         password: (value) => {
-          const pattern = /^[\w-]{8,24}$/;
+          const pattern = /^[\w-]{6,24}$/;
           return (
             pattern.test(value) ||
-            "パスワードは8文字以上12文字以下で入力してください。"
+            "パスワードは6文字以上、24文字以下で入力してください。"
           );
         },
       },

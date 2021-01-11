@@ -33,7 +33,11 @@
                 {{ getLike.displayName }}
               </v-card-title>
               <v-layout justify-center>
-                <Avatar :url="getLike.avatarUrl" :size="avatarSize" :likedCount="getLike.likedCount"></Avatar>
+                <Avatar
+                  :url="getLike.avatarUrl"
+                  :size="avatarSize"
+                  :likedCount="getLike.likedCount"
+                ></Avatar>
               </v-layout>
               <v-card-subtitle>
                 いいねされた日時:<br />{{ getLike.createdAt }}
@@ -68,10 +72,14 @@
             >
               <v-card hover nuxt :to="`/users/${myLike.userId}`">
                 <v-card-title>
-                  {{ myLike.displayname }}
+                  {{ myLike.displayName }}
                 </v-card-title>
                 <v-layout justify-center>
-                  <Avatar :url="myLike.avatarUrl" :size="avatarSize" :likedCount="myLike.likedCount"></Avatar>
+                  <Avatar
+                    :url="myLike.avatarUrl"
+                    :size="avatarSize"
+                    :likedCount="myLike.likedCount"
+                  ></Avatar>
                 </v-layout>
                 <v-card-subtitle>
                   いいねした日時:<br />{{ myLike.createdAt }}
@@ -98,7 +106,6 @@ export default {
   data() {
     return {
       loading: true,
-      currentUser: {},
       getLikes: [],
       myLikes: [],
       tab: null,
@@ -108,7 +115,7 @@ export default {
     avatarSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
-          return 180;
+          return 140;
         case "sm":
           return 160;
         case "md":
@@ -229,7 +236,10 @@ export default {
 
       // ルーム作成
       batch.set(this.$firestore.collection("rooms").doc(), {
-        attendUsersId: [this.currentUser.uid, like.userId],
+        attendUsersId: [currentUser.uid, like.userId],
+        [currentUser.uid]: 0,
+        [like.userId]: 0,
+        latestMessage: { senderId: "", body: "" },
         updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
       });
 

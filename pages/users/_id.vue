@@ -8,7 +8,11 @@
             <v-skeleton-loader type="image" />
           </div>
           <!-- ローダーここまで -->
-          <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
+          <Avatar
+            :url="profile.avatarUrl"
+            :size="200"
+            :likedCount="profile.likedCount"
+          ></Avatar>
         </v-layout>
         <v-layout class="mt-4" justify-space-around>
           <v-btn
@@ -162,7 +166,7 @@ export default {
     Avatar,
     Select,
   },
-  middleware: ['checkLogin'],
+  middleware: ["checkLogin"],
   data() {
     return {
       loading: true,
@@ -174,7 +178,7 @@ export default {
         isMatched: false,
       },
       labels: {
-        sex: '性別',
+        sex: "性別",
         age: "年齢",
         residence: "居住地",
         workLocation: "勤務地",
@@ -188,10 +192,7 @@ export default {
         marriageDesire: "結婚に対する意志",
       },
       items: {
-        sex: [
-          "男性",
-          "女性"
-        ],
+        sex: ["男性", "女性"],
         locations: [
           "未設定",
           "北海道",
@@ -321,7 +322,7 @@ export default {
     selectHeight() {
       const maxHeight = 200;
       const array = [...Array(maxHeight).keys()];
-      const stringArray = array.map((number) => String(number) + 'cm');
+      const stringArray = array.map((number) => String(number) + "cm");
       stringArray.splice(0, 131);
       stringArray.unshift("未設定", "130cm以下");
       stringArray.push("200cm以上");
@@ -330,7 +331,7 @@ export default {
     selectAge() {
       const maxAge = 70;
       const array = [...Array(maxAge).keys()];
-      const stringArray = array.map((number) => String(number) + '歳');
+      const stringArray = array.map((number) => String(number) + "歳");
       stringArray.splice(0, 18);
       stringArray.unshift("未設定");
       stringArray.push("70歳以上");
@@ -434,12 +435,18 @@ export default {
       // ３、ルーム作成
       batch.set(this.$firestore.collection("rooms").doc(), {
         attendUsersId: [currentUser.uid, profile.id],
+        [currentUser.uid]: 0,
+        [profile.id]: 0,
+        latestMessage: { senderId: "", body: "" },
         updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
       });
 
       // 一括処理
       await batch.commit();
-      alert(profile.displayName + 'さんとメッセージのやりとりが出来るようになりました！')
+      alert(
+        profile.displayName +
+          "さんとメッセージのやりとりが出来るようになりました！"
+      );
       this.relationStatus.isMatched = true;
     },
   },
