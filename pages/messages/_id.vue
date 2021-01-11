@@ -10,7 +10,7 @@
       <v-row align="end">
         <v-col class="pa-0 ma-0">
           <div v-for="message in messages" :key="message.id" v-show="messages">
-            <div v-if="isMyMessage(message.userId)">
+            <div v-if="isMyMessage(message.senderId)">
               <v-row align="center">
                 <v-col cols="2"></v-col>
                 <v-col cols="8" class="d-flex justify-end">
@@ -86,7 +86,11 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-layout justify-center>
-                  <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
+                  <Avatar
+                    :url="profile.avatarUrl"
+                    :size="200"
+                    :likedCount="profile.likedCount"
+                  ></Avatar>
                 </v-layout>
                 <v-form>
                   <v-row>
@@ -211,7 +215,6 @@ export default {
       roomId: this.$route.params.id,
       partnerId: "",
       unsubscribe: null,
-      currentUser: {},
       myAvatarUrl: "",
       profile: {},
       messages: [],
@@ -362,20 +365,6 @@ export default {
       const ageRange = [...Array(maxAge).keys()].reverse();
       return ageRange.splice(0, 80).reverse();
     },
-    avatarSize() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return 180;
-        case "sm":
-          return 160;
-        case "md":
-          return 190;
-        case "lg":
-          return 200;
-        case "xl":
-          return 200;
-      }
-    },
   },
   methods: {
     getMessages() {
@@ -409,13 +398,15 @@ export default {
     },
     async onSubmit() {
       if (this.sendingMessage.trim()) {
+        const currentUser = await this.$auth();
         try {
           await this.$firestore
             .collection("rooms")
             .doc(this.roomId)
             .collection("messages")
             .add({
-              userId: this.currentUser.uid,
+              senderId: currentUser.uid,
+              receiverId: this.partnerId,
               body: this.sendingMessage,
               createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
             });
@@ -442,7 +433,6 @@ export default {
   async created() {
     this.getMessages();
     const currentUser = await this.$auth();
-    this.currentUser = currentUser
     const roomId = this.$route.params.id;
     const docData = await this.$firestore
       .collection("rooms")
@@ -453,6 +443,14 @@ export default {
       (id) => id !== currentUser.uid
     )[0];
 
+    // 入室時、ルームの自分の未読数を0にする ※要修正
+    // const unreadCount = docData.unreadCount;
+    // unreadCount[currentUser.uid] = 0;
+
+    this.$firestore.collection("rooms").doc(roomId).update({
+      [currentUser.uid]: 0
+    });
+
     // 自分の画像を取得。
     const myProfileData = await this.$firestore
       .collection("profiles")
@@ -460,6 +458,7 @@ export default {
       .get()
       .then((doc) => doc.data());
     this.myAvatarUrl = myProfileData.avatarUrl;
+    this.myProfileName = myProfileData.displayName;
 
     // 該当ユーザーのプロフィールのデータを取得。
     const snapshot = await this.$firestore

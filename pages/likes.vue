@@ -72,7 +72,7 @@
             >
               <v-card hover nuxt :to="`/users/${myLike.userId}`">
                 <v-card-title>
-                  {{ myLike.displayname }}
+                  {{ myLike.displayName }}
                 </v-card-title>
                 <v-layout justify-center>
                   <Avatar
@@ -115,7 +115,7 @@ export default {
     avatarSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
-          return 180;
+          return 140;
         case "sm":
           return 160;
         case "md":
@@ -237,8 +237,9 @@ export default {
       // ルーム作成
       batch.set(this.$firestore.collection("rooms").doc(), {
         attendUsersId: [currentUser.uid, like.userId],
-        unreadCount: { [currentUser.uid]: 0, [like.userId]: 0 },
-        latestMessage: { sender: "", body: "" },
+        [currentUser.uid]: 0,
+        [like.userId]: 0,
+        latestMessage: { senderId: "", body: "" },
         updatedAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
       });
 

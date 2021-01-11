@@ -14,10 +14,31 @@
             {{ room.partnerName }}
           </v-card-title>
           <v-layout justify-center>
-            <Avatar :url="room.partnerAvatarUrl" :size="avatarSize" :likedCount="room.partnerLikedCount"></Avatar>
+            <v-badge
+              color="info"
+              :content="room.myUnreadCount"
+              :value="room.myUnreadCount"
+              offset-x="20"
+              offset-y="20"
+            >
+              <Avatar
+                :url="room.partnerAvatarUrl"
+                :size="avatarSize"
+                :likedCount="room.partnerLikedCount"
+              ></Avatar>
+            </v-badge>
           </v-layout>
           <v-card-subtitle>
-            最新のメッセージ:<br />{{ room.updatedAt }}
+            <p
+              style="
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                margin-bottom: 4px;
+              "
+              >{{ room.latestSender }}:{{ room.latestMessage.body }}</p
+            >
+            <span>{{ room.updatedAt }}</span>
           </v-card-subtitle>
         </v-card>
       </v-col>
@@ -43,7 +64,7 @@ export default {
     avatarSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
-          return 180;
+          return 140;
         case "sm":
           return 160;
         case "md":
@@ -80,7 +101,13 @@ export default {
         room.partnerId = partnerId;
         room.partnerName = partnerProfile.displayName;
         room.partnerAvatarUrl = partnerProfile.avatarUrl;
-        room.partnerLikedCount = partnerProfile.likedCount
+        room.partnerLikedCount = partnerProfile.likedCount;
+        room.myUnreadCount = room[currentUser.uid];
+        if (room.latestMessage.senderId === currentUser.uid) {
+          room.latestSender = "あなた";
+        } else {
+          room.latestSender = partnerProfile.displayName;
+        }
         room.updatedAt = room.updatedAt
           .toDate()
           .toLocaleString("ja-JP-u-ca-japanese");
