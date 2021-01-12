@@ -12,8 +12,8 @@
           <div v-for="message in messages" :key="message.id" v-show="messages">
             <div v-if="isMyMessage(message.senderId)">
               <v-row align="center">
-                <v-col cols="2"></v-col>
-                <v-col cols="8" class="d-flex justify-end">
+                <v-col cols="3"></v-col>
+                <v-col cols="7" class="d-flex justify-end">
                   <div class="teal lighten-5 pa-2 rounded-lg">
                     {{ message.body }}
                   </div>
@@ -45,12 +45,12 @@
                     />
                   </v-avatar>
                 </v-col>
-                <v-col cols="8" class="d-flex">
+                <v-col cols="7" class="d-flex">
                   <div class="teal lighten-5 pa-2 rounded-lg">
                     {{ message.body }}
                   </div>
                 </v-col>
-                <v-col cols="2"></v-col>
+                <v-col cols="3"></v-col>
               </v-row>
             </div>
           </div>
