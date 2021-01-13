@@ -56,6 +56,27 @@ exports.onDeleteUser = functions.auth.user().onDelete(async (user) => {
   })
 });
 
+exports.deleteSubcollectin = functions.firestore.document('rooms/{roomId}')
+  .onDelete(async (snap, context) => {
+    const deletedDocument = snap.data()
+    if (!deletedDocument) {
+      return
+    }
+    const roomId = context.params.roomId
+    const firebaseTools = require('firebase-tools')
+    
+    try {
+      await firebaseTools.firestore
+        .delete(`rooms/${roomId}/messages`, {
+          project: process.env.GCLOUD_PROJECT,
+          recursive: true,
+          yes: true,
+          token: functions.config().fb.token
+        })
+    } catch (err) {
+      console.error(err)
+    }
+  })
 exports.profileLiked = functions.firestore.document('profiles/{profileId}/likedProfileUsers/{likedProfileUsersId}')
   .onCreate(async (snap, context) => {
     // プロフィールにいいねが追加されたら、プロフィールのlikedCountをIncrement
@@ -90,6 +111,7 @@ exports.sendMessage = functions.firestore.document('rooms/{roomId}/messages/{mes
       }
     )
 })
+
 
 // exports.addImageUrl = functions.storage.object().onFinalize((object) => {
 //   console.log('OBJECT', object)
