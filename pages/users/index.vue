@@ -72,6 +72,7 @@
           :to="`/users/${profile.id}`"
           hover
           :ripple="false"
+          width="100%"
         >
           <v-card-title>
             <span class="white px-4 rounded-lg">{{ profile.displayName }}</span>
@@ -308,14 +309,6 @@ export default {
 </script>
 
 <style>
-* {
-  text-decoration: none;
-}
-.card {
-  width: 100%;
-  height: auto;
-  /* レスポンシブで％指定 1:100 2:50  */
-}
 .picture {
   display: block;
   margin: 0 auto;
