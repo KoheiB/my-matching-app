@@ -3,7 +3,7 @@
     <v-btn x-large rounded nuxt to="/users/">ユーザー一覧ページへ</v-btn>
     <v-container style="max-width: 500px">
       <v-card tile elevation="0" background-color="white">
-        <v-tabs v-model="tab" grow color="green">
+        <v-tabs v-model="tab" grow color="primary">
           <v-tab> ログイン </v-tab>
           <v-tab> 新規登録 </v-tab>
         </v-tabs>

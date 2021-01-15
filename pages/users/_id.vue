@@ -74,6 +74,7 @@
                 label="年齢"
                 item-color="blue"
                 :items="selectAge"
+                readonly
               ></v-select>
             </v-col>
           </v-row>
@@ -514,4 +515,7 @@ export default {
 </script>
 
 <style>
+.theme--light.v-select .v-select__selection--disabled {
+  color: black;
+}
 </style>

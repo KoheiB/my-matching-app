@@ -3,7 +3,7 @@
     <div>
       <span>現在登録されているメールアドレス：</span>
       <div class="d-inline">
-        <div class="my-5" v-show="change">
+        <div class="my-5">
           {{ email }}
         </div>
         <v-form v-show="!change" style="width: 500px">
@@ -12,7 +12,7 @@
           <v-text-field type="text" color="info" label="新しいメールアドレス"></v-text-field>
             </v-col>
             <v-col cols="2">
-              <v-btn @click='changeEmail'>変更</v-btn>
+              <v-btn class="save white--text" @click='changeEmail'>変更</v-btn>
             </v-col>
           </v-row>
         </v-form>
@@ -66,7 +66,7 @@ export default {
     passwordReset() {
       if (
         window.confirm(
-          "パスワードを変更しますか？登録メールアドレスにパスワード変更のメールが送信されます。"
+          "現在登録されているメールアドレスにパスワード変更のメールを送信しますか？"
         )
       ) {
         const user = this.$fireAuth.currentUser;
