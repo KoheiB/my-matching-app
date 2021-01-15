@@ -34,8 +34,13 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: [
+  modules: ['@nuxtjs/style-resources'
   ],
+  styleResources: {
+    scss: [
+    '~/assets/_common.scss',
+    ]
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {

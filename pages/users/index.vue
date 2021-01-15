@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!--  検索窓-->
-    <v-expansion-panels>
+    <v-expansion-panels class="mb-4" v-show="currentUser">
       <v-expansion-panel>
         <v-expansion-panel-header color="info">
           <span>
@@ -111,6 +111,7 @@ export default {
   data() {
     return {
       loading: true,
+      currentUser: {},
       allProfiles: [],
       profiles: [],
       model: 0,
@@ -295,9 +296,13 @@ export default {
           });
           break;
         case "いいね数が多い順":
-          // this.profiles = this.allProfiles.filter(
-          //   (profile) => profile.sex == "female"
-          // );
+          this.profiles = this.allProfiles.slice().sort(function (a, b) {
+            if (a.likedCount < b.likedCount) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
           break;
         default:
           console.log(`Sorry, we are out of ${orderBy}.`);

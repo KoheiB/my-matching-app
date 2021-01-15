@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: #eceff1; text-decoration: none;">
+  <v-app id="app">
     <v-navigation-drawer
       v-model="drawer"
       color="teal lighten-3"
@@ -146,3 +146,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+#app {
+  background-color: $bg-color;
+  text-decoration: none;
+}
+</style>
