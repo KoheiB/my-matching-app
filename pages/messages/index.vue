@@ -11,7 +11,7 @@
       <v-col cols="6" sm="4" lg="3" v-for="room in rooms" :key="room.id">
         <v-card hover nuxt :to="`/messages/${room.id}`">
           <v-card-title>
-            {{ room.partnerName }}
+            <span class="third px-4 rounded-lg">{{ room.partnerName }}</span>
           </v-card-title>
           <v-layout justify-center>
             <v-badge

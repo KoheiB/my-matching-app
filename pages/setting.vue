@@ -1,7 +1,5 @@
 <template>
-  <v-container class="">
-    <div class="text-h4">ユーザー設定</div>
-    <v-divider class="mt-2 mb-6"></v-divider>
+  <v-container>
     <div>
       <span>現在登録されているメールアドレス：</span>
       <div class="d-inline">
@@ -14,24 +12,24 @@
           <v-text-field type="text" color="info" label="新しいメールアドレス"></v-text-field>
             </v-col>
             <v-col cols="2">
-              <v-btn rounded @click='changeEmail'>変更</v-btn>
+              <v-btn @click='changeEmail'>変更</v-btn>
             </v-col>
           </v-row>
         </v-form>
       </div>
-      <v-btn @click="change = !change" rounded>メールアドレスを変更する</v-btn>
+      <v-btn class="save white--text" @click="change = !change">メールアドレスを変更する</v-btn>
     </div>
     <v-divider class="mt-2 mb-6"></v-divider>
     <div>
-      <v-btn rounded @click="passwordReset">パスワードを変更する</v-btn>
+      <v-btn class="save white--text" @click="passwordReset">パスワードを変更する</v-btn>
       <p class="mt-4">
         現在登録されているメールアドレスにパスワード変更メールが送信されます。
       </p>
     </div>
     <v-divider class="mt-2 mb-6"></v-divider>
     <div>
-      <v-btn rounded @click="logOut">ログアウト</v-btn>
-      <v-btn @click="unregister" class="red white--text ml-2" rounded
+      <v-btn @click="logOut">ログアウト</v-btn>
+      <v-btn @click="unregister" class="red white--text ml-6"
         >退会する</v-btn
       >
     </div>

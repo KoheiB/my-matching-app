@@ -38,7 +38,7 @@ export default {
   ],
   styleResources: {
     scss: [
-    '~/assets/_common.scss',
+    '@/assets/_common.scss',
     ]
   },
 
@@ -50,14 +50,14 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: '#ECEFF1',
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
+          primary: '#406E6E',
+          secondary: '#C9E8CD',
+          third: '#E8F4E9',
+          accent: '#F2867E',
           info: colors.teal.lighten1,
-          warning: colors.amber.base,
+          save: '#178CB9',
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
-          
         }
       }
     }

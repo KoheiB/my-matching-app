@@ -67,7 +67,7 @@
       >
         <!-- カード部分 -->
         <v-card
-          class="card mb-5 teal lighten-5"
+          class="card mb-5 secondary"
           nuxt
           :to="`/users/${profile.id}`"
           hover
@@ -75,7 +75,7 @@
           width="100%"
         >
           <v-card-title>
-            <span class="white px-4 rounded-lg">{{ profile.displayName }}</span>
+            <span class="third px-4 rounded-lg">{{ profile.displayName }}</span>
           </v-card-title>
           <v-layout justify-center>
             <Avatar :url="profile.avatarUrl" :size="avatarSize" :likedCount="profile.likedCount"></Avatar>
@@ -84,13 +84,13 @@
             <v-btn
               v-show="currentUser"
               @click.prevent="likeUser(currentUser, profile)"
-              color="red darken-1 white--text"
+              class="accent"
               height="50"
               block
               rounded
               :disabled="profile.isLiked"
             >
-              <v-icon>mdi-thumb-up-outline</v-icon>いいね！
+              <v-icon>mdi-thumb-up</v-icon>いいね！
             </v-btn>
           </v-card-actions>
         </v-card>

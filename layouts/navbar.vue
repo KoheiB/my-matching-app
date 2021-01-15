@@ -147,9 +147,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 #app {
-  background-color: $bg-color;
+  background-color: #eceff1;
   text-decoration: none;
 }
 </style>
