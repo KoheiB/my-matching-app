@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-btn x-large rounded nuxt to="/users/">ユーザー一覧ページへ</v-btn>
+    <v-btn x-large nuxt to="/users/">ユーザー一覧ページへ</v-btn>
     <v-container style="max-width: 500px">
       <v-card tile elevation="0" background-color="white">
         <v-tabs v-model="tab" grow color="primary">
