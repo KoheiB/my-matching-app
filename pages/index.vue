@@ -55,7 +55,7 @@
                       outlined
                       label="Nickname"
                       color="info"
-                      :rules="[rules.required]"
+                      :rules="[rules.required, rules.name]"
                       validate-on-blur
                     ></v-text-field>
                   </v-col>
@@ -139,6 +139,7 @@ export default {
             "パスワードは6文字以上、24文字以下で入力してください。"
           );
         },
+        name: v => (v && v.length <= 8) || 'ニックネームは8文字以下で入力してください。'
       },
     };
   },
