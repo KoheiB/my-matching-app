@@ -16,14 +16,16 @@
         </v-layout>
         <v-layout class="mt-4" justify-space-around>
           <v-btn
+          class="accent"
             :disabled="relationStatus.hasLiked"
             rounded
             @click="likeProfile(profile)"
             v-show="!relationStatus.isLiked"
           >
-            <v-icon>mdi-thumb-up-outline</v-icon>いいね！
+            <v-icon>mdi-thumb-up</v-icon>いいね！
           </v-btn>
           <v-btn
+            class="accent"
             @click="approveLike(profile)"
             v-show="relationStatus.isLiked"
             :disabled="relationStatus.isMatched"
@@ -72,6 +74,7 @@
                 label="年齢"
                 item-color="blue"
                 :items="selectAge"
+                readonly
               ></v-select>
             </v-col>
           </v-row>
@@ -512,4 +515,7 @@ export default {
 </script>
 
 <style>
+.theme--light.v-select .v-select__selection--disabled {
+  color: black;
+}
 </style>

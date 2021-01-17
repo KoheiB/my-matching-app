@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- 画面タブ -->
-    <v-tabs v-model="tab" background-color="#ECEFF1" grow color="green">
+    <v-tabs v-model="tab" background-color="#ECEFF1" grow color="primary" class="mb-2">
       <v-tab> 相手から </v-tab>
       <v-tab> 自分から </v-tab>
     </v-tabs>
@@ -28,7 +28,7 @@
             v-for="getLike in getLikes"
             :key="getLike.id"
           >
-            <v-card hover nuxt :to="`/users/${getLike.userId}`">
+            <v-card class="secondary" hover nuxt :to="`/users/${getLike.userId}`">
               <v-card-title>
                 {{ getLike.displayName }}
               </v-card-title>
@@ -44,8 +44,8 @@
               </v-card-subtitle>
               <v-card-actions>
                 <v-btn
+                  class="accent"
                   @click.prevent="approveLike(getLike)"
-                  color="info"
                   block
                   rounded
                   height="50"
@@ -70,9 +70,9 @@
               v-for="myLike in myLikes"
               :key="myLike.id"
             >
-              <v-card hover nuxt :to="`/users/${myLike.userId}`">
+              <v-card class="secondary" hover nuxt :to="`/users/${myLike.userId}`">
                 <v-card-title>
-                  {{ myLike.displayName }}
+                  <span class="third px-4 rounded-lg">{{ myLike.displayName }}</span>
                 </v-card-title>
                 <v-layout justify-center>
                   <Avatar

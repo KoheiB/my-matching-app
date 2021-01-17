@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div class="d-flex justify-end">
-      <v-btn @click="saveChanges" color="secondary" :disabled="!profile.displayName"
+      <v-btn class="save white--text" @click="saveChanges" :disabled="!profile.displayName"
         >プロフィールの変更を保存する</v-btn
       >
     </div>
@@ -11,7 +11,7 @@
         <v-layout justify-center>
           <Avatar :url="profile.avatarUrl" :size="200" :likedCount="profile.likedCount"></Avatar>
         </v-layout>
-        <v-btn class="d-flex mt-4 mx-auto" @click="selectImage"
+        <v-btn class="save white--text d-flex mt-4 mx-auto" @click="selectImage"
           >プロフィール写真を変更する</v-btn
         >
         <input
@@ -373,4 +373,6 @@ export default {
 </script>
 
 <style>
-</style>
+.theme--light.v-select .v-select__selection--disabled {
+  color: black;
+}</style>

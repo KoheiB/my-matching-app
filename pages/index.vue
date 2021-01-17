@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <v-btn x-large rounded nuxt to="/users/">ユーザー一覧ページへ</v-btn>
+    <v-btn x-large nuxt to="/users/">ユーザー一覧ページへ</v-btn>
     <v-container style="max-width: 500px">
       <v-card tile elevation="0" background-color="white">
-        <v-tabs v-model="tab" grow color="green">
+        <v-tabs v-model="tab" grow color="primary">
           <v-tab> ログイン </v-tab>
           <v-tab> 新規登録 </v-tab>
         </v-tabs>
@@ -55,7 +55,7 @@
                       outlined
                       label="Nickname"
                       color="info"
-                      :rules="[rules.required]"
+                      :rules="[rules.required, rules.name]"
                       validate-on-blur
                     ></v-text-field>
                   </v-col>
@@ -139,6 +139,7 @@ export default {
             "パスワードは6文字以上、24文字以下で入力してください。"
           );
         },
+        name: v => (v && v.length <= 8) || 'ニックネームは8文字以下で入力してください。'
       },
     };
   },
@@ -221,6 +222,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

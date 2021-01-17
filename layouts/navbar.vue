@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <v-navigation-drawer
       v-model="drawer"
       color="teal lighten-3"
@@ -58,13 +58,7 @@
 </template>
 
 <script>
-import Login from "~/components/Login.vue";
-import Signup from "~/components/Signup.vue";
 export default {
-  components: {
-    Login,
-    Signup,
-  },
   data() {
     return {
       clipped: false,
@@ -154,11 +148,8 @@ export default {
 </script>
 
 <style>
-.btn {
-  background-size: cover;
-}
-
-.v-main__wrap {
+#app {
   background-color: #eceff1;
+  text-decoration: none;
 }
 </style>

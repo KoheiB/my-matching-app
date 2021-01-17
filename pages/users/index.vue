@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!--  検索窓-->
-    <v-expansion-panels>
+    <v-expansion-panels class="mb-4" v-show="currentUser">
       <v-expansion-panel>
         <v-expansion-panel-header color="info">
           <span>
@@ -67,14 +67,15 @@
       >
         <!-- カード部分 -->
         <v-card
-          class="card mb-5 teal lighten-5"
+          class="card mb-5 secondary"
           nuxt
           :to="`/users/${profile.id}`"
           hover
           :ripple="false"
+          width="100%"
         >
           <v-card-title>
-            <span class="white px-4 rounded-lg">{{ profile.displayName }}</span>
+            <span class="third px-4 rounded-lg">{{ profile.displayName }}</span>
           </v-card-title>
           <v-layout justify-center>
             <Avatar :url="profile.avatarUrl" :size="avatarSize" :likedCount="profile.likedCount"></Avatar>
@@ -83,13 +84,13 @@
             <v-btn
               v-show="currentUser"
               @click.prevent="likeUser(currentUser, profile)"
-              color="red darken-1 white--text"
+              class="accent"
               height="50"
               block
               rounded
               :disabled="profile.isLiked"
             >
-              <v-icon>mdi-thumb-up-outline</v-icon>いいね！
+              <v-icon>mdi-thumb-up</v-icon>いいね！
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -110,6 +111,7 @@ export default {
   data() {
     return {
       loading: true,
+      currentUser: {},
       allProfiles: [],
       profiles: [],
       model: 0,
@@ -294,9 +296,13 @@ export default {
           });
           break;
         case "いいね数が多い順":
-          // this.profiles = this.allProfiles.filter(
-          //   (profile) => profile.sex == "female"
-          // );
+          this.profiles = this.allProfiles.slice().sort(function (a, b) {
+            if (a.likedCount < b.likedCount) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
           break;
         default:
           console.log(`Sorry, we are out of ${orderBy}.`);
@@ -308,14 +314,6 @@ export default {
 </script>
 
 <style>
-* {
-  text-decoration: none;
-}
-.card {
-  width: 100%;
-  height: auto;
-  /* レスポンシブで％指定 1:100 2:50  */
-}
 .picture {
   display: block;
   margin: 0 auto;
