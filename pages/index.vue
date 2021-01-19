@@ -187,7 +187,7 @@ export default {
                 displayName: this.signup.nickname,
                 sex: this.signup.sex,
                 age: "未設定",
-                body: "未設定",
+                body: "",
                 residence: "未設定",
                 workLocation: "未設定",
                 height: "未設定",
