@@ -467,7 +467,7 @@ export default {
     const profileData = snapshot.data();
     this.profile = profileData;
 
-    if (this.currentUser === {}) {
+    if (currentUser) {
       // ログインユーザーがいいねしているユーザーをクエリし、該当ユーザーをいいねしているか確認。
       const profileRef = this.$firestore.collection("profiles").doc(profileId);
       const hasLiked = await this.$firestore
