@@ -25,7 +25,7 @@
         @click="drawer = !drawer"
         class="d-none d-md-block"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title> MyMatchingApp </v-toolbar-title>
+      <v-toolbar-title class="font-weight-bold"> MyPartner </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="currentUser">
         <v-btn depressed x-large min-width="200" nuxt to="/setting">

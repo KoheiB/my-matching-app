@@ -37,6 +37,7 @@
 
 - 通知機能（新着いいね、新着メッセージ）
 - 無料/有料会員ステータス切換機能
+- メッセージ定型文機能
 ## Technology
 
 - JavaScript Framework: Nuxt.js
@@ -44,9 +45,9 @@
 - BaaS: Firebase
   - IDaaS: Firebase Authentication
   - Database: Cloud Firestore
-  - : Cloud Functions
-  - : Cloud Storage
   - Hosting: Firebase Hosting
+  - Cloud Functions
+  - Cloud Storage
 
 ## Requirements
 
