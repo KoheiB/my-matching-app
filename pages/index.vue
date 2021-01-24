@@ -37,11 +37,38 @@
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="logIn" width="30%" :disabled="!isValid.login">Login</v-btn>
+                    <v-btn @click="logIn" width="30%" :disabled="!isValid.login"
+                      >Login</v-btn
+                    >
                   </v-col>
                 </v-row>
               </v-form>
             </v-card-actions>
+            <v-card-text>
+              テストユーザー一覧（クリックで簡易ログイン）
+              <v-simple-table class="amber lighten-4">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">TestUser</th>
+                      <th class="text-left">Email</th>
+                      <th class="text-left">Password</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="item in testUsers"
+                      :key="item.email"
+                      @click="testLogin(item)"
+                    >
+                      <td>{{ item.user }}</td>
+                      <td>{{ item.email }}</td>
+                      <td>{{ item.password }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card-text>
           </v-tab-item>
 
           <!-- 新規登録画面 -->
@@ -92,7 +119,12 @@
                     ></v-text-field>
                   </v-col>
                   <v-col>
-                    <v-btn @click="signUp" width="30%" :disabled="!isValid.signup">SignUp</v-btn>
+                    <v-btn
+                      @click="signUp"
+                      width="30%"
+                      :disabled="!isValid.signup"
+                      >SignUp</v-btn
+                    >
                   </v-col>
                 </v-row>
               </v-form>
@@ -122,6 +154,10 @@ export default {
       items: {
         sex: ["男性", "女性"],
       },
+      testUsers: [
+        { user: "男性ユーザー", email: "testuser1@gmail.com", password: "123456" },
+        { user: "女性ユーザー", email: "testuser2@gmail.com", password: "123456" },
+      ],
       isValid: {
         login: false,
         signup: false,
@@ -139,7 +175,8 @@ export default {
             "パスワードは6文字以上、24文字以下で入力してください。"
           );
         },
-        name: v => (v && v.length <= 8) || 'ニックネームは8文字以下で入力してください。'
+        name: (v) =>
+          (v && v.length <= 8) || "ニックネームは8文字以下で入力してください。",
       },
     };
   },
@@ -156,6 +193,12 @@ export default {
           const errorMessage = error.message;
           alert(errorMessage);
         });
+    },
+    testLogin(item) {
+      this.login.email = item.email
+      this.login.password = item.password
+      console.log(this.login.email, this.login.password)
+      this.logIn()
     },
     signUp() {
       this.$fireAuth

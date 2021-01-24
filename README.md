@@ -26,7 +26,6 @@
 ## Features
 
 - 認証機能
-- 無限スクロール機能
 - フィルタリング/ソートによる検索機能
 - 登録ユーザーにいいねを送り、承認されたらマッチングする機能
 - マッチングしたユーザーとメッセージのやり取りをする機能
@@ -35,6 +34,7 @@
 
 ## 実装予定機能
 
+- 無限スクロール機能
 - 通知機能（新着いいね、新着メッセージ）
 - 無料/有料会員ステータス切換機能
 - メッセージ定型文機能
@@ -54,4 +54,7 @@
 ## Installation
 
 ## Author
-KoheiB
+### KoheiB
+- [Github](https://github.com/KoheiB)
+- [Twitter](https://twitter.com/KoheiB1)
+- [Qiita](https://qiita.com/kou74)
