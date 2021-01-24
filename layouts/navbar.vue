@@ -96,19 +96,9 @@ export default {
       ],
     };
   },
-  created() {
-    this.$fireAuth.onAuthStateChanged(async (user) => {
-      this.currentUser = user;
-      try {
-        const documentSnapshot = await this.$firestore
-          .collection("profiles")
-          .doc(user.uid)
-          .get();
-        this.userData = documentSnapshot.data();
-      } catch (error) {
-        console.log(error);
-      }
-    });
+  async created() {
+    await this.getUserData()
+    this.setListener()
   },
   methods: {
     logIn() {
@@ -143,6 +133,23 @@ export default {
         this.createUser(result.user);
       });
     },
+    setListener() {
+      this.$nuxt.$on('updateAvatar', this.getUserData)
+    },
+    async getUserData() {
+      this.currentUser = await this.$auth()
+      try {
+        const documentSnapshot = await this.$firestore
+          .collection("profiles")
+          .doc(this.currentUser.uid)
+          .get();
+        this.userData = documentSnapshot.data();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    
   },
 };
 </script>
