@@ -31,10 +31,10 @@
         <v-btn depressed x-large min-width="200" nuxt to="/setting">
           <v-avatar size="40" color="white" class="mr-3">
             <v-img
-              v-show="!userData.avatarUrl"
+              v-if="!userData.avatarUrl"
               :src="require('@/assets/image/default-user.jpg')"
             />
-            <v-img v-show="userData.avatarUrl" :src="userData.avatarUrl" />
+            <v-img v-if="userData.avatarUrl" :src="userData.avatarUrl" />
           </v-avatar>
           {{ userData.displayName }}
         </v-btn>
@@ -134,7 +134,7 @@ export default {
       });
     },
     setListener() {
-      this.$nuxt.$on('updateAvatar', this.getUserData)
+      this.$nuxt.$on('updateProfile', this.updateProfile)
     },
     async getUserData() {
       this.currentUser = await this.$auth()
@@ -147,9 +147,11 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    updateProfile(profile) {
+      this.userData.displayName = profile.displayName
+      this.userData.avatarUrl = profile.avatarUrl
     }
-
-    
   },
 };
 </script>

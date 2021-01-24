@@ -347,7 +347,7 @@ export default {
         },
         { merge: true }
       );
-      this.updateAvatar()
+      this.updateProfile()
       alert("写真を変更しました。");
     },
     async saveChanges() {
@@ -357,11 +357,11 @@ export default {
         .collection("profiles")
         .doc(user.uid)
         .set(profile, { merge: true });
+      this.updateProfile()
       alert("変更を保存しました");
     },
-    updateAvatar() {
-      this.$nuxt.$emit('updateAvatar')
-      console.log('emit')
+    updateProfile() {
+      this.$nuxt.$emit('updateProfile',this.profile)
     }
   },
   async created() {
