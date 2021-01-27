@@ -10,7 +10,7 @@
 ## Demo
 ### http://
 
-## Usage
+## Installation/Usage
 
 `$ git clone https://github.com/aocattleya/Ramen-Timer.git`
 
@@ -41,16 +41,16 @@
 ## Technology
 
 - JavaScript Framework: Nuxt.js
-- Styling: Vuetify
+- Styling: Vuetify,Sass
 - BaaS: Firebase
   - IDaaS: Firebase Authentication
   - Database: Cloud Firestore
   - Hosting: Firebase Hosting
-  - Cloud Functions
-  - Cloud Storage
+  - FaaS: Cloud Functions
+  - Storage: Cloud Storage
 
 ## Requirements
-
+- Node.js v12.16.0
 ## Installation
 
 ## Author

@@ -197,7 +197,6 @@ export default {
     testLogin(item) {
       this.login.email = item.email
       this.login.password = item.password
-      console.log(this.login.email, this.login.password)
       this.logIn()
     },
     signUp() {

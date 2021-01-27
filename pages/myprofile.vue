@@ -353,7 +353,7 @@ export default {
     async saveChanges() {
       const user = await this.$auth();
       const profile = this.profile;
-      this.$firestore
+      await this.$firestore
         .collection("profiles")
         .doc(user.uid)
         .set(profile, { merge: true });
