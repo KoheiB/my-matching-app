@@ -5,20 +5,20 @@
 
 あなたの人生を共に歩んでくれるパートナーを探すことができます。
 
-PC版
+### PC版
+|Search|User|
+|:---:|:---:|
+|![search](https://user-images.githubusercontent.com/60537225/105991145-cba0f500-60e6-11eb-980d-31ad85ee8f07.png)|![user-profile](https://user-images.githubusercontent.com/60537225/105990914-7ebd1e80-60e6-11eb-8c9e-ed0576858b54.png)|
 
-![search](https://user-images.githubusercontent.com/60537225/105985940-8b8a4400-60df-11eb-8a5b-771d86f31bac.png)
-![user-profile](https://user-images.githubusercontent.com/60537225/105985991-9e9d1400-60df-11eb-93e5-fff5362786c9.png)
-![like](https://user-images.githubusercontent.com/60537225/105986006-a3fa5e80-60df-11eb-9b8a-c823264bc6c8.png)
-![message](https://user-images.githubusercontent.com/60537225/105986026-a9f03f80-60df-11eb-8cda-ff59f6f5d54a.png)
+|Like|Message|
+|:---:|:---:|
+|![like](https://user-images.githubusercontent.com/60537225/105990910-7d8bf180-60e6-11eb-8881-d09dbc48fdca.png)|![message](https://user-images.githubusercontent.com/60537225/105991134-c774d780-60e6-11eb-92e4-1b2afaccbab7.png)|
 
 
-モバイル版
-
-![search](https://user-images.githubusercontent.com/60537225/105988895-ae1e5c00-60e3-11eb-8fe6-f3e75bc2c1af.png)
-![user-profile](https://user-images.githubusercontent.com/60537225/105988910-b2e31000-60e3-11eb-93d6-766183f0cf70.png)
-![like](https://user-images.githubusercontent.com/60537225/105988898-af4f8900-60e3-11eb-9d97-02d4468385ca.png)
-![message](https://user-images.githubusercontent.com/60537225/105988906-b1b1e300-60e3-11eb-8969-c6c410fac2b6.png)
+### モバイル版
+|Search|User|Like|Message|
+|:---:|:---:|:---:|:---:|
+|![search](https://user-images.githubusercontent.com/60537225/105988895-ae1e5c00-60e3-11eb-8fe6-f3e75bc2c1af.png)|![user-profile](https://user-images.githubusercontent.com/60537225/105988910-b2e31000-60e3-11eb-93d6-766183f0cf70.png)|![like](https://user-images.githubusercontent.com/60537225/105988898-af4f8900-60e3-11eb-9d97-02d4468385ca.png)|![message](https://user-images.githubusercontent.com/60537225/105988906-b1b1e300-60e3-11eb-8969-c6c410fac2b6.png)|
 
 ## Demo
 ### http://
