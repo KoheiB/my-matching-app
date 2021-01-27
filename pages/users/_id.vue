@@ -51,6 +51,7 @@
                 color="info"
                 label="ニックネーム"
                 class="mt-4"
+                readonly
               ></v-text-field>
             </v-col>
             <v-col cols="6" lg="3">
