@@ -4,8 +4,8 @@
     <v-expansion-panels class="mb-4" v-show="currentUser">
       <v-expansion-panel>
         <v-expansion-panel-header color="info">
-          <span>
-            <v-icon>mdi-account-search</v-icon>
+          <span :class="{ 'caption': $vuetify.breakpoint.smAndDown }">
+            <v-icon size="20">mdi-account-search</v-icon>
             条件を指定してフィルター/並べ替えする
           </span>
         </v-expansion-panel-header>
@@ -13,35 +13,45 @@
           <v-expansion-panel-content>
             <v-row>
               <v-col cols="12" sm="6">
-                <div>
-                  <v-row align="center" justify="end">
-                    <v-col cols="6"> 性別 </v-col>
-                    <v-col cols="6">
-                      <v-select
-                        @change="filterProfiles"
-                        v-model="selectedItem.sex"
-                        :items="items.sex"
-                        item-color="blue"
-                        color="info"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </div>
+                <v-row align="center" justify="end">
+                  <v-col cols="6"> 性別 </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      class="mt-3"
+                      v-model="selectedItem.sex"
+                      :items="items.sex"
+                      item-color="blue"
+                      color="info"
+                      dense
+                      @change="
+                        onChangeSexFilter(
+                          selectedItem.sex,
+                          selectedItem.orderBy
+                        )
+                      "
+                    />
+                  </v-col>
+                </v-row>
               </v-col>
               <v-col cols="12" sm="6">
-                <div>
-                  <v-row align="center">
-                    <v-col cols="6">並び順</v-col>
-                    <v-col cols="6">
-                      <v-select
-                        @change="orderProfiles"
-                        v-model="selectedItem.orderBy"
-                        :items="items.orderBy"
-                        item-color="blue"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </div>
+                <v-row align="center">
+                  <v-col cols="6">並び順</v-col>
+                  <v-col cols="6">
+                    <v-select
+                      class="mt-3"
+                      v-model="selectedItem.orderBy"
+                      :items="items.orderBy"
+                      item-color="blue"
+                      dense
+                      @change="
+                        onChangeOrderFilter(
+                          selectedItem.orderBy,
+                          selectedItem.sex
+                        )
+                      "
+                    />
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-expansion-panel-content>
@@ -78,7 +88,11 @@
             <span class="third px-4 rounded-lg">{{ profile.displayName }}</span>
           </v-card-title>
           <v-layout justify-center>
-            <Avatar :url="profile.avatarUrl" :size="avatarSize" :likedCount="profile.likedCount"></Avatar>
+            <Avatar
+              :url="profile.avatarUrl"
+              :size="avatarSize"
+              :likedCount="profile.likedCount"
+            ></Avatar>
           </v-layout>
           <v-card-actions>
             <v-btn
@@ -145,7 +159,7 @@ export default {
   // 表示するプロフィールの配列を取得する。
   async created() {
     const currentUser = await this.$auth();
-    this.currentUser = currentUser
+    this.currentUser = currentUser;
 
     if (currentUser) {
       // いいねしたユーザーの一覧を取得。
@@ -264,15 +278,14 @@ export default {
     filterProfiles(sex) {
       switch (sex) {
         case "全て":
-          this.profiles = this.allProfiles;
           break;
         case "男性":
-          this.profiles = this.allProfiles.filter(
+          this.profiles = this.profiles.filter(
             (profile) => profile.sex == "男性"
           );
           break;
         case "女性":
-          this.profiles = this.allProfiles.filter(
+          this.profiles = this.profiles.filter(
             (profile) => profile.sex == "女性"
           );
           break;
@@ -284,7 +297,58 @@ export default {
     orderProfiles(orderBy) {
       switch (orderBy) {
         case "おまかせ":
+          break;
+        case "登録日が新しい順":
+          this.profiles = this.profiles.slice().sort(function (a, b) {
+            if (a.createdAt < b.createdAt) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+          break;
+        case "いいね数が多い順":
+          this.profiles = this.profiles.slice().sort(function (a, b) {
+            if (a.likedCount < b.likedCount) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+          break;
+        default:
+          console.log(`Sorry, we are out of ${orderBy}.`);
+          break;
+      }
+    },
+    onChangeSexFilter(sex, orderBy) {
+      switch (sex) {
+        case "全て":
           this.profiles = this.allProfiles;
+          this.orderProfiles(orderBy);
+          break;
+        case "男性":
+          this.profiles = this.allProfiles.filter(
+            (profile) => profile.sex == "男性"
+          );
+          this.orderProfiles(orderBy);
+          break;
+        case "女性":
+          this.profiles = this.allProfiles.filter(
+            (profile) => profile.sex == "女性"
+          );
+          this.orderProfiles(orderBy);
+          break;
+        default:
+          console.log(`Sorry, we are out of ${sex}.`);
+          break;
+      }
+    },
+    onChangeOrderFilter(orderBy, sex) {
+      switch (orderBy) {
+        case "おまかせ":
+          this.profiles = this.allProfiles;
+          this.filterProfiles(sex);
           break;
         case "登録日が新しい順":
           this.profiles = this.allProfiles.slice().sort(function (a, b) {
@@ -294,6 +358,7 @@ export default {
               return -1;
             }
           });
+          this.filterProfiles(sex);
           break;
         case "いいね数が多い順":
           this.profiles = this.allProfiles.slice().sort(function (a, b) {
@@ -303,6 +368,7 @@ export default {
               return -1;
             }
           });
+          this.filterProfiles(sex);
           break;
         default:
           console.log(`Sorry, we are out of ${orderBy}.`);

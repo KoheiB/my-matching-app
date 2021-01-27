@@ -25,16 +25,16 @@
         @click="drawer = !drawer"
         class="d-none d-md-block"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title> MyMatchingApp </v-toolbar-title>
+      <v-toolbar-title class="font-weight-bold"> MyPartner </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="currentUser">
         <v-btn depressed x-large min-width="200" nuxt to="/setting">
           <v-avatar size="40" color="white" class="mr-3">
             <v-img
-              v-show="!userData.avatarUrl"
+              v-if="!userData.avatarUrl"
               :src="require('@/assets/image/default-user.jpg')"
             />
-            <v-img v-show="userData.avatarUrl" :src="userData.avatarUrl" />
+            <v-img v-if="userData.avatarUrl" :src="userData.avatarUrl" />
           </v-avatar>
           {{ userData.displayName }}
         </v-btn>
@@ -96,19 +96,9 @@ export default {
       ],
     };
   },
-  created() {
-    this.$fireAuth.onAuthStateChanged(async (user) => {
-      this.currentUser = user;
-      try {
-        const documentSnapshot = await this.$firestore
-          .collection("profiles")
-          .doc(user.uid)
-          .get();
-        this.userData = documentSnapshot.data();
-      } catch (error) {
-        console.log(error);
-      }
-    });
+  async created() {
+    await this.getUserData()
+    this.setListener()
   },
   methods: {
     logIn() {
@@ -143,6 +133,25 @@ export default {
         this.createUser(result.user);
       });
     },
+    setListener() {
+      this.$nuxt.$on('updateProfile', this.updateProfile)
+    },
+    async getUserData() {
+      this.currentUser = await this.$auth()
+      try {
+        const documentSnapshot = await this.$firestore
+          .collection("profiles")
+          .doc(this.currentUser.uid)
+          .get();
+        this.userData = documentSnapshot.data();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    updateProfile(profile) {
+      this.userData.displayName = profile.displayName
+      this.userData.avatarUrl = profile.avatarUrl
+    }
   },
 };
 </script>

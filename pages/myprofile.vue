@@ -347,17 +347,22 @@ export default {
         },
         { merge: true }
       );
+      this.updateProfile()
       alert("写真を変更しました。");
     },
     async saveChanges() {
       const user = await this.$auth();
       const profile = this.profile;
-      this.$firestore
+      await this.$firestore
         .collection("profiles")
         .doc(user.uid)
         .set(profile, { merge: true });
+      this.updateProfile()
       alert("変更を保存しました");
     },
+    updateProfile() {
+      this.$nuxt.$emit('updateProfile',this.profile)
+    }
   },
   async created() {
     const user = await this.$auth();
