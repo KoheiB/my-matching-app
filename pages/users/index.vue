@@ -4,8 +4,8 @@
     <v-expansion-panels class="mb-4" v-show="currentUser">
       <v-expansion-panel>
         <v-expansion-panel-header color="info">
-          <span>
-            <v-icon>mdi-account-search</v-icon>
+          <span :class="{ 'caption': $vuetify.breakpoint.smAndDown }">
+            <v-icon size="20">mdi-account-search</v-icon>
             条件を指定してフィルター/並べ替えする
           </span>
         </v-expansion-panel-header>
@@ -13,35 +13,45 @@
           <v-expansion-panel-content>
             <v-row>
               <v-col cols="12" sm="6">
-                <div>
-                  <v-row align="center" justify="end">
-                    <v-col cols="6"> 性別 </v-col>
-                    <v-col cols="6">
-                      <v-select
-                        @change="onChangeSexFilter(selectedItem.sex, selectedItem.orderBy)"
-                        v-model="selectedItem.sex"
-                        :items="items.sex"
-                        item-color="blue"
-                        color="info"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </div>
+                <v-row align="center" justify="end">
+                  <v-col cols="6"> 性別 </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      class="mt-3"
+                      v-model="selectedItem.sex"
+                      :items="items.sex"
+                      item-color="blue"
+                      color="info"
+                      dense
+                      @change="
+                        onChangeSexFilter(
+                          selectedItem.sex,
+                          selectedItem.orderBy
+                        )
+                      "
+                    />
+                  </v-col>
+                </v-row>
               </v-col>
               <v-col cols="12" sm="6">
-                <div>
-                  <v-row align="center">
-                    <v-col cols="6">並び順</v-col>
-                    <v-col cols="6">
-                      <v-select
-                        @change="onChangeOrderFilter(selectedItem.orderBy, selectedItem.sex)"
-                        v-model="selectedItem.orderBy"
-                        :items="items.orderBy"
-                        item-color="blue"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </div>
+                <v-row align="center">
+                  <v-col cols="6">並び順</v-col>
+                  <v-col cols="6">
+                    <v-select
+                      class="mt-3"
+                      v-model="selectedItem.orderBy"
+                      :items="items.orderBy"
+                      item-color="blue"
+                      dense
+                      @change="
+                        onChangeOrderFilter(
+                          selectedItem.orderBy,
+                          selectedItem.sex
+                        )
+                      "
+                    />
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-expansion-panel-content>

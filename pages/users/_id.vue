@@ -44,7 +44,7 @@
         </v-layout>
         <v-form>
           <v-row>
-            <v-col cols="6">
+            <v-col cols="12" lg="6">
               <v-text-field
                 v-model="profile.displayName"
                 outlined
@@ -53,7 +53,7 @@
                 class="mt-4"
               ></v-text-field>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="6" lg="3">
               <v-select
                 class="mt-4"
                 v-model="profile.sex"
@@ -65,7 +65,7 @@
                 readonly
               ></v-select>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="6" lg="3">
               <v-select
                 class="mt-4"
                 v-model="profile.age"

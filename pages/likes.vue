@@ -30,7 +30,7 @@
           >
             <v-card class="secondary" hover nuxt :to="`/users/${getLike.userId}`">
               <v-card-title>
-                {{ getLike.displayName }}
+                <span class="third px-4 rounded-lg">{{ getLike.displayName }}</span>
               </v-card-title>
               <v-layout justify-center>
                 <Avatar

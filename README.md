@@ -5,23 +5,36 @@
 
 あなたの人生を共に歩んでくれるパートナーを探すことができます。
 
-![search-view](https://user-images.githubusercontent.com/60537225/105216626-2b067e80-5b96-11eb-8bb6-40cd722bed40.png)
+PC版
+
+![search](https://user-images.githubusercontent.com/60537225/105985940-8b8a4400-60df-11eb-8a5b-771d86f31bac.png)
+![user-profile](https://user-images.githubusercontent.com/60537225/105985991-9e9d1400-60df-11eb-93e5-fff5362786c9.png)
+![like](https://user-images.githubusercontent.com/60537225/105986006-a3fa5e80-60df-11eb-9b8a-c823264bc6c8.png)
+![message](https://user-images.githubusercontent.com/60537225/105986026-a9f03f80-60df-11eb-8cda-ff59f6f5d54a.png)
+
+
+モバイル版
+
+![search](https://user-images.githubusercontent.com/60537225/105988895-ae1e5c00-60e3-11eb-8fe6-f3e75bc2c1af.png)
+![user-profile](https://user-images.githubusercontent.com/60537225/105988910-b2e31000-60e3-11eb-93d6-766183f0cf70.png)
+![like](https://user-images.githubusercontent.com/60537225/105988898-af4f8900-60e3-11eb-9d97-02d4468385ca.png)
+![message](https://user-images.githubusercontent.com/60537225/105988906-b1b1e300-60e3-11eb-8969-c6c410fac2b6.png)
 
 ## Demo
 ### http://
 
 ## Installation/Usage
 
-`$ git clone https://github.com/aocattleya/Ramen-Timer.git`
+`$ git clone https://github.com/KoheiB/my-matching-app.git`
 
 `$ npm run dev`
 
 ### テストアカウント
 
-|ログインID|パスワード|
+|メールアドレス|パスワード|
 |:---:|:---:|
-|aaa|bbb|
-|ccc|ddd|
+|testuser1@gmail.com|123456|
+|testuser2@gmail.com|123456|
 
 ## Features
 
@@ -40,7 +53,7 @@
 - メッセージ定型文機能
 ## Technology
 
-- JavaScript Framework: Nuxt.js
+- JavaScript Framework: Nuxt.js(v2.14.12)
 - Styling: Vuetify,Sass
 - BaaS: Firebase
   - IDaaS: Firebase Authentication
@@ -51,7 +64,6 @@
 
 ## Requirements
 - Node.js v12.16.0
-## Installation
 
 ## Author
 ### KoheiB
