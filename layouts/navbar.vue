@@ -97,8 +97,8 @@ export default {
     };
   },
   async created() {
-    await this.getUserData()
-    this.setListener()
+    await this.getUserData();
+    this.setListener();
   },
   methods: {
     logIn() {
@@ -117,41 +117,38 @@ export default {
       }
     },
     createUser(user) {
-      this.$firestore.collection("users").doc(user.uid).set(
-        {
-          name: user.displayName,
-          photoURL: user.photoURL,
-          email: user.email,
-        },
-        { merge: true }
-      );
-    },
-    logInWithGithub() {
-      const provider = new this.$firebase.auth.GithubAuthProvider();
-      this.$fireAuth.signInWithPopup(provider).then((result) => {
-        alert("Hello, " + result.user.displayName + "!");
-        this.createUser(result.user);
-      });
+      if (user) {
+        this.$firestore.collection("users").doc(user.uid).set(
+          {
+            name: user.displayName,
+            photoURL: user.photoURL,
+            email: user.email,
+          },
+          { merge: true }
+        );
+      }
     },
     setListener() {
-      this.$nuxt.$on('updateProfile', this.updateProfile)
+      this.$nuxt.$on("updateProfile", this.updateProfile);
     },
     async getUserData() {
-      this.currentUser = await this.$auth()
-      try {
-        const documentSnapshot = await this.$firestore
-          .collection("profiles")
-          .doc(this.currentUser.uid)
-          .get();
-        this.userData = documentSnapshot.data();
-      } catch (error) {
-        console.log(error);
+      this.currentUser = await this.$auth();
+      if (this.currentUser) {
+        try {
+          const documentSnapshot = await this.$firestore
+            .collection("profiles")
+            .doc(this.currentUser.uid)
+            .get();
+          this.userData = documentSnapshot.data();
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
     updateProfile(profile) {
-      this.userData.displayName = profile.displayName
-      this.userData.avatarUrl = profile.avatarUrl
-    }
+      this.userData.displayName = profile.displayName;
+      this.userData.avatarUrl = profile.avatarUrl;
+    },
   },
 };
 </script>
