@@ -91,6 +91,7 @@ sw.*
 
 #Firebase
 firebaseConfig.json
+.firebase
 
 #data
 data/
