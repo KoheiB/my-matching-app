@@ -290,7 +290,6 @@ export default {
           );
           break;
         default:
-          console.log(`Sorry, we are out of ${sex}.`);
           break;
       }
     },
@@ -317,7 +316,6 @@ export default {
           });
           break;
         default:
-          console.log(`Sorry, we are out of ${orderBy}.`);
           break;
       }
     },
@@ -340,7 +338,6 @@ export default {
           this.orderProfiles(orderBy);
           break;
         default:
-          console.log(`Sorry, we are out of ${sex}.`);
           break;
       }
     },
@@ -371,7 +368,6 @@ export default {
           this.filterProfiles(sex);
           break;
         default:
-          console.log(`Sorry, we are out of ${orderBy}.`);
           break;
       }
     },

@@ -155,7 +155,6 @@ export default {
         this.loading = false;
       });
     } catch (error) {
-      console.log(error);
     }
     // 自分のいいねを取得。
     try {
@@ -181,7 +180,6 @@ export default {
         this.myLikes.push(myLike);
       });
     } catch (error) {
-      console.log(error);
     }
   },
   methods: {

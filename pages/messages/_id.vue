@@ -388,7 +388,6 @@ export default {
             });
           },
           function (error) {
-            console.log(error);
           }
         );
     },
@@ -410,7 +409,6 @@ export default {
               body: this.sendingMessage,
               createdAt: this.$firebase.firestore.FieldValue.serverTimestamp(),
             });
-          console.log("submit");
           this.sendingMessage = "";
           this.scrollOnSubmit();
         } catch (error) {
@@ -443,9 +441,7 @@ export default {
       (id) => id !== currentUser.uid
     )[0];
 
-    // 入室時、ルームの自分の未読数を0にする ※要修正
-    // const unreadCount = docData.unreadCount;
-    // unreadCount[currentUser.uid] = 0;
+    // 入室時、ルームの自分の未読数を0にする。
 
     this.$firestore.collection("rooms").doc(roomId).update({
       [currentUser.uid]: 0
@@ -472,7 +468,6 @@ export default {
   destroyed() {
     this.messages = [];
     if (this.unsubscribe) {
-      console.log("unsubscribe");
       this.unsubscribe();
     }
   },

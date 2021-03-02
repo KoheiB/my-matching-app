@@ -252,7 +252,6 @@ export default {
             this.$router.push("/users/");
           } catch (error) {
             await this.$fireAuth.user.delete();
-            console.log(error);
             alert("エラーが発生しました。もう一度登録し直してください。");
           }
         })

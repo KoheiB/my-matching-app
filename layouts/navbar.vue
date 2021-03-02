@@ -28,7 +28,7 @@
       <v-toolbar-title class="font-weight-bold"> MyPartner </v-toolbar-title>
       <v-spacer></v-spacer>
       <div v-if="currentUser">
-        <v-btn depressed x-large min-width="200" nuxt to="/setting">
+        <v-btn style="text-transform: none" depressed x-large min-width="200" nuxt to="/setting">
           <v-avatar size="40" color="white" class="mr-3">
             <v-img
               v-if="!userData.avatarUrl"
@@ -141,7 +141,6 @@ export default {
             .get();
           this.userData = documentSnapshot.data();
         } catch (error) {
-          console.log(error);
         }
       }
     },
