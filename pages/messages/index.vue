@@ -114,7 +114,6 @@ export default {
         this.rooms.push(room);
       });
     } catch (error) {
-      console.log(error);
     }
     this.loading = await false;
   },

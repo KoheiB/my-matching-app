@@ -56,7 +56,6 @@ export default {
           alert("メールアドレスが正常に変更されました。");
         })
         .catch(function (error) {
-          console.log("error");
           alert(
             "メールアドレスが正常に変更されませんでした。もう一度入力し直してください。"
           );
@@ -74,12 +73,10 @@ export default {
           .sendPasswordResetEmail(user.email)
           .then(function () {
             // Email sent.
-            console.log("Email sent.");
             alert("Email sent");
           })
           .catch(function (error) {
             // An error happened.
-            console.log(error);
           });
       }
     },
@@ -92,6 +89,11 @@ export default {
       }
     },
     async unregister() {
+      const user = await this.$auth();
+      if(user.uid === 'ZdnYuNDKkefVxOyyJLQoSlAngIx2'||'CRcfFOhBobQOea3nDqTwCLsi8te2' ) {
+        alert('テストユーザーは退会出来ません。退会機能を試したい場合は、ユーザーを新規登録して行ってください。')
+        return
+      }
       if (window.confirm("本当に退会しますか？")) {
         await this.$fireAuth.currentUser.delete().then(() => {
           alert('退会が完了しました。ユーザーに関わるすべてのデータを削除しました。')
